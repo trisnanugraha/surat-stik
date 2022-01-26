@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-header bg-light">
             <div class="text-left">
-              <button type="button" class="btn btn-sm btn-outline-primary" onclick="add_user()" title="Add Data"><i class="fas fa-plus"></i> Tambah User</button>
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="add()" title="Add Data"><i class="fas fa-plus"></i> Tambah User</button>
               <a href="<?php echo base_url('user/download') ?>" type="button" class="btn btn-sm btn-outline-info" target="_blank" id="dwn_user" title="Download"><i class="fas fa-download"></i> Download</a>
             </div>
           </div>
@@ -17,7 +17,6 @@
                 <tr class="bg-info text-center">
                   <th>No</th>
                   <th>Nama Lengkap</th>
-                  <th>Program Studi</th>
                   <th>Username</th>
                   <th>Hak Akses</th>
                   <th>Status</th>

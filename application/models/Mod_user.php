@@ -5,8 +5,8 @@ class Mod_user extends CI_Model
 {
 
     var $table = 'tbl_user';
-    var $column_order = array('', 'full_name', 'nama_prodi', 'username', 'nama_level', 'is_active');
-    var $column_search = array('full_name', 'nama_prodi', 'username', 'nama_level', 'is_active');
+    var $column_order = array('', 'full_name', 'username', 'nama_level', 'is_active');
+    var $column_search = array('full_name', 'username', 'nama_level', 'is_active');
     var $order = array('id_user' => 'desc'); // default order 
 
     public function __construct()
@@ -17,9 +17,8 @@ class Mod_user extends CI_Model
 
     private function _get_datatables_query()
     {
-        $this->db->select('a.*,b.nama_level,c.nama_prodi');
+        $this->db->select('a.*,b.nama_level');
         $this->db->join('tbl_userlevel b', 'a.id_level=b.id_level');
-        $this->db->join('tbl_program_studi c', 'a.id_prodi=c.id_prodi');
         $this->db->from('tbl_user a');
 
         $i = 0;
@@ -114,22 +113,22 @@ class Mod_user extends CI_Model
         return $this->db->get("tbl_user");
     }
 
-    function insertUser($tabel, $data)
+    function insert($data)
     {
-        $this->db->insert($tabel, $data);
-        return $this->db->insert_id();
+        $insert = $this->db->insert($this->table, $data);
+        return $insert;
     }
 
-    function getUser($id)
+    function get_user($id)
     {
         $this->db->where("id_user", $id);
-        return $this->db->get("tbl_user a")->row();
+        return $this->db->get($this->table)->row();
     }
 
-    function updateUser($id, $data)
+    function update($id, $data)
     {
         $this->db->where('id_user', $id);
-        $this->db->update('tbl_user', $data);
+        $this->db->update($this->table, $data);
     }
 
     function update_status($id)

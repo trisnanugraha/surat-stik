@@ -8,7 +8,7 @@
       "responsive": true,
       "autoWidth": false,
       "language": {
-        "sEmptyTable": "Data User Belum Ada"
+        "sEmptyTable": "Data User Masih Kosong"
       },
       "processing": true, //Feature control the processing indicator.
       "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -21,22 +21,22 @@
       },
       //Set column definition initialisation properties.
       "columnDefs": [{
-          "targets": [0, 1, 2, 3, 4, 5, 6],
+          "targets": [0, 1, 2, 3, 4, 5],
           "className": 'text-center'
         }, {
           "targets": [-1], //last column
           "render": function(data, type, row) {
-            if (row[5] == "N") {
-              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_user(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"deluser(" + row[6] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+            if (row[4] == "N") {
+              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
             } else {
-              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit_user(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"riset(" + row[6] + ")\"><i></i> Reset Password</a></div>";
+              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[5] + ")\"><i></i> Reset Password</a></div>";
             }
           },
           "orderable": false, //set not orderable
         }, {
           "targets": [-2], //last column
           "render": function(data, type, row) {
-            if (row[5] == "N") {
+            if (row[4] == "N") {
               return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
             } else {
               return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
@@ -47,16 +47,6 @@
           "orderable": false,
           "targets": 0
         }
-        // {
-        //   "targets": [0],
-        //   "render": function(data , type , row){
-        //     if (row[0]!=null) {
-        //       return "<img class=\"myImgx\"  src='<?php echo base_url("assets/foto/user/"); ?>"+row[0]+"' width=\"100px\" height=\"100px\">";
-        //     }else{
-        //       return "<img class=\"myImgx\"  src='<?php echo base_url("assets/foto/default-150x150.png"); ?>' width=\"100px\" height=\"100px\">";
-        //     }
-        //   }
-        // },
       ],
 
     });
@@ -90,7 +80,7 @@
 
   // Button Tabel
 
-  function riset(id) {
+  function reset(id) {
 
     Swal.fire({
       title: 'Anda Yakin Ingin Mengatur Ulang Password ?',
@@ -135,7 +125,7 @@
   }
 
   //delete
-  function deluser(id) {
+  function del(id) {
     Swal.fire({
       title: 'Konfirmasi Hapus User',
       text: "Apakah Anda Yakin Ingin Menghapus User Ini ?",
@@ -157,7 +147,7 @@
             if (respone.status == true) {
               Swal.fire({
                 icon: 'success',
-                title: 'Data User Berhasil Dihapus!'
+                title: 'User Berhasil Dihapus!'
               });
               reload_table();
             } else {
@@ -178,7 +168,7 @@
     })
   }
 
-  function add_user() {
+  function add() {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
@@ -187,7 +177,7 @@
     $('.modal-title').text('Tambah User'); // Set Title to Bootstrap modal title
   }
 
-  function edit_user(id) {
+  function edit(id) {
     save_method = 'update';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
@@ -195,24 +185,18 @@
 
     //Ajax Load data from ajax
     $.ajax({
-      url: "<?php echo site_url('user/edituser') ?>/" + id,
+      url: "<?php echo site_url('user/edit') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
-        $('[name="id_prodi"]').val(data.id_prodi);
         $('[name="id_user"]').val(data.id_user);
         $('[name="username"]').val(data.username);
         $('[name="full_name"]').val(data.full_name);
+        $('[name="kelas"]').val(data.id_kelas);
+        $('[name="sindikat"]').val(data.id_sindikat);
+        $('[name="jabatan"]').val(data.id_jabatan);
         $('[name="is_active"]').val(data.is_active);
         $('[name="level"]').val(data.id_level);
-
-        if (data.image == null) {
-          var image = "<?php echo base_url('assets/foto/user/default.png') ?>";
-          $("#v_image").attr("src", image);
-        } else {
-          var image = "<?php echo base_url('assets/foto/user/') ?>";
-          $("#v_image").attr("src", image + data.image);
-        }
 
         $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
         $('.modal-title').text('Ubah User'); // Set title to Bootstrap modal title
@@ -251,12 +235,12 @@
           if (save_method == 'add') {
             Toast.fire({
               icon: 'success',
-              title: 'Data User Berhasil Disimpan!'
+              title: 'User Berhasil Disimpan!'
             });
           } else if (save_method == 'update') {
             Toast.fire({
               icon: 'success',
-              title: 'Data User Berhasil Diubah!'
+              title: 'User Berhasil Diubah!'
             });
           }
         } else {
@@ -284,11 +268,6 @@
       }
     });
   }
-
-  var loadFile = function(event) {
-    var image = document.getElementById('v_image');
-    image.src = URL.createObjectURL(event.target.files[0]);
-  };
 
   function batal() {
     $('#form')[0].reset();

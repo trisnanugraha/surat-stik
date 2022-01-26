@@ -11,7 +11,9 @@ class User extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_user');
-        $this->load->model('Mod_program_studi');
+        $this->load->model('Mod_kelas');
+        $this->load->model('Mod_sindikat');
+        $this->load->model('Mod_jabatan');
     }
 
     public function index()
@@ -20,7 +22,9 @@ class User extends MY_Controller
         $data['judul'] = 'Manajemen User';
         $data['user'] = $this->Mod_user->getAll();
         $data['user_level'] = $this->Mod_user->userlevel();
-        $data['programStudi'] = $this->Mod_program_studi->get_all();
+        $data['kelas'] = $this->Mod_kelas->get_all();
+        $data['sindikat'] = $this->Mod_sindikat->get_all();
+        $data['jabatan'] = $this->Mod_jabatan->get_all();
         $data['modal_tambah_user'] = show_my_modal('user/modal_tambah_user', $data);
         $js = $this->load->view('user/user-js', null, true);
         $this->template->views('user/home', $data, $js);
@@ -38,7 +42,6 @@ class User extends MY_Controller
             $row = array();
             $row[] = $no;
             $row[] = $user->full_name;
-            $row[] = $user->nama_prodi;
             $row[] = $user->username;
             $row[] = $user->nama_level;
             $row[] = $user->is_active;
@@ -60,50 +63,18 @@ class User extends MY_Controller
     {
         // var_dump($this->input->post('username'));
         $this->_validate();
-        $username = $this->input->post('username');
-        $cek = $this->Mod_user->cekUsername($username);
-        if ($cek->num_rows() > 0) {
-            echo json_encode(array("error" => "Username Sudah Ada!!"));
-        } else {
-            $nama = slug($this->input->post('username'));
-            $config['upload_path']   = './assets/foto/user/';
-            $config['allowed_types'] = 'gif|jpg|jpeg|png'; //mencegah upload backdor
-            $config['max_size']      = '1000';
-            $config['max_width']     = '2000';
-            $config['max_height']    = '1024';
-            $config['file_name']     = $nama;
-
-            $this->upload->initialize($config);
-
-            if ($this->upload->do_upload('imagefile')) {
-                $gambar = $this->upload->data();
-
-                $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('full_name'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => $this->input->post('is_active'),
-                    'image' => $gambar['file_name']
-                );
-
-                $this->Mod_user->insertUser("tbl_user", $save);
-                echo json_encode(array("status" => TRUE));
-            } else { //Apabila tidak ada gambar yang di upload
-                $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('full_name'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => $this->input->post('is_active')
-                );
-
-                $this->Mod_user->insertUser("tbl_user", $save);
-                echo json_encode(array("status" => TRUE));
-            }
-        }
+        $save  = array(
+            'username'  => $this->input->post('username'),
+            'full_name' => $this->input->post('full_name'),
+            'password'  => get_hash($this->input->post('password')),
+            'id_kelas'  => $this->input->post('kelas'),
+            'id_sindikat'  => $this->input->post('sindikat'),
+            'id_jabatan'  => $this->input->post('jabatan'),
+            'id_level'  => $this->input->post('level'),
+            'is_active' => $this->input->post('is_active')
+        );
+        $this->Mod_user->insert($save);
+        echo json_encode(array("status" => TRUE));
     }
 
     public function viewuser()
@@ -116,114 +87,44 @@ class User extends MY_Controller
         $this->load->view('admin/view', $data);
     }
 
-    public function edituser($id)
+    public function edit($id)
     {
 
-        $data = $this->Mod_user->getUser($id);
+        $data = $this->Mod_user->get_user($id);
         echo json_encode($data);
     }
 
 
     public function update()
     {
-        if (!empty($_FILES['imagefile']['name'])) {
-            // $this->_validate();
-            $id = $this->input->post('id_user');
-
-            $nama = slug($this->input->post('username'));
-            $config['upload_path']   = './assets/foto/user/';
-            $config['allowed_types'] = 'gif|jpg|jpeg|png'; //mencegah upload backdor
-            $config['max_size']      = '1000';
-            $config['max_width']     = '2000';
-            $config['max_height']    = '1024';
-            $config['file_name']     = $nama;
-
-            $this->upload->initialize($config);
-
-            if ($this->upload->do_upload('imagefile')) {
-                $gambar = $this->upload->data();
-                //Jika Password tidak kosong
-                if ($this->input->post('password')) {
-                    $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
-                        'username' => $this->input->post('username'),
-                        'full_name' => $this->input->post('full_name'),
-                        'password'  => get_hash($this->input->post('password')),
-                        'id_level'  => $this->input->post('level'),
-                        'is_active' => $this->input->post('is_active'),
-                        'image' => $gambar['file_name']
-                    );
-                } else { //Jika password kosong
-                    $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
-                        'username' => $this->input->post('username'),
-                        'full_name' => $this->input->post('full_name'),
-                        'id_level'  => $this->input->post('level'),
-                        'is_active' => $this->input->post('is_active'),
-                        'image' => $gambar['file_name']
-                    );
-                }
-
-
-                $g = $this->Mod_user->getImage($id)->row_array();
-
-                if ($g != null) {
-                    //hapus gambar yg ada diserver
-                    unlink('assets/foto/user/' . $g['image']);
-                }
-
-                $this->Mod_user->updateUser($id, $save);
-                echo json_encode(array("status" => TRUE));
-            } else { //Apabila tidak ada gambar yang di upload
-
-                //Jika Password tidak kosong
-                if ($this->input->post('password')) {
-                    $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
-                        'username' => $this->input->post('username'),
-                        'full_name' => $this->input->post('full_name'),
-                        'password'  => get_hash($this->input->post('password')),
-                        'id_level'  => $this->input->post('level'),
-                        'is_active' => $this->input->post('is_active')
-                    );
-                } else { //Jika password kosong
-                    $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
-                        'username' => $this->input->post('username'),
-                        'full_name' => $this->input->post('full_name'),
-                        'id_level'  => $this->input->post('level'),
-                        'is_active' => $this->input->post('is_active')
-                    );
-                }
-
-                $this->Mod_user->updateUser($id, $save);
-                echo json_encode(array("status" => TRUE));
-            }
-        } else {
-            // $this->_validate();
-            $id_user = $this->input->post('id_user');
-            if ($this->input->post('password')) {
-                $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('full_name'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => $this->input->post('is_active')
-                );
-            } else {
-                $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('full_name'),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => $this->input->post('is_active')
-                );
-            }
-
-            $this->Mod_user->updateUser($id_user, $save);
-            echo json_encode(array("status" => TRUE));
+        $id = $this->input->post('id_user');
+        //Jika Password tidak kosong
+        if ($this->input->post('password')) {
+            $save  = array(
+                'username' => $this->input->post('username'),
+                'full_name' => $this->input->post('full_name'),
+                'password'  => get_hash($this->input->post('password')),
+                'id_kelas'  => $this->input->post('kelas'),
+                'id_sindikat'  => $this->input->post('sindikat'),
+                'id_jabatan'  => $this->input->post('jabatan'),
+                'id_level'  => $this->input->post('level'),
+                'is_active' => $this->input->post('is_active')
+            );
+        } else { //Jika password kosong
+            $save  = array(
+                'id_prodi' => $this->input->post('id_prodi'),
+                'username' => $this->input->post('username'),
+                'full_name' => $this->input->post('full_name'),
+                'id_kelas'  => $this->input->post('kelas'),
+                'id_sindikat'  => $this->input->post('sindikat'),
+                'id_jabatan'  => $this->input->post('jabatan'),
+                'id_level'  => $this->input->post('level'),
+                'is_active' => $this->input->post('is_active')
+            );
         }
+
+        $this->Mod_user->update($id, $save);
+        echo json_encode(array("status" => TRUE));
     }
 
     public function delete()
@@ -300,12 +201,6 @@ class User extends MY_Controller
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('id_prodi') == '') {
-            $data['inputerror'][] = 'id_prodi';
-            $data['error_string'][] = 'Program Studi Tidak Boleh Kosong';
-            $data['status'] = FALSE;
-        }
-
         if ($this->input->post('full_name') == '') {
             $data['inputerror'][] = 'full_name';
             $data['error_string'][] = 'Nama Lengkap Tidak Boleh Kosong';
@@ -315,6 +210,24 @@ class User extends MY_Controller
         if ($this->input->post('password') == '') {
             $data['inputerror'][] = 'password';
             $data['error_string'][] = 'Password Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('kelas') == '') {
+            $data['inputerror'][] = 'kelas';
+            $data['error_string'][] = 'Kelas Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('sindikat') == '') {
+            $data['inputerror'][] = 'sindikat';
+            $data['error_string'][] = 'Sindikat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('jabatan') == '') {
+            $data['inputerror'][] = 'jabatan';
+            $data['error_string'][] = 'Jabatan Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
