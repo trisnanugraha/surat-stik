@@ -112,7 +112,6 @@ class User extends MY_Controller
             );
         } else { //Jika password kosong
             $save  = array(
-                'id_prodi' => $this->input->post('id_prodi'),
                 'username' => $this->input->post('username'),
                 'full_name' => $this->input->post('full_name'),
                 'id_kelas'  => $this->input->post('kelas'),
@@ -130,12 +129,7 @@ class User extends MY_Controller
     public function delete()
     {
         $id = $this->input->post('id');
-        $g = $this->Mod_user->getImage($id)->row_array();
-        if ($g != null) {
-            //hapus gambar yg ada diserver
-            unlink('assets/foto/user/' . $g['image']);
-        }
-        $this->Mod_user->deleteUsers($id, 'tbl_user');
+        $this->Mod_user->delete($id);
         $data['status'] = TRUE;
         echo json_encode($data);
     }

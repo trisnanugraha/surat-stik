@@ -17,6 +17,7 @@ class Dashboard extends MY_Controller
         $this->load->model('Mod_data_penelitian');
         $this->load->model('Mod_data_pkm');
         $this->load->model('Mod_dashboard');
+        $this->load->model('Mod_permohonan_surat');
         // backButtonHandle();
     }
 
@@ -28,6 +29,7 @@ class Dashboard extends MY_Controller
         $data['penelitian'] = $this->Mod_data_penelitian->total_rows();
         $data['pendinguser'] = $this->Mod_aktivasi_user->total_rows();
         $data['pkm'] = $this->Mod_data_pkm->total_rows();
+        $data['permohonansurat'] = $this->Mod_permohonan_surat->total_rows();
         $data['periode'] = $this->Mod_priode->get_data();
         // $data['dataPenelitian'] = $this->Mod_dashboard->get_total_penelitian($this->getdata());
         // $data['dataPKM'] = $this->Mod_dashboard->get_total_pkm($this->getdata());

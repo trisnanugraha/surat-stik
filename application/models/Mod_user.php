@@ -119,6 +119,12 @@ class Mod_user extends CI_Model
         return $insert;
     }
 
+    function insert_new_user($data)
+    {
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
+    }
+
     function get_user($id)
     {
         $this->db->where("id_user", $id);
@@ -138,10 +144,10 @@ class Mod_user extends CI_Model
         $this->db->update('tbl_user');
     }
 
-    function deleteUsers($id, $table)
+    function delete($id)
     {
         $this->db->where('id_user', $id);
-        $this->db->delete($table);
+        $this->db->delete($this->table);
     }
 
     function userlevel()

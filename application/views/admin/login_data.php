@@ -28,7 +28,7 @@
 </head>
 
 <body class="hold-transition login-page">
-  <div class="login-box">
+  <div class="login-box" style="width: 600px;">
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
@@ -65,7 +65,7 @@
             </div>
           </div> -->
             <!-- /.col -->
-            <div class="col-4">
+            <div class="col-12">
               <button type="button" id="login" class="btn btn-primary btn-block">Masuk</button>
             </div>
 

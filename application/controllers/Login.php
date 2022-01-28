@@ -14,7 +14,11 @@ class Login extends CI_Controller
     {
         $logged_in = $this->session->userdata('logged_in');
         if ($logged_in == TRUE) {
-            redirect('dashboard');
+            if ($this->session->userdata('id_level') == 1) {
+                redirect('dashboard');
+            } else {
+                redirect('permohonansurat');
+            }
         } else {
             $aplikasi['aplikasi'] = $this->Mod_login->Aplikasi()->row();
             $this->load->view('admin/login_data', $aplikasi);

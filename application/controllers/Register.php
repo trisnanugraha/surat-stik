@@ -7,7 +7,9 @@ class Register extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Mod_program_studi');
+        $this->load->model('Mod_kelas');
+        $this->load->model('Mod_sindikat');
+        $this->load->model('Mod_jabatan');
         $this->load->model('Mod_user');
         $this->load->model('Mod_aktivasi_user');
         $this->load->model(array('Mod_login'));
@@ -17,7 +19,9 @@ class Register extends CI_Controller
     {
         $data['aplikasi'] = $this->Mod_login->Aplikasi()->row();
         $data['user_level'] = $this->Mod_user->userlevelRegister();
-        $data['programStudi'] = $this->Mod_program_studi->get_all();
+        $data['kelas'] = $this->Mod_kelas->get_all();
+        $data['sindikat'] = $this->Mod_sindikat->get_all();
+        $data['jabatan'] = $this->Mod_jabatan->get_all();
         $this->load->view('admin/register', $data);
     }
 
@@ -27,59 +31,29 @@ class Register extends CI_Controller
         $username = $this->input->post('username');
         $cek = $this->Mod_user->cekUsername($username);
         if ($cek->num_rows() > 0) {
-            echo json_encode(array("error" => "Username Sudah Ada!!"));
+            $data['pesan'] = "Mohon Maaf Username Tidak Tersedia";
+            $data['error'] = TRUE;
+            echo json_encode($data);
         } else {
-            $nama = slug($this->input->post('username'));
-            $config['upload_path']   = './assets/foto/user/';
-            $config['allowed_types'] = 'gif|jpg|jpeg|png'; //mencegah upload backdor
-            $config['max_size']      = '1000';
-            $config['max_width']     = '2000';
-            $config['max_height']    = '1024';
-            $config['file_name']     = $nama;
+            $save  = array(
+                'username' => $this->input->post('username'),
+                'full_name' => $this->input->post('fullname'),
+                'password'  => get_hash($this->input->post('password')),
+                'id_kelas'  => $this->input->post('kelas'),
+                'id_sindikat'  => $this->input->post('sindikat'),
+                'id_jabatan'  => $this->input->post('jabatan'),
+                'id_level'  => $this->input->post('level'),
+                'is_active' => 'N'
+            );
 
-            $this->upload->initialize($config);
+            $id = $this->Mod_user->insert_new_user($save);
 
-            if ($this->upload->do_upload('imagefile')) {
-                $gambar = $this->upload->data();
+            $pending = array(
+                'id_user' => $id
+            );
 
-                $save  = array(
-                    'id_prodi' => $this->input->post('prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('fullname'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => 'N',
-                    'image' => $gambar['file_name']
-                );
-
-                $id = $this->Mod_user->insertUser("tbl_user", $save);
-
-                $pending = array(
-                    'id_user' => $id->id_user
-                );
-
-                $this->Mod_aktivasi_user->insert("tbl_pending_user", $pending);
-
-                echo json_encode(array("status" => TRUE));
-            } else { //Apabila tidak ada gambar yang di upload
-                $save  = array(
-                    'id_prodi' => $this->input->post('prodi'),
-                    'username' => $this->input->post('username'),
-                    'full_name' => $this->input->post('fullname'),
-                    'password'  => get_hash($this->input->post('password')),
-                    'id_level'  => $this->input->post('level'),
-                    'is_active' => 'N'
-                );
-
-                $id = $this->Mod_user->insertUser("tbl_user", $save);
-
-                $pending = array(
-                    'id_user' => $id
-                );
-
-                $this->Mod_aktivasi_user->insert("tbl_pending_user", $pending);
-                echo json_encode(array("status" => TRUE));
-            }
+            $this->Mod_aktivasi_user->insert($pending);
+            echo json_encode(array("status" => TRUE));
         }
     }
 
@@ -102,12 +76,6 @@ class Register extends CI_Controller
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('prodi') == '') {
-            $data['inputerror'][] = 'prodi';
-            $data['error_string'][] = 'Program Studi Tidak Boleh Kosong';
-            $data['status'] = FALSE;
-        }
-
         if ($this->input->post('password') == '') {
             $data['inputerror'][] = 'password';
             $data['error_string'][] = 'Password Tidak Boleh Kosong';
@@ -123,6 +91,24 @@ class Register extends CI_Controller
         if ($this->input->post('password') != '' && $this->input->post('verifypassword') != '' && $this->input->post('password') != $this->input->post('verifypassword')) {
             $data['inputerror'][] = 'verifypassword';
             $data['error_string'][] = 'Verifikasi Password Tidak Cocok Dengan Password';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('kelas') == '') {
+            $data['inputerror'][] = 'kelas';
+            $data['error_string'][] = 'Kelas Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('sindikat') == '') {
+            $data['inputerror'][] = 'sindikat';
+            $data['error_string'][] = 'Sindikat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('jabatan') == '') {
+            $data['inputerror'][] = 'jabatan';
+            $data['error_string'][] = 'Jabatan Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

@@ -1,12 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_aktivasi_user extends CI_Model
+class Mod_permohonan_surat extends CI_Model
 {
-    var $table = 'tbl_pending_user';
-    var $column_order = array('', 'username', 'full_name', 'nama_level', 'a.tgl_dibuat');
-    var $column_search = array('username', 'full_name', 'nama_level');
-    var $order = array('id_pending_user' => 'asc'); // default order 
+
+    var $table = 'tbl_permohonan_surat';
+    var $column_order = array('', 'perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
+    var $column_search = array('perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
+    var $order = array('id_permohonan_surat' => 'desc'); // default order 
 
     public function __construct()
     {
@@ -15,11 +16,7 @@ class Mod_aktivasi_user extends CI_Model
     }
     private function _get_datatables_query()
     {
-        $this->db->select('a.*,b.username,b.full_name,c.nama_level');
-        $this->db->join('tbl_user b', 'a.id_user=b.id_user');
-        $this->db->join('tbl_userlevel c', 'b.id_level=c.id_level');
-        $this->db->from('tbl_pending_user a');
-        // $this->db->from($this->table);
+        $this->db->from($this->table);
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -73,11 +70,30 @@ class Mod_aktivasi_user extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function get_user($id)
+    function get_all()
     {
-        $this->db->where("id_pending_user", $id);
-        $this->db->select('id_user');
-        return $this->db->get("tbl_pending_user")->row();
+        return $this->db->get($this->table)
+            ->result();
+    }
+
+    function get_surat_by_id($id)
+    {
+        $this->db->where('id_permohonan_surat', $id);
+        return $this->db->get($this->table)->row();
+    }
+
+    function get_sindikat($id)
+    {
+        $this->db->where('id_sindikat', $id);
+        return $this->db->get($this->table)->row();
+    }
+
+    function getuser($id_prodi)
+    {
+        $this->db->where('id_prodi', $id_prodi);
+        $this->db->where('is_active', 'Y');
+        $this->db->from('tbl_user');
+        return $this->db->count_all_results();
     }
 
     function insert($data)
@@ -86,9 +102,15 @@ class Mod_aktivasi_user extends CI_Model
         return $insert;
     }
 
+    function update($id, $data)
+    {
+        $this->db->where('id_sindikat', $id);
+        $this->db->update($this->table, $data);
+    }
+
     function delete($id)
     {
-        $this->db->where('id_pending_user', $id);
+        $this->db->where('id_permohonan_surat', $id);
         $this->db->delete($this->table);
     }
 
@@ -98,3 +120,5 @@ class Mod_aktivasi_user extends CI_Model
         return $data->num_rows();
     }
 }
+
+/* End of file Mod_permohonan_surat.php */

@@ -27,14 +27,12 @@
 </head>
 
 <body class="hold-transition register-page">
-    <div class="register-box" style="width: 500px;">
+    <div class="register-box" style="width: 600px;">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
                 <a href="<?php echo base_url(); ?>" class="h1"><b><?php echo $aplikasi->nama_aplikasi; ?></b></a>
             </div>
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Daftar Akun Baru</p>
-
                 <form action="" method="post" id="signup-form">
                     <div class="form-group row">
                         <label for="judul" class="col-sm-4 col-form-label">Nama Lengkap</label>
@@ -56,19 +54,6 @@
                                     <span class="fas fa-user"></span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Program Studi</label>
-                        <div class="col-sm-8 kosong">
-                            <select class="form-control" name="prodi">
-                                <option value="" selected disabled>-- Pilih Program Studi --</option>
-                                <?php
-                                foreach ($programStudi as $prodi) { ?>
-                                    <option value="<?= $prodi->id_prodi; ?>"><?= $prodi->nama_prodi; ?></option>
-                                <?php } ?>
-                            </select>
-                            <div class="input-group-append"></div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -94,6 +79,45 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="judul" class="col-sm-4 col-form-label">Kelas</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control" name="kelas" id="kelas">
+                                <option value="" selected disabled>Pilih Kelas</option>
+                                <?php
+                                foreach ($kelas as $k) { ?>
+                                    <option value="<?= $k->id_kelas; ?>"><?= $k->nama_kelas; ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="input-group-append"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="judul" class="col-sm-4 col-form-label">Sindikat</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control" name="sindikat" id="sindikat">
+                                <option value="" selected disabled>Pilih Sindikat</option>
+                                <?php
+                                foreach ($sindikat as $s) { ?>
+                                    <option value="<?= $s->id_sindikat; ?>"><?= $s->nama_sindikat; ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="input-group-append"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="judul" class="col-sm-4 col-form-label">Jabatan</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control" name="jabatan" id="jabatan">
+                                <option value="" selected disabled>Pilih Jabatan</option>
+                                <?php
+                                foreach ($jabatan as $j) { ?>
+                                    <option value="<?= $j->id_jabatan; ?>"><?= $j->nama_jabatan; ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="input-group-append"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="judul" class="col-sm-4 col-form-label">Hak Akses</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="level">
@@ -113,10 +137,6 @@
                         <!-- /.col -->
                     </div>
                 </form>
-                <br>
-                <p class="text-center">
-                    <a href="<?php echo base_url(); ?>">Saya Sudah Punya Akun</a>
-                </p>
             </div>
             <div class="card-footer" style="text-align: center;">
                 <b>
