@@ -4,6 +4,10 @@
 
   $(document).ready(function() {
 
+    $('.kelas').hide();
+    $('.sindikat').hide();
+    $('.jabatan').hide();
+
     table = $("#tabeluser").DataTable({
       "responsive": true,
       "autoWidth": false,
@@ -21,33 +25,32 @@
       },
       //Set column definition initialisation properties.
       "columnDefs": [{
-          "targets": [0, 1, 2, 3, 4, 5],
-          "className": 'text-center'
-        }, {
-          "targets": [-1], //last column
-          "render": function(data, type, row) {
-            if (row[4] == "N") {
-              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
-            } else {
-              return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[5] + ")\"><i></i> Reset Password</a></div>";
-            }
-          },
-          "orderable": false, //set not orderable
-        }, {
-          "targets": [-2], //last column
-          "render": function(data, type, row) {
-            if (row[4] == "N") {
-              return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
-            } else {
-              return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
-            }
+        "targets": [0, 1, 2, 3, 4, 5],
+        "className": 'text-center'
+      }, {
+        "targets": [-1], //last column
+        "render": function(data, type, row) {
+          if (row[4] == "N") {
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+          } else {
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[5] + ")\"><i></i> Reset Password</a></div>";
           }
-        }, {
-          "searchable": false,
-          "orderable": false,
-          "targets": 0
+        },
+        "orderable": false, //set not orderable
+      }, {
+        "targets": [-2], //last column
+        "render": function(data, type, row) {
+          if (row[4] == "N") {
+            return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
+          } else {
+            return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
+          }
         }
-      ],
+      }, {
+        "searchable": false,
+        "orderable": false,
+        "targets": 0
+      }],
 
     });
     $("input").change(function() {
@@ -64,6 +67,21 @@
       $(this).parent().parent().removeClass('has-error');
       $(this).next().empty();
       $(this).removeClass('is-invalid');
+    });
+    $('select.level').change(function() {
+      var val = $(this).val();
+      console.log(val)
+      if (val === "11" || val === "12" || val === "13") {
+        $('.kelas').hide();
+        $('.sindikat').hide();
+        $('.jabatan').show();
+        // $('.subkategori-buku-umum').hide();
+      } else if (val === "6") {
+        $('.kelas').show();
+        $('.sindikat').show();
+        $('.jabatan').hide();
+
+      }
     });
   });
 

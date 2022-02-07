@@ -7,4 +7,5 @@ $route['translate_uri_dashes'] = FALSE;
 $route['aktivasi-user'] = 'Aktivasiuser/index';
 $route['permohonan-surat'] = 'Permohonansurat/index';
 $route['validasi-surat'] = 'Validasisurat/index';
+$route['daftar-mahasiswa'] = 'Mahasiswa/index';
 

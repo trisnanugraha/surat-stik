@@ -76,6 +76,13 @@ class Mod_sindikat extends CI_Model
             ->result();
     }
 
+    function get_all_sindikat()
+    {
+        $this->db->where('nama_sindikat !=', '-');
+        return $this->db->get($this->table)
+            ->result();
+    }
+
     function get_sindikat($id)
     {
         $this->db->where('id_sindikat', $id);

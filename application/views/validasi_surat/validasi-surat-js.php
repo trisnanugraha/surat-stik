@@ -156,7 +156,7 @@
 
     function detail(id) {
         save_method = 'detail';
-        $('#form')[0].reset(); // reset form on modals
+        $('#form_detail')[0].reset(); // reset form on modals
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         //Ajax Load data from ajax
@@ -170,16 +170,19 @@
                 $('[name="tanggal"]').text(data.tanggal);
                 $('[name="lokasi"]').text(data.lokasi);
                 $('[name="tanggal_akhir"]').text(data.tanggal_akhir);
-                if (data.level == 'Admin') {
-                    $('[name="status_sekretaris"]').val(data.status_sekretaris);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                } else if (data.level == 'Kasenat') {
-                    $('[name="status_kasenat"]').val(data.status_kasenat);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                } else if (data.level == 'Kakorwa') {
-                    $('[name="status_kakorwa"]').val(data.status_kakorwa);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                }
+                $('[name="status_sekretaris"]').val(data.status_sekretaris);
+                $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                // } else if (data.level == 'Kasenat') {
+                // if (data.level == 'Admin') {
+                //     $('[name="status_sekretaris"]').val(data.status_sekretaris);
+                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                // } else if (data.level == 'Kasenat') {
+                //     $('[name="status_kasenat"]').val(data.status_kasenat);
+                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                // } else if (data.level == 'Kakorwa') {
+                //     $('[name="status_kakorwa"]').val(data.status_kakorwa);
+                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                // }
 
                 $('#modal_detail').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Detail Permohonan Surat'); // Set title to Bootstrap modal title
@@ -194,24 +197,28 @@
         $('#btnSave').text('Menyimpan...'); //change button text
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
+        var dataform;
 
         if (save_method == 'add') {
             url = "<?php echo site_url('permohonansurat/insert') ?>";
+            dataform = '#form';
         }
 
         if (save_method == 'update') {
             url = "<?php echo site_url('sindikat/update') ?>";
+            dataform = '#form';
         }
 
         if (save_method == 'detail') {
             url = "<?php echo site_url('validasisurat/validasi') ?>";
+            dataform = '#form_detail';
         }
 
         // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
-            data: $('#form').serialize(),
+            data: $(dataform).serialize(),
             dataType: "JSON",
             success: function(data) {
 

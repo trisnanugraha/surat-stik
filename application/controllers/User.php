@@ -11,6 +11,7 @@ class User extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_user');
+        $this->load->model('Mod_userlevel');
         $this->load->model('Mod_kelas');
         $this->load->model('Mod_sindikat');
         $this->load->model('Mod_jabatan');
@@ -22,7 +23,7 @@ class User extends MY_Controller
         $data['judul'] = 'Manajemen User';
         $data['user'] = $this->Mod_user->getAll();
         $data['user_level'] = $this->Mod_user->userlevel();
-        $data['kelas'] = $this->Mod_kelas->get_all();
+        $data['kelas'] = $this->Mod_kelas->get_all_kelas();
         $data['sindikat'] = $this->Mod_sindikat->get_all();
         $data['jabatan'] = $this->Mod_jabatan->get_all();
         $data['modal_tambah_user'] = show_my_modal('user/modal_tambah_user', $data);
@@ -62,7 +63,14 @@ class User extends MY_Controller
     public function insert()
     {
         // var_dump($this->input->post('username'));
-        $this->_validate();
+        if ($this->input->post('level') == '') {
+            $this->_validateFirst();
+        } else {
+            $checklevel = $this->Mod_userlevel->getUserlevel($this->input->post('level'));
+            $this->_validate($checklevel);
+        }
+        $level = $this->Mod_userlevel->getUserlevel($this->input->post('level'));
+        if($level)
         $save  = array(
             'username'  => $this->input->post('username'),
             'full_name' => $this->input->post('full_name'),
@@ -182,7 +190,68 @@ class User extends MY_Controller
     }
 
 
-    private function _validate()
+    private function _validate($level)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+
+        if ($this->input->post('username') == '') {
+            $data['inputerror'][] = 'username';
+            $data['error_string'][] = 'Username Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('full_name') == '') {
+            $data['inputerror'][] = 'full_name';
+            $data['error_string'][] = 'Nama Lengkap Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('password') == '') {
+            $data['inputerror'][] = 'password';
+            $data['error_string'][] = 'Password Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('kelas') == '') {
+            $data['inputerror'][] = 'kelas';
+            $data['error_string'][] = 'Kelas Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('sindikat') == '') {
+            $data['inputerror'][] = 'sindikat';
+            $data['error_string'][] = 'Sindikat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('jabatan') == '') {
+            $data['inputerror'][] = 'jabatan';
+            $data['error_string'][] = 'Jabatan Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('is_active') == '') {
+            $data['inputerror'][] = 'is_active';
+            $data['error_string'][] = 'Status Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('level') == '') {
+            $data['inputerror'][] = 'level';
+            $data['error_string'][] = 'Hak Akses Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] === FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    private function _validateFirst()
     {
         $data = array();
         $data['error_string'] = array();

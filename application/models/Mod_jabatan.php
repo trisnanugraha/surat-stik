@@ -76,6 +76,13 @@ class Mod_jabatan extends CI_Model
             ->result();
     }
 
+    function get_all_jabatan()
+    {
+        $this->db->where('nama_jabatan !=', 'mahasiswa');
+        return $this->db->get($this->table)
+            ->result();
+    }
+
     function get_jabatan($id)
     {
         $this->db->where('id_jabatan', $id);

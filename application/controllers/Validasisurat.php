@@ -113,15 +113,17 @@ class Validasisurat extends MY_Controller
         // $this->_validate();
         $id      = $this->input->post('id_permohonan_surat');
 
-        var_dump($this->input->post('id_permohonan_surat'));
-        var_dump($this->input->post('status_sekretaris'));
-        var_dump($this->input->post('keterangan_sekretaris'));
+        // var_dump($this->input->post('id_permohonan_surat'));
+        // var_dump($this->input->post('status_sekretaris'));
+        // var_dump($this->input->post('keterangan_sekretaris'));
 
         $data  = array(
             'status_sekretaris' => $this->input->post('status_sekretaris'),
             'keterangan_sekretaris' => $this->input->post('keterangan_sekretaris'),
             'tgl_validasi_sekretaris' => date('Y-m-d H:i:s'),
         );
+
+        // echo json_encode($data);
         $this->Mod_validasi_surat->update($id, $data);
         echo json_encode(array("status" => TRUE));
     }

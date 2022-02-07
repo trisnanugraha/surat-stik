@@ -11,7 +11,7 @@
 
             </div>
             <div class="modal-body form">
-                <form action="#" id="form" class="form-horizontal">
+                <form action="#" id="form_detail" class="form-horizontal">
                     <input type="hidden" value="" name="id_permohonan_surat" />
                     <div class="form-group row ">
                         <label for="perihal" class="col-sm-3 col-form-label">Perihal</label>
@@ -47,7 +47,7 @@
                             <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row ">
+                    <!-- <div class="form-group row ">
                         <label for="status_kasenat" class="col-sm-3 col-form-label">Validasi Kasenat</label>
                         <div class="col-sm-9">
                             <p class="form-control my-0" name="status_kasenat" id="status_kasenat"></p>
@@ -70,13 +70,13 @@
                         <div class="col-sm-9">
                             <textarea class="form-control" name="keterangan_kakorwa" id="keterangan_kakorwa" rows="2" style="resize: none;" readonly></textarea>
                         </div>
-                    </div>
+                    </div> -->
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="text-right">
                     <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Simpan</button>
-                    <button class="btn btn-primary" onclick="tutup()" data-dismiss="modal"> Tutup</button>
+                    <!-- <button class="btn btn-primary" onclick="tutup()" data-dismiss="modal"> Tutup</button> -->
                 </div>
             </div>
         </div><!-- /.modal-content -->

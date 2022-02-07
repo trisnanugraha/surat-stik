@@ -33,6 +33,18 @@
                         </div>
                     </div>
                     <div class="form-group row ">
+                        <label for="level" class="col-sm-4 col-form-label">Hak Akses</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control level" name="level" id="level">
+                                <option value="" selected disabled>Pilih Hak Akses</option>
+                                <?php
+                                foreach ($user_level as $level) { ?>
+                                    <option value="<?= $level->id_level; ?>"><?= $level->nama_level; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row kelas">
                         <label for="kelas" class="col-sm-4 col-form-label">Kelas</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="kelas" id="kelas">
@@ -44,7 +56,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row ">
+                    <div class="form-group row sindikat">
                         <label for="sindikat" class="col-sm-4 col-form-label">Sindikat</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="sindikat" id="sindikat">
@@ -56,7 +68,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row ">
+                    <div class="form-group row jabatan">
                         <label for="jabatan" class="col-sm-4 col-form-label">Jabatan</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="jabatan" id="jabatan">
@@ -75,18 +87,6 @@
                                 <option value="" selected disabled>Pilih Status</option>
                                 <option value="Y">Aktif</option>
                                 <option value="N">Non-Aktif</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row ">
-                        <label for="level" class="col-sm-4 col-form-label">Hak Akses</label>
-                        <div class="col-sm-8 kosong">
-                            <select class="form-control" name="level" id="level">
-                                <option value="" selected disabled>Pilih Hak Akses</option>
-                                <?php
-                                foreach ($user_level as $level) { ?>
-                                    <option value="<?= $level->id_level; ?>"><?= $level->nama_level; ?></option>
-                                <?php } ?>
                             </select>
                         </div>
                     </div>

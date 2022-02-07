@@ -79,6 +79,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="level" class="col-sm-4 col-form-label">Hak Akses</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control level" name="level">
+                                <option value="" selected disabled>-- Pilih Hak Akses --</option>
+                                <?php
+                                foreach ($user_level as $level) { ?>
+                                    <option value="<?= $level->id_level; ?>"><?= $level->nama_level; ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="input-group-append"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row kelas">
                         <label for="judul" class="col-sm-4 col-form-label">Kelas</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="kelas" id="kelas">
@@ -91,7 +104,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row sindikat">
                         <label for="judul" class="col-sm-4 col-form-label">Sindikat</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="sindikat" id="sindikat">
@@ -104,7 +117,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row jabatan">
                         <label for="judul" class="col-sm-4 col-form-label">Jabatan</label>
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="jabatan" id="jabatan">
@@ -117,19 +130,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Hak Akses</label>
-                        <div class="col-sm-8 kosong">
-                            <select class="form-control" name="level">
-                                <option value="" selected disabled>-- Pilih Hak Akses --</option>
-                                <?php
-                                foreach ($user_level as $level) { ?>
-                                    <option value="<?= $level->id_level; ?>"><?= $level->nama_level; ?></option>
-                                <?php } ?>
-                            </select>
-                            <div class="input-group-append"></div>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="col-12">
                             <button type="button" class="btn btn-primary btn-block" id="register">Register</button>
@@ -172,6 +173,11 @@
 
     <script>
         $(document).ready(function() {
+
+            $('.kelas').hide();
+            $('.sindikat').hide();
+            $('.jabatan').hide();
+
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().next().empty();
@@ -181,6 +187,20 @@
                 $(this).parent().parent().removeClass('has-error');
                 $(this).next().empty();
                 $(this).removeClass('is-invalid');
+            });
+            $('select.level').change(function() {
+                var val = $(this).val();
+                if (val === "11" || val === "12" || val === "13") {
+                    $('.kelas').hide();
+                    $('.sindikat').hide();
+                    $('.jabatan').show();
+                    // $('.subkategori-buku-umum').hide();
+                } else if (val === "6") {
+                    $('.kelas').show();
+                    $('.sindikat').show();
+                    $('.jabatan').hide();
+
+                }
             });
         });
 

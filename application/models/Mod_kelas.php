@@ -76,6 +76,13 @@ class Mod_kelas extends CI_Model
             ->result();
     }
 
+    function get_all_kelas()
+    {
+        $this->db->where('nama_kelas !=', '-');
+        return $this->db->get($this->table)
+            ->result();
+    }
+
     function get_kelas($id)
     {
         $this->db->where('id_kelas', $id);

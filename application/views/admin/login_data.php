@@ -66,7 +66,7 @@
           </div> -->
             <!-- /.col -->
             <div class="col-12">
-              <button type="button" id="login" class="btn btn-primary btn-block">Masuk</button>
+              <button type="submit" id="login" class="btn btn-primary btn-block">Masuk</button>
             </div>
 
             <!-- /.col -->
@@ -133,7 +133,9 @@
 
 
   <script>
-    $("#login").on('click', function() {
+    $("#quickForm").submit(function(e) {
+      //prevent Default functionality
+      e.preventDefault();
       $.ajax({
         url: '<?php echo base_url('login/login') ?>',
         type: 'POST',
@@ -145,9 +147,26 @@
             var url = '<?php echo base_url('dashboard') ?>';
             window.location = url;
           } else if (data.error) {
-            toastr.error(
-              data.pesan
-            );
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+              },
+              toastr.error(
+                data.pesan
+              );
           } else {
             for (var i = 0; i < data.inputerror.length; i++) {
               $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid');
