@@ -31,52 +31,72 @@
                             <p class="form-control my-0" name="lokasi" id="lokasi"></p>
                         </div>
                     </div>
-                    <div class="form-group row ">
-                        <label for="status_sekretaris" class="col-sm-3 col-form-label">Validasi Sekretaris</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" name="status_sekretaris" id="status_sekretaris">
-                                <option value="Diproses">Diproses</option>
-                                <option value="Disetujui">Disetujui</option>
-                                <option value="Ditolak">Ditolak</option>
-                            </select>
+                    <?php
+                    if ($level == 'Admin') { ?>
+                        <div class="form-group row ">
+                            <label for="status_sekretaris" class="col-sm-3 col-form-label">Validasi Sekretaris</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="status_sekretaris" id="status_sekretaris">
+                                    <option value="Diproses">Diproses</option>
+                                    <option value="Disetujui">Disetujui</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Keterangan Sekretaris</label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;"></textarea>
+                        <div class="form-group row">
+                            <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Keterangan Sekretaris</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;"></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div class="form-group row ">
-                        <label for="status_kasenat" class="col-sm-3 col-form-label">Validasi Kasenat</label>
-                        <div class="col-sm-9">
-                            <p class="form-control my-0" name="status_kasenat" id="status_kasenat"></p>
+                    <?php }
+                    ?>
+                    <?php
+                    if ($level == 'Kasenat') { ?>
+                        <div class="form-group row ">
+                            <label for="status_kasenat" class="col-sm-3 col-form-label">Validasi Kasenat</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="status_kasenat" id="status_kasenat">
+                                    <option value="Diproses">Diproses</option>
+                                    <option value="Disetujui">Disetujui</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="keterangan_kasenat" class="col-sm-3 col-form-label">Keterangan Kasenat</label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_kasenat" id="keterangan_kasenat" rows="2" style="resize: none;" readonly></textarea>
+                        <div class="form-group row">
+                            <label for="keterangan_kasenat" class="col-sm-3 col-form-label">Keterangan Kasenat</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" name="keterangan_kasenat" id="keterangan_kasenat" rows="2" style="resize: none;"></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row ">
-                        <label for="status_kakorwa" class="col-sm-3 col-form-label">Validasi Kakorwa</label>
-                        <div class="col-sm-9">
-                            <p class="form-control my-0" name="status_kakorwa" id="status_kakorwa"></p>
+                    <?php }
+                    ?>
+                    <?php
+                    if ($level == 'Kakorwa') { ?>
+                        <div class="form-group row ">
+                            <label for="status_kakorwa" class="col-sm-3 col-form-label">Validasi Kakorwa</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="status_kakorwa" id="status_kakorwa">
+                                    <option value="Diproses">Diproses</option>
+                                    <option value="Disetujui">Disetujui</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="keterangan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_kakorwa" id="keterangan_kakorwa" rows="2" style="resize: none;" readonly></textarea>
+                        <div class="form-group row">
+                            <label for="keterangan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" name="keterangan_kakorwa" id="keterangan_kakorwa" rows="2" style="resize: none;"></textarea>
+                            </div>
                         </div>
-                    </div> -->
+                    <?php }
+                    ?>
                 </form>
             </div>
             <div class="modal-footer">
                 <div class="text-right">
                     <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Simpan</button>
-                    <!-- <button class="btn btn-primary" onclick="tutup()" data-dismiss="modal"> Tutup</button> -->
+                    <button class="btn btn-outline-secondary" onclick="tutup()" data-dismiss="modal"> Tutup</button>
                 </div>
             </div>
         </div><!-- /.modal-content -->

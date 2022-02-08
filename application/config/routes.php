@@ -8,4 +8,5 @@ $route['aktivasi-user'] = 'Aktivasiuser/index';
 $route['permohonan-surat'] = 'Permohonansurat/index';
 $route['validasi-surat'] = 'Validasisurat/index';
 $route['daftar-mahasiswa'] = 'Mahasiswa/index';
+$route['kotak-surat'] = 'Kotaksurat/index';
 

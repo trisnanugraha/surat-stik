@@ -172,17 +172,16 @@
                 $('[name="tanggal_akhir"]').text(data.tanggal_akhir);
                 $('[name="status_sekretaris"]').val(data.status_sekretaris);
                 $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                // } else if (data.level == 'Kasenat') {
-                // if (data.level == 'Admin') {
-                //     $('[name="status_sekretaris"]').val(data.status_sekretaris);
-                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                // } else if (data.level == 'Kasenat') {
-                //     $('[name="status_kasenat"]').val(data.status_kasenat);
-                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                // } else if (data.level == 'Kakorwa') {
-                //     $('[name="status_kakorwa"]').val(data.status_kakorwa);
-                //     $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                // }
+                if (data.level == 'Admin') {
+                    $('[name="status_sekretaris"]').val(data.status_sekretaris);
+                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                } else if (data.level == 'Kasenat') {
+                    $('[name="status_kasenat"]').val(data.status_kasenat);
+                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                } else if (data.level == 'Kakorwa') {
+                    $('[name="status_kakorwa"]').val(data.status_kakorwa);
+                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                }
 
                 $('#modal_detail').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Detail Permohonan Surat'); // Set title to Bootstrap modal title
@@ -268,5 +267,11 @@
 
             }
         });
+    }
+
+    function tutup() {
+        $('#form_detail')[0].reset();
+        $('[name="perihal"]').text('');
+        reload_table();
     }
 </script>

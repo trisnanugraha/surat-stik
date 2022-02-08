@@ -163,6 +163,8 @@
                 $('[name="status_kasenat"]').text(data.status_kasenat);
                 $('[name="status_kakorwa"]').text(data.status_kakorwa);
                 $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                $('[name="keterangan_kasenat"]').val(data.keterangan_kasenat);
+                $('[name="keterangan_kakorwa"]').val(data.keterangan_kakorwa);
 
                 $('#modal_detail').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Detail Permohonan Surat'); // Set title to Bootstrap modal title

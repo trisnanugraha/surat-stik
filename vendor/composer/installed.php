@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5d68401fa12b7991b12b75abdb2ad47250af4237',
+    'reference' => 'fd67d96e57569c986c5ceb44f9b6af17171e05ec',
     'name' => 'codeigniter/framework',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5d68401fa12b7991b12b75abdb2ad47250af4237',
+      'reference' => 'fd67d96e57569c986c5ceb44f9b6af17171e05ec',
     ),
     'doctrine/instantiator' => 
     array (
@@ -31,12 +31,12 @@
     ),
     'dompdf/dompdf' => 
     array (
-      'pretty_version' => 'v1.0.2',
-      'version' => '1.0.2.0',
+      'pretty_version' => 'v1.1.1',
+      'version' => '1.1.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '8768448244967a46d6e67b891d30878e0e15d25c',
+      'reference' => 'de4aad040737a89fae2129cdeb0f79c45513128d',
     ),
     'ezyang/htmlpurifier' => 
     array (
