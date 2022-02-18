@@ -21,7 +21,7 @@
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 2, 3, 4, 5, 6],
+                "targets": [0, 1, 4, 5, 6],
                 "className": 'text-center'
             }, {
                 "searchable": false,
@@ -31,18 +31,23 @@
                 "targets": [-2], //status lppm
                 "render": function(data, type, row) {
                     if (row[5] == "Disetujui") {
-                        return "<div class=\"badge bg-success text-white text-wrap\">Disetujui</div>"
+                        return "<div class=\"badge bg-success text-white text-wrap\">" + row[5] + "</div>"
                     } else if (row[5] == "Ditolak") {
-                        return "<div class=\"badge bg-danger text-white text-wrap\">Ditolak</div>"
+                        return "<div class=\"badge bg-danger text-white text-wrap\">" + row[5] + "</div>"
                     } else if (row[5] == "Diproses") {
-                        return "<div class=\"badge bg-info text-white text-wrap\">Diproses</div>"
+                        return "<div class=\"badge bg-info text-white text-wrap\">" + row[5] + "</div>"
+                    } else if (row[5] == "Butuh Perbaikan") {
+                        return "<div class=\"badge bg-warning text-white text-wrap\">" + row[5] + "</div>"
                     }
                 }
             }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[6] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[6] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
-
+                    if (row[5] == "Disetujui") {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Print\" onclick=\"print(" + row[7] + ")\"><i class=\"fas fa-print\"></i> Print</a></div>"
+                    } else {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[7] + ")\"><i class=\"fas fa-file-signature\"></i> Validasi</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Print\" onclick=\"print(" + row[7] + ")\"><i class=\"fas fa-print\"></i> Print</a></div>"
+                    }
                 },
                 "orderable": false, //set not orderable
             }],
@@ -74,6 +79,11 @@
         showConfirmButton: false,
         timer: 3000
     });
+
+    function print(id) {
+        var go_to_url = '<?php echo base_url('validasisurat/print/'); ?>' + id;
+        window.open(go_to_url, '_blank');
+    }
 
     //delete
     function del(id) {
@@ -170,17 +180,17 @@
                 $('[name="tanggal"]').text(data.tanggal);
                 $('[name="lokasi"]').text(data.lokasi);
                 $('[name="tanggal_akhir"]').text(data.tanggal_akhir);
-                $('[name="status_sekretaris"]').val(data.status_sekretaris);
-                $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                if (data.level == 'Admin') {
+                if (data.level == 'Staff') {
+                    $('[name="id_validasi_sekretaris"]').val(data.id_validasi_sekretaris);
                     $('[name="status_sekretaris"]').val(data.status_sekretaris);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                    $('[name="catatan_sekretaris"]').val(data.catatan_sekretaris);
                 } else if (data.level == 'Kasenat') {
+                    $('[name="id_validasi_kasenat"]').val(data.id_validasi_kasenat);
                     $('[name="status_kasenat"]').val(data.status_kasenat);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                    $('[name="catatan_kasenat"]').val(data.catatan_kasenat);
                 } else if (data.level == 'Kakorwa') {
                     $('[name="status_kakorwa"]').val(data.status_kakorwa);
-                    $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
+                    $('[name="catatan_kakorwa"]').val(data.catatan_kakorwa);
                 }
 
                 $('#modal_detail').modal('show'); // show bootstrap modal when complete loaded

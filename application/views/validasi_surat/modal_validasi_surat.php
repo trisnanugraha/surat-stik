@@ -13,7 +13,7 @@
             <div class="modal-body form">
                 <form action="#" id="form_detail" class="form-horizontal">
                     <input type="hidden" value="" name="id_permohonan_surat" />
-                    <div class="form-group row ">
+                    <!-- <div class="form-group row ">
                         <label for="perihal" class="col-sm-3 col-form-label">Perihal</label>
                         <div class="col-sm-9">
                             <p class="form-control my-0" name="perihal" id="perihal"></p>
@@ -30,43 +30,47 @@
                         <div class="col-sm-9">
                             <p class="form-control my-0" name="lokasi" id="lokasi"></p>
                         </div>
-                    </div>
+                    </div> -->
                     <?php
-                    if ($level == 'Admin') { ?>
+                    if ($level == 'Staff') { ?>
+                        <input type="hidden" value="" name="id_validasi_sekretaris" />
                         <div class="form-group row ">
                             <label for="status_sekretaris" class="col-sm-3 col-form-label">Validasi Sekretaris</label>
                             <div class="col-sm-9">
                                 <select class="form-control" name="status_sekretaris" id="status_sekretaris">
                                     <option value="Diproses">Diproses</option>
+                                    <option value="Butuh Perbaikan">Butuh Perbaikan</option>
                                     <option value="Disetujui">Disetujui</option>
                                     <option value="Ditolak">Ditolak</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Keterangan Sekretaris</label>
+                            <label for="catatan_sekretaris" class="col-sm-3 col-form-label">Catatan Sekretaris</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;"></textarea>
+                                <textarea class="form-control" name="catatan_sekretaris" id="catatan_sekretaris" rows="2" style="resize: none;"></textarea>
                             </div>
                         </div>
                     <?php }
                     ?>
                     <?php
                     if ($level == 'Kasenat') { ?>
+                        <input type="hidden" value="" name="id_validasi_kasenat" />
                         <div class="form-group row ">
                             <label for="status_kasenat" class="col-sm-3 col-form-label">Validasi Kasenat</label>
                             <div class="col-sm-9">
                                 <select class="form-control" name="status_kasenat" id="status_kasenat">
                                     <option value="Diproses">Diproses</option>
+                                    <option value="Butuh Perbaikan">Butuh Perbaikan</option>
                                     <option value="Disetujui">Disetujui</option>
                                     <option value="Ditolak">Ditolak</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="keterangan_kasenat" class="col-sm-3 col-form-label">Keterangan Kasenat</label>
+                            <label for="catatan_kasenat" class="col-sm-3 col-form-label">Catatan Kasenat</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" name="keterangan_kasenat" id="keterangan_kasenat" rows="2" style="resize: none;"></textarea>
+                                <textarea class="form-control" name="catatan_kasenat" id="catatan_kasenat" rows="2" style="resize: none;"></textarea>
                             </div>
                         </div>
                     <?php }
@@ -78,15 +82,16 @@
                             <div class="col-sm-9">
                                 <select class="form-control" name="status_kakorwa" id="status_kakorwa">
                                     <option value="Diproses">Diproses</option>
+                                    <option value="Butuh Perbaikan">Butuh Perbaikan</option>
                                     <option value="Disetujui">Disetujui</option>
                                     <option value="Ditolak">Ditolak</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="keterangan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
+                            <label for="catatan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" name="keterangan_kakorwa" id="keterangan_kakorwa" rows="2" style="resize: none;"></textarea>
+                                <textarea class="form-control" name="catatan_kakorwa" id="catatan_kakorwa" rows="2" style="resize: none;"></textarea>
                             </div>
                         </div>
                     <?php }

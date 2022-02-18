@@ -42,6 +42,8 @@
   <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/plugins/select2/js/select2.full.min.js"></script>
 
+  <script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>  
+
   <!-- Bootstrap4 Duallistbox -->
   <script src="<?php echo base_url(); ?>assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
 

@@ -14,10 +14,11 @@
                         <table id="tabelsurat" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr class="bg-info text-center">
-                                    <th>No.</th>
-                                    <th>Perihal</th>
-                                    <th>Tanggal</th>
+                                    <th style="width: 50px;">No.</th>
+                                    <th style="width: 350px;">Perihal</th>
+                                    <th style="width: 120px;">Tanggal</th>
                                     <th>Lokasi</th>
+                                    <th style="width: 100px;">Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>

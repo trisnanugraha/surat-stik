@@ -6,11 +6,20 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'fd67d96e57569c986c5ceb44f9b6af17171e05ec',
+    'reference' => 'ad48ad150ad3bb37067a9642fb07b52819b05c28',
     'name' => 'codeigniter/framework',
   ),
   'versions' => 
   array (
+    'ckeditor/ckeditor' => 
+    array (
+      'pretty_version' => '4.17.2',
+      'version' => '4.17.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '0a402ca86b1821418e90cef026910fc723a930a6',
+    ),
     'codeigniter/framework' => 
     array (
       'pretty_version' => 'dev-master',
@@ -18,7 +27,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'fd67d96e57569c986c5ceb44f9b6af17171e05ec',
+      'reference' => 'ad48ad150ad3bb37067a9642fb07b52819b05c28',
     ),
     'doctrine/instantiator' => 
     array (

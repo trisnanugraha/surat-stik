@@ -5,7 +5,7 @@
 
             <div class="modal-header">
                 <h3 class="modal-title">Form</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" onclick="tutup()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Keterangan Sekretaris</label>
+                        <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Catatan Sekretaris</label>
                         <div class="col-sm-9">
                             <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;" readonly></textarea>
                         </div>

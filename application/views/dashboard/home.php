@@ -29,34 +29,6 @@
                     <a href="<?php echo base_url('aktivasi-user'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3><?php echo $permohonansurat; ?></h3>
-
-                        <p>Total Permohonan Surat</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-envelope-open"></i>
-                    </div>
-                    <a href="<?php echo base_url('validasi-surat'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3><?php echo $pkm; ?></h3>
-
-                        <p>Total Surat Tervalidasi</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <a href="<?php echo base_url('datapkm'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
         </div>
         <!-- /.row -->
     </div>

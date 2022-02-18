@@ -7,15 +7,16 @@ class Mod_permohonan_surat extends CI_Model
     var $table = 'tbl_permohonan_surat';
     var $column_order = array('', 'perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
     var $column_search = array('perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
-    var $order = array('id_permohonan_surat' => 'desc'); // default order 
+    var $order = array('tgl_diubah' => 'desc'); // default order 
 
     public function __construct()
     {
         parent::__construct();
         $this->load->database();
     }
-    private function _get_datatables_query()
+    private function _get_datatables_query($id)
     {
+        $this->db->where('id_pemohon', $id);
         $this->db->from($this->table);
         $i = 0;
 
@@ -47,18 +48,18 @@ class Mod_permohonan_surat extends CI_Model
         }
     }
 
-    function get_datatables()
+    function get_datatables($id)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($id);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    function count_filtered()
+    function count_filtered($id)
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($id);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -98,13 +99,13 @@ class Mod_permohonan_surat extends CI_Model
 
     function insert($data)
     {
-        $insert = $this->db->insert($this->table, $data);
-        return $insert;
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
     }
 
     function update($id, $data)
     {
-        $this->db->where('id_sindikat', $id);
+        $this->db->where('id_permohonan_surat', $id);
         $this->db->update($this->table, $data);
     }
 

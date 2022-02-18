@@ -7,7 +7,7 @@ class Login extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(array('Mod_login'));
+        $this->load->model(array('Mod_login', 'Mod_userlevel'));
     }
 
     public function index()
@@ -55,6 +55,17 @@ class Login extends CI_Controller
                     );
 
                     $this->session->set_userdata($userdata);
+
+                    $checklevel = $this->_cek_status($userdata['id_level']);
+
+                    if($checklevel == 'Admin'){
+                        $data['url'] = 'dashboard';
+                    } else if($checklevel == 'Mahasiswa'){
+                        $data['url'] = 'permohonan-surat';
+                    } else {
+                        $data['url'] = 'validasi-surat';
+                    }
+
                     $data['status'] = TRUE;
                     echo json_encode($data);
                 } else {
@@ -107,6 +118,12 @@ class Login extends CI_Controller
             echo json_encode($data);
             exit();
         }
+    }
+
+    private function _cek_status($id_level)
+    {
+        $nama_level = $this->Mod_userlevel->getUserlevel($id_level);
+        return $nama_level->nama_level;
     }
 }
 

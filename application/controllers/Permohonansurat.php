@@ -8,6 +8,9 @@ class Permohonansurat extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_permohonan_surat');
+        $this->load->model('Mod_validasi_sekretaris');
+        $this->load->model('Mod_validasi_kasenat');
+        $this->load->model('Mod_validasi_kakorwa');
     }
 
     public function index()
@@ -21,9 +24,10 @@ class Permohonansurat extends MY_Controller
 
     public function ajax_list()
     {
+        $id_user = $this->session->userdata('id_user');
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
-        $list = $this->Mod_permohonan_surat->get_datatables();
+        $list = $this->Mod_permohonan_surat->get_datatables($id_user);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $surat) {
@@ -32,8 +36,15 @@ class Permohonansurat extends MY_Controller
             $row = array();
             $row[] = $no;
             $row[] = $surat->perihal;
-            $row[] = $this->fungsi->tanggalindo($surat->tanggal_berangkat) . ' ~ ' . $this->fungsi->tanggalindo($surat->tanggal_pulang);
+
+            if ($surat->tanggal_berangkat == $surat->tanggal_pulang) {
+                $row[] = $this->fungsi->tanggalindo($surat->tanggal_berangkat);
+            } else {
+                $row[] = $this->fungsi->tanggalindo($surat->tanggal_berangkat) . ' s/d ' . $this->fungsi->tanggalindo($surat->tanggal_pulang);
+            }
+
             $row[] = $surat->lokasi;
+            $row[] = $surat->status;
             $row[] = $surat->id_permohonan_surat;
             // $row[] = $cekuser;
             $data[] = $row;
@@ -42,7 +53,7 @@ class Permohonansurat extends MY_Controller
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->Mod_permohonan_surat->count_all(),
-            "recordsFiltered" => $this->Mod_permohonan_surat->count_filtered(),
+            "recordsFiltered" => $this->Mod_permohonan_surat->count_filtered($id_user),
             "data" => $data,
         );
         //output to json format
@@ -51,32 +62,123 @@ class Permohonansurat extends MY_Controller
 
     public function edit($id)
     {
-        $data = $this->Mod_sindikat->get_sindikat($id);
+        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
         echo json_encode($data);
     }
 
     public function insert()
     {
         $this->_validate();
-        $save  = array(
-            'id_pemohon'           => $this->session->userdata('id_user'),
-            'perihal'              => $this->input->post('perihal'),
-            'tanggal_berangkat'    => $this->input->post('tanggal_berangkat'),
-            'tanggal_pulang'       => $this->input->post('tanggal_pulang'),
-            'lokasi'               => $this->input->post('lokasi'),
+
+        if ($this->input->post('isCheck') == 'true') {
+            $save  = array(
+                'id_pemohon'           => $this->session->userdata('id_user'),
+                'perihal'              => $this->input->post('perihal'),
+                'tanggal_berangkat'    => $this->input->post('tanggal_berangkat'),
+                'tanggal_pulang'       => $this->input->post('tanggal_pulang'),
+                'lokasi'               => $this->input->post('lokasi'),
+                'isi_surat'            => $this->input->post('isi_surat'),
+                'tembusan'             => $this->input->post('tembusan'),
+                'judul_lampiran'       => $this->input->post('judul_lampiran'),
+                'isi_lampiran'         => $this->input->post('isi_lampiran'),
+            );
+        } else {
+            $save  = array(
+                'id_pemohon'           => $this->session->userdata('id_user'),
+                'perihal'              => $this->input->post('perihal'),
+                'tanggal_berangkat'    => $this->input->post('tanggal_berangkat'),
+                'tanggal_pulang'       => $this->input->post('tanggal_berangkat'),
+                'lokasi'               => $this->input->post('lokasi'),
+                'isi_surat'            => $this->input->post('isi_surat'),
+                'tembusan'             => $this->input->post('tembusan'),
+                'judul_lampiran'       => $this->input->post('judul_lampiran'),
+                'isi_lampiran'         => $this->input->post('isi_lampiran'),
+            );
+        }
+
+        $get_id = $this->Mod_permohonan_surat->insert($save);
+
+        $validasi = array(
+            'id_permohonan_surat' => $get_id
         );
-        $this->Mod_permohonan_surat->insert($save);
+
+        $this->Mod_validasi_sekretaris->insert($validasi);
+
         echo json_encode(array("status" => TRUE));
     }
 
     public function update()
     {
+        $id = $this->input->post('id_permohonan_surat');
         $this->_validate();
-        $id      = $this->input->post('id_sindikat');
-        $data  = array(
-            'nama_sindikat' => $this->input->post('nama_sindikat'),
-        );
-        $this->Mod_sindikat->update($id, $data);
+
+        if ($this->input->post('isCheck') == 'true') {
+            $save  = array(
+                'id_pemohon'           => $this->session->userdata('id_user'),
+                'perihal'              => $this->input->post('perihal'),
+                'tanggal_berangkat'    => $this->input->post('tanggal_berangkat'),
+                'tanggal_pulang'       => $this->input->post('tanggal_pulang'),
+                'lokasi'               => $this->input->post('lokasi'),
+                'isi_surat'            => $this->input->post('isi_surat'),
+                'tembusan'             => $this->input->post('tembusan'),
+                'judul_lampiran'       => $this->input->post('judul_lampiran'),
+                'isi_lampiran'         => $this->input->post('isi_lampiran'),
+                'status'               => 'Diproses'
+            );
+        } else {
+            $save  = array(
+                'id_pemohon'           => $this->session->userdata('id_user'),
+                'perihal'              => $this->input->post('perihal'),
+                'tanggal_berangkat'    => $this->input->post('tanggal_berangkat'),
+                'tanggal_pulang'       => $this->input->post('tanggal_berangkat'),
+                'lokasi'               => $this->input->post('lokasi'),
+                'isi_surat'            => $this->input->post('isi_surat'),
+                'tembusan'             => $this->input->post('tembusan'),
+                'judul_lampiran'       => $this->input->post('judul_lampiran'),
+                'isi_lampiran'         => $this->input->post('isi_lampiran'),
+                'status'               => 'Diproses'
+            );
+        }
+        $this->Mod_permohonan_surat->update($id, $save);
+
+        $data_sekretaris = $this->Mod_validasi_sekretaris->get_surat_by_id($id);
+        $data_kasenat = $this->Mod_validasi_kasenat->get_surat_by_id($id);
+        $data_kakorwa = $this->Mod_validasi_kakorwa->get_surat_by_id($id);
+
+        if ($data_sekretaris != null) {
+            $status_sekretaris = $data_sekretaris->status_sekretaris;
+
+            if ($status_sekretaris != 'Disetujui') {
+                $validasi = array(
+                    'status_sekretaris' => 'Diproses'
+                );
+
+                $this->Mod_validasi_sekretaris->update($id, $validasi);
+            }
+        }
+
+        if ($data_kasenat != null) {
+            $status_kasenat = $data_kasenat->status_kasenat;
+            if ($status_kasenat != 'Disetujui') {
+                $validasi = array(
+                    'status_kasenat' => 'Diproses'
+                );
+
+                $this->Mod_validasi_kasenat->update($id, $validasi);
+            }
+        }
+
+        if ($data_kakorwa != null) {
+            $status_kakorwa = $data_kakorwa->status_kakorwa;
+            if ($status_kakorwa != 'Disetujui') {
+                $validasi = array(
+                    'status_kakorwa' => 'Diproses'
+                );
+
+                $this->Mod_validasi_kakorwa->update($id, $validasi);
+            }
+        }
+
         echo json_encode(array("status" => TRUE));
     }
 
@@ -90,9 +192,63 @@ class Permohonansurat extends MY_Controller
     public function detail($id)
     {
         $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
-        $data->tanggal = $this->fungsi->tanggalindo($data->tanggal_berangkat) . ' ~ ' . $this->fungsi->tanggalindo($data->tanggal_pulang);
+
+        $status_sekretaris = $this->Mod_validasi_sekretaris->get_status_surat($id);
+        $data->status_sekretaris =  $status_sekretaris->status_sekretaris;
+        $data->keterangan_sekretaris =  $status_sekretaris->catatan_sekretaris;
+
+        $status_kasenat = $this->Mod_validasi_kasenat->get_status_surat($id);
+        if ($status_kasenat != null) {
+            $data->status_kasenat =  $status_kasenat->status_kasenat;
+            $data->keterangan_kasenat =  $status_kasenat->catatan_kasenat;
+        }
+
+        $status_kakorwa = $this->Mod_validasi_kakorwa->get_status_surat($id);
+        if ($status_kakorwa != null) {
+            $data->status_kakorwa =  $status_kakorwa->status_kakorwa;
+            $data->keterangan_kakorwa =  $status_kakorwa->catatan_kakorwa;
+        }
+
+        if ($data->tanggal_berangkat == $data->tanggal_pulang) {
+            $data->tanggal = $this->fungsi->tanggalindo($data->tanggal_berangkat);
+        } else {
+            $data->tanggal = $this->fungsi->tanggalindo($data->tanggal_berangkat) . ' ~ ' . $this->fungsi->tanggalindo($data->tanggal_pulang);
+        }
 
         echo json_encode($data);
+    }
+
+    public function print($id)
+    {
+        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        // $this->load->library('pdf');
+        // $paper = $this->pdf->setPaper('A4', 'potrait');
+        // $filename = $this->pdf->filename = "Nota Dinas.pdf";
+
+        if ($data->isi_lampiran != null) {
+            $html = $this->load->view('permohonan_surat/template-nota-dinas-lampiran', $data, TRUE);
+        } else {
+            $html = $this->load->view('permohonan_surat/template-nota-dinas', $data, TRUE);
+        }
+
+        $this->fungsi->PdfGenerator($html, 'Draft - Nota Dinas.pdf', 'A4', 'potrait');
+    }
+
+    public function generate($id)
+    {
+        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data->tgl_diubah = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($data->tgl_diubah)));
+        // $this->load->library('pdf');
+        // $paper = $this->pdf->setPaper('A4', 'potrait');
+        // $filename = $this->pdf->filename = "Nota Dinas.pdf";
+
+        if ($data->isi_lampiran != null) {
+            $html = $this->load->view('permohonan_surat/cetak-nota-dinas-lampiran', $data, TRUE);
+        } else {
+            $html = $this->load->view('permohonan_surat/cetak-nota-dinas', $data, TRUE);
+        }
+
+        $this->fungsi->PdfGenerator($html, 'E-Nota Dinas -- ' . date('d:m:Y', strtotime($data->tgl_diubah)) . '.pdf', 'A4', 'potrait');
     }
 
     private function _validate()
@@ -110,14 +266,16 @@ class Permohonansurat extends MY_Controller
 
         if ($this->input->post('tanggal_berangkat') == '') {
             $data['inputerror'][] = 'tanggal_berangkat';
-            $data['error_string'][] = 'Tanggal Berangkat Tidak Boleh Kosong';
+            $data['error_string'][] = 'Tanggal Mulai Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
-        if ($this->input->post('tanggal_pulang') == '') {
-            $data['inputerror'][] = 'tanggal_pulang';
-            $data['error_string'][] = 'Tanggal Pulang Tidak Boleh Kosong';
-            $data['status'] = FALSE;
+        if ($this->input->post('isCheck') == 'true') {
+            if ($this->input->post('tanggal_pulang') == '') {
+                $data['inputerror'][] = 'tanggal_pulang';
+                $data['error_string'][] = 'Tanggal Selesai Tidak Boleh Kosong';
+                $data['status'] = FALSE;
+            }
         }
 
         if ($this->input->post('lokasi') == '') {

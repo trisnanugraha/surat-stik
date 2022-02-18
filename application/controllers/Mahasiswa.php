@@ -94,27 +94,65 @@ class Mahasiswa extends MY_Controller
     }
 
     public function import()
-	{
-		if (isset($_FILES["fileExcel"]["name"])) {
-			$path = $_FILES["fileExcel"]["tmp_name"];
-			$object = PHPExcel_IOFactory::load($path);
-			foreach ($object->getWorksheetIterator() as $worksheet) {
-				$highestRow = $worksheet->getHighestRow();
-				$highestColumn = $worksheet->getHighestColumn();
-				for ($row = 2; $row <= $highestRow; $row++) {
-					$nama_mhs = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-					$nim = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
-					$sindikat = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-					$temp_data[] = array(
-						'nama_mhs'		=> $nama_mhs,
-						'nim'	        => $nim,
-						'id_sindikat'	=> $sindikat,
-					);
-				}
-			}
-			$insert = $this->Mod_import->insert($temp_data, 'tbl_mahasiswa');
-		}
-	}
+    {
+        $file_mimes = array('application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        if (isset($_FILES['file']['name']) && in_array($_FILES['file']['type'], $file_mimes)) {
+
+            $arr_file = explode('.', $_FILES['file']['name']);
+            $extension = end($arr_file);
+
+            if ($extension == 'csv') {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            } elseif ($extension == 'xlsx') {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            } else {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+            }
+
+            $spreadsheet = $reader->load($_FILES['file']['tmp_name']);
+
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            $sheetcount = count($sheetData);
+            if ($sheetcount > 1) {
+                for ($i = 1; $i < $sheetcount; $i++) {
+                    $nama_mhs = $sheetData[$i]['0'];
+                    $nim = $sheetData[$i]['1'];
+                    $sindikat = $sheetData[$i]['2'];
+
+                    if ($sindikat == 'Sindikat I') {
+                        $id_sindikat = 1;
+                    } elseif ($sindikat == 'Sindikat II') {
+                        $id_sindikat = 2;
+                    } elseif ($sindikat == 'Sindikat III') {
+                        $id_sindikat = 3;
+                    } elseif ($sindikat == 'Sindikat IV') {
+                        $id_sindikat = 4;
+                    } elseif ($sindikat == 'Sindikat V') {
+                        $id_sindikat = 5;
+                    } elseif ($sindikat == 'Sindikat VI') {
+                        $id_sindikat = 6;
+                    } elseif ($sindikat == 'Sindikat VII') {
+                        $id_sindikat = 7;
+                    } else {
+                        $id_sindikat = 8;
+                    }
+
+                    $temp_data[] = array(
+                        'nama_mhs' => $nama_mhs,
+                        'nim' => $nim,
+                        'id_sindikat' => $id_sindikat
+                    );
+                }
+
+                $insert = $this->Mod_import->insert($temp_data, 'tbl_mahasiswa');
+
+                if ($insert) {
+                    redirect('daftar-mahasiswa');
+                }
+            }
+        }
+    }
 
     private function _validate()
     {

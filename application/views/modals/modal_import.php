@@ -1,18 +1,21 @@
-<div class="modal fade" id="" role="dialog">
+<div class="modal fade" id="import-mahasiswa" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="col-md-offset-1 col-md-10 col-md-offset-1 well">
-                <div class="form-msg"></div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 style="display:block; text-align:center;">Import <?php echo @$judul; ?></h3>
-                <br>
+            <div class="form-msg"></div>
+            <div class="modal-header">
+                <h3><?php echo @$judul; ?></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body form">
                 <form method="POST" action="<?php echo base_url($url); ?>" enctype="multipart/form-data">
                     <div class="col-md-12">
                         <div class="input-group form-group">
                             <span class="input-group-addon" id="sizing-addon2">
                                 <i class="glyphicon glyphicon-file"></i>
                             </span>
-                            <input type="file" class="form-control" name="excel" aria-describedby="sizing-addon2">
+                            <input type="file" class="form-control" name="file" aria-describedby="sizing-addon2">
                         </div>
                     </div>
                     <div class="col-md-12">

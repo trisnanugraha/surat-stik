@@ -27,16 +27,16 @@
 </head>
 
 <body class="hold-transition register-page">
-    <div class="register-box" style="width: 600px;">
-        <div class="card card-outline card-primary">
+    <div class="register-box" style="padding-top: 100px; padding-bottom: 50px;">
+        <div class="card card-outline card-primary" style="margin-top: 100px;">
             <div class="card-header text-center">
                 <a href="<?php echo base_url(); ?>" class="h1"><b><?php echo $aplikasi->nama_aplikasi; ?></b></a>
             </div>
             <div class="card-body register-card-body">
                 <form action="" method="post" id="signup-form">
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Nama Lengkap</label>
-                        <div class="input-group col-sm-8 kosong">
+                    <div class="form-group">
+                        <label for="judul" class="col-form-label">Nama Lengkap</label>
+                        <div class="input-group kosong">
                             <input type="text" class="form-control" name="fullname" placeholder="Misal : John Doe">
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -45,9 +45,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Username</label>
-                        <div class="input-group col-sm-8 kosong">
+                    <div class="form-group">
+                        <label for="judul" class="col-form-label">Username</label>
+                        <div class="input-group kosong">
                             <input type="text" class="form-control" name="username" placeholder="Misal : johndoe">
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -56,9 +56,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Password</label>
-                        <div class="input-group col-sm-8 kosong">
+                    <div class="form-group">
+                        <label for="judul" class="col-form-label">Password</label>
+                        <div class="input-group kosong">
                             <input type="password" class="form-control" name="password" placeholder="Misal : Secret@1234">
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -67,9 +67,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="judul" class="col-sm-4 col-form-label">Verifikasi Password</label>
-                        <div class="input-group col-sm-8 kosong">
+                    <div class="form-group">
+                        <label for="judul" class="col-form-label">Verifikasi Password</label>
+                        <div class="input-group kosong">
                             <input type="password" class="form-control" name="verifypassword" placeholder="Misal : Secret@1234">
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -78,9 +78,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="level" class="col-sm-4 col-form-label">Hak Akses</label>
-                        <div class="col-sm-8 kosong">
+                    <div class="form-group">
+                        <label for="level" class="col-form-label">Hak Akses</label>
+                        <div class="kosong">
                             <select class="form-control level" name="level">
                                 <option value="" selected disabled>-- Pilih Hak Akses --</option>
                                 <?php
@@ -91,9 +91,9 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row kelas">
-                        <label for="judul" class="col-sm-4 col-form-label">Kelas</label>
-                        <div class="col-sm-8 kosong">
+                    <div class="form-group kelas">
+                        <label for="judul" class="col-form-label">Kelas</label>
+                        <div class="kosong">
                             <select class="form-control" name="kelas" id="kelas">
                                 <option value="" selected disabled>Pilih Kelas</option>
                                 <?php
@@ -104,9 +104,9 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row sindikat">
-                        <label for="judul" class="col-sm-4 col-form-label">Sindikat</label>
-                        <div class="col-sm-8 kosong">
+                    <div class="form-group sindikat">
+                        <label for="judul" class="col-form-label">Sindikat</label>
+                        <div class="kosong">
                             <select class="form-control" name="sindikat" id="sindikat">
                                 <option value="" selected disabled>Pilih Sindikat</option>
                                 <?php
@@ -117,9 +117,9 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="form-group row jabatan">
-                        <label for="judul" class="col-sm-4 col-form-label">Jabatan</label>
-                        <div class="col-sm-8 kosong">
+                    <div class="form-group jabatan">
+                        <label for="judul" class="col-form-label">Jabatan</label>
+                        <div class="kosong">
                             <select class="form-control" name="jabatan" id="jabatan">
                                 <option value="" selected disabled>Pilih Jabatan</option>
                                 <?php
@@ -130,7 +130,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-
+                    <br>
                     <div class="row">
                         <div class="col-12">
                             <button type="button" class="btn btn-primary btn-block" id="register">Register</button>

@@ -28,7 +28,7 @@
 </head>
 
 <body class="hold-transition login-page">
-  <div class="login-box" style="width: 600px;">
+  <div class="login-box">
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
@@ -143,8 +143,25 @@
         dataType: 'JSON',
         success: function(data) {
           if (data.status) {
-            toastr.success('Login Berhasil!');
-            var url = '<?php echo base_url('dashboard') ?>';
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+              },
+              toastr.success('Login Berhasil!');
+            var url = data.url;
             window.location = url;
           } else if (data.error) {
             toastr.options = {

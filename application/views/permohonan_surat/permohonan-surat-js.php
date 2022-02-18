@@ -21,22 +21,48 @@
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 2, 3, 4],
+                "targets": [0, 3, 4, 5],
                 "className": 'text-center'
             }, {
                 "searchable": false,
                 "orderable": false,
                 "targets": 0
             }, {
+                "targets": [-2],
+                "render": function(data, type, row) {
+                    if (row[4] == "Diproses") {
+                        return "<div class=\"badge bg-info text-white text-wrap\">" + row[4] + "</div>"
+                    } else if (row[4] == "Butuh Perbaikan") {
+                        return "<div class=\"badge bg-warning text-white text-wrap\">" + row[4] + "</div>"
+                    } else if (row[4] == "Disetujui") {
+                        return "<div class=\"badge bg-success text-white text-wrap\">" + row[4] + "</div>"
+                    } else if (row[4] == "Ditolak") {
+                        return "<div class=\"badge bg-danger text-white text-wrap\">" + row[4] + "</div>"
+                    }
+                }
+            }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[4] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[4] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+                    if (row[4] == "Diproses") {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div>"
+                    } else if (row[4] == "Butuh Perbaikan") {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+                    } else if (row[4] == "Ditolak") {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+                    } else if (row[4] == "Disetujui") {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Print\" onclick=\"generate(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Print</a></div>"
+                    }
 
                 },
                 "orderable": false, //set not orderable
             }],
         });
-        $("input").change(function() {
+        $("input[type=text]").change(function() {
+            $(this).parent().parent().removeClass('has-error');
+            $(this).next().empty();
+            $(this).removeClass('is-invalid');
+        });
+        $("input[type=date]").change(function() {
             $(this).parent().parent().removeClass('has-error');
             $(this).next().empty();
             $(this).removeClass('is-invalid');
@@ -51,6 +77,14 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
+
+        var changeStatus = function() {
+            var fne = $("#isCheck").prop("checked");
+            $("#tanggal_pulang").prop("disabled", !fne);
+        };
+
+
+        $("#isCheck").on("change", changeStatus);
     });
 
     function reload_table() {
@@ -63,6 +97,16 @@
         showConfirmButton: false,
         timer: 3000
     });
+
+    function print(id) {
+        var go_to_url = '<?php echo base_url('permohonansurat/print/'); ?>' + id;
+        window.open(go_to_url, '_blank');
+    }
+
+    function generate(id) {
+        var go_to_url = '<?php echo base_url('permohonansurat/generate/'); ?>' + id;
+        window.open(go_to_url, '_blank');
+    }
 
     //delete
     function del(id) {
@@ -89,7 +133,7 @@
                             reload_table();
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Permohonan Surat     Berhasil Dihapus!'
+                                title: 'Permohonan Surat Berhasil Dihapus!'
                             });
                         } else {
                             Toast.fire({
@@ -112,6 +156,7 @@
     function add() {
         save_method = 'add';
         $('#form')[0].reset(); // reset form on modals
+        $('[id="perihal"]').val('');
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         $('#modal_form').modal('show'); // show bootstrap modal
@@ -126,15 +171,44 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('sindikat/edit') ?>/" + id,
+            url: "<?php echo site_url('permohonansurat/edit') ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id_sindikat"]').val(data.id_sindikat);
-                $('[name="nama_sindikat"]').val(data.nama_sindikat);
+                $('[name="id_permohonan_surat"]').val(data.id_permohonan_surat);
+                $('[name="perihal"]').val(data.perihal);
+                $('[name="tanggal_berangkat"]').val(data.tanggal_berangkat);
+                if (data.tanggal_pulang != data.tanggal_berangkat) {
+                    $("#tanggal_pulang").prop("disabled", false);
+                    $('[name="tanggal_pulang"]').val(data.tanggal_pulang);
+                    $("#isCheck").prop("checked", true);
+                }
+                $('[name="lokasi"]').val(data.lokasi);
+                // if (data.isi_surat != '') {
+                //     getIsiSurat.setData(data.isi_surat);
+                // }
+
+                if (data.isi_surat != null) {
+                    getIsiSurat.setData(data.isi_surat);
+                }
+
+                if (data.tembusan != null) {
+                    getTembusan.setData(data.tembusan);
+                }
+
+                if (data.judul_lampiran != null) {
+                    getJudulLampiran.setData(data.judul_lampiran);
+                }
+
+                if (data.isi_lampiran != null) {
+                    getIsiLampiran.setData(data.isi_lampiran);
+                }
+
+                //     $('[name="isi_surat"]').val(data.isi_surat);
+                // $('[name="tembusan"]').val(data.tembusan);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title').text('Ubah Sindikat'); // Set title to Bootstrap modal title
+                $('.modal-title').text('Ubah Permohonan Surat'); // Set title to Bootstrap modal title
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -180,22 +254,47 @@
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
 
+        const isi_surat = getIsiSurat.getData();
+        const tembusan = getTembusan.getData();
+        const judul_lampiran = getJudulLampiran.getData();
+        const isi_lampiran = getIsiLampiran.getData();
+
+        let isChecked = $('#isCheck')[0].checked
+
+        var formData = {
+            id_permohonan_surat: $("#id_permohonan_surat").val(),
+            perihal: $("#perihal").val(),
+            tanggal_berangkat: $("#tanggal_berangkat").val(),
+            tanggal_pulang: $("#tanggal_pulang").val(),
+            lokasi: $("#lokasi").val(),
+            isi_surat: isi_surat,
+            tembusan: tembusan,
+            judul_lampiran: judul_lampiran,
+            isi_lampiran: isi_lampiran,
+            isCheck: isChecked
+        };
+
         if (save_method == 'add') {
             url = "<?php echo site_url('permohonansurat/insert') ?>";
         } else {
-            url = "<?php echo site_url('sindikat/update') ?>";
+            url = "<?php echo site_url('permohonansurat/update') ?>";
         }
 
         // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
-            data: $('#form').serialize(),
+            data: formData,
             dataType: "JSON",
             success: function(data) {
 
                 if (data.status) //if success close modal and reload ajax table
                 {
+                    $('[id="perihal"]').val('');
+                    getIsiSurat.setData('');
+                    getTembusan.setData('');
+                    getJudulLampiran.setData('');
+                    getIsiLampiran.setData('');
                     $('#modal_form').modal('hide');
                     reload_table();
                     if (save_method == 'add') {
@@ -206,7 +305,7 @@
                     } else if (save_method == 'update') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Sindikat Berhasil Diubah!'
+                            title: 'Permohonan Surat Berhasil Diubah!'
                         });
                     }
                 } else {
@@ -230,5 +329,16 @@
 
             }
         });
+    }
+
+    function tutup() {
+        $('#form')[0].reset();
+        $('[id="perihal"]').val('');
+        $("#tanggal_pulang").prop("disabled", true);
+        $("#isCheck").prop("checked", false);
+        getIsiSurat.setData('');
+        getTembusan.setData('');
+        getJudulLampiran.setData('');
+        getIsiLampiran.setData('');
     }
 </script>

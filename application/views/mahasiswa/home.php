@@ -40,9 +40,9 @@
 <?php echo $modal_tambah_mahasiswa; ?>
 
 <?php
-$data['judul'] = 'Customer Data';
+$data['judul'] = 'Import Data Mahasiswa';
 $data['url'] = 'mahasiswa/import';
-$data['link'] = 'assets/template_import/Customer Template.xlsx';
-$data['filename'] = 'Customer Template.xlsx';
+$data['link'] = 'assets/template/Mahasiswa-Template.xlsx';
+$data['filename'] = 'Mahasiswa -- Import Template.xlsx';
 echo show_my_modal('modals/modal_import', $data);
 ?>
