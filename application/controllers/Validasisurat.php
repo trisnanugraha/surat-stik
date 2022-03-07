@@ -14,6 +14,7 @@ class Validasisurat extends MY_Controller
         $this->load->model('Mod_permohonan_surat');
         $this->load->model('Mod_userlevel');
         $this->load->model('Mod_surat_keluar');
+        $this->load->model('Mod_lampiran');
         $this->load->library('ciqrcode');
     }
 
@@ -150,16 +151,23 @@ class Validasisurat extends MY_Controller
                 'catatan_sekretaris' => $this->input->post('catatan_sekretaris'),
             );
 
-            if ($this->input->post('status_sekretaris') == 'Diproses' || $this->input->post('status_sekretaris') == 'Disetujui') {
+            if ($this->input->post('status_sekretaris') == 'Diproses') {
                 $status = 'Diproses';
+                $nota_dinas = '';
             } else if ($this->input->post('status_sekretaris') == 'Ditolak') {
                 $status = 'Ditolak';
+                $nota_dinas = '';
             } else if ($this->input->post('status_sekretaris') == 'Butuh Perbaikan') {
                 $status = 'Butuh Perbaikan';
+                $nota_dinas = '';
+            } else if ($this->input->post('status_sekretaris') == 'Disetujui') {
+                $status = 'Diproses';
+                $nota_dinas = $this->input->post('nota_dinas');
             }
 
             $data_surat = array(
                 'status' => $status,
+                'nomor_nota' => $nota_dinas
             );
 
             $this->Mod_validasi_sekretaris->update($id, $data);
@@ -257,15 +265,21 @@ class Validasisurat extends MY_Controller
 
     public function print($id)
     {
-        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
-        // $this->load->library('pdf');
-        // $paper = $this->pdf->setPaper('A4', 'potrait');
-        // $filename = $this->pdf->filename = "Nota Dinas.pdf";
-        if ($data->isi_lampiran != null) {
+        $data['surat'] = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id);
+        // echo('<pre>');
+        // print_r($data['lampiran']);
+
+        $this->load->library('pdf');
+        $paper = $this->pdf->setPaper('A4', 'potrait');
+        $filename = $this->pdf->filename = "Nota Dinas.pdf";
+
+        if ($data['lampiran'] != null) {
             $html = $this->load->view('permohonan_surat/template-nota-dinas-lampiran', $data, TRUE);
         } else {
             $html = $this->load->view('permohonan_surat/template-nota-dinas', $data, TRUE);
         }
+
         $this->fungsi->PdfGenerator($html, 'Draft - Nota Dinas.pdf', 'A4', 'potrait');
     }
 

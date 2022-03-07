@@ -3,7 +3,7 @@
     var table;
 
     $(document).ready(function() {
-
+        $('.sekretaris').hide();
         table = $("#tabelsurat").DataTable({
             "responsive": true,
             "autoWidth": false,
@@ -66,6 +66,17 @@
             $(this).parent().parent().removeClass('has-error');
             $(this).next().empty();
             $(this).removeClass('is-invalid');
+        });
+
+        $('select.validasi_sekretaris').change(function() {
+            var val = $(this).val();
+            if (val === "Disetujui") {
+                $('.sekretaris').show();
+                // $('.subkategori-buku-umum').hide();
+            } else{
+                $('.sekretaris').hide();
+
+            }
         });
     });
 

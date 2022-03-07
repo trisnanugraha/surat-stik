@@ -111,7 +111,7 @@
                 <td>NOTA DINAS</td>
             </tr>
             <tr>
-                <td>Nomor: B-ND/ 14 /I/2022/Senat PMIK</td>
+                <td>Nomor: .................................................................</td>
             </tr>
         </table>
         <table id="tujuan-surat">
@@ -128,10 +128,10 @@
             <tr>
                 <td>Perihal</td>
                 <td>:</td>
-                <td><?php echo $perihal; ?></td>
+                <td><?php echo $surat->perihal; ?></td>
             </tr>
         </table>
-        <div style="text-align: justify;"><?php echo $isi_surat; ?></div>
+        <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
         <table id="penutup-surat">
             <tr>
                 <td>Jakarta, ..................................</td>
@@ -140,7 +140,7 @@
         <div id="tembusan">
             <p>Tembusan</p>
             <div id="list-tembusan">
-                <?php echo $tembusan; ?>
+                <?php echo $surat->tembusan; ?>
             </div>
         </div>
     </div>

@@ -13,6 +13,8 @@
         body {
             font-family: 'OpenSans-Regular';
             font-size: 10pt;
+            margin-left: 20px;
+            margin-right: 20px;
         }
 
         .kop-surat {
@@ -40,7 +42,8 @@
         }
 
         #tujuan-surat {
-            margin-left: 100px;
+            margin-left: 10%;
+            width: 90%;
         }
 
         #tujuan-surat td {
@@ -48,7 +51,7 @@
         }
 
         #tujuan-surat tr td:first-child {
-            width: 100px;
+            /* width: 100px; */
         }
 
         #tujuan-surat tr td:nth-child(2) {
@@ -104,6 +107,11 @@
 
         }
 
+        .judul-lampiran tr td p {
+            padding: 0;
+            margin: 0;
+        }
+
         .judul-lampiran td:last-child {
             padding-top: 0;
             padding-bottom: 0;
@@ -114,6 +122,7 @@
 
         .isi-lampiran {
             width: 100%;
+            font-family: 'OpenSans-Regular';
         }
 
         .isi-lampiran table {
@@ -122,9 +131,25 @@
             border-collapse: collapse;
         }
 
+        .isi-lampiran thead th {
+            font-family: 'OpenSans-Regular';
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: 1px solid black;
+            border-collapse: collapse;
+            font-weight: 400;
+        }
+
         .isi-lampiran tbody tr td {
             border: 1px solid black;
             border-collapse: collapse;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+
+        .isi-lampiran tbody tr td:nth-child(2) {
+            text-align: left;
         }
 
         .isi-lampiran tbody tr td p {
@@ -153,7 +178,7 @@
                     <td>NOTA DINAS</td>
                 </tr>
                 <tr>
-                    <td>Nomor: B-ND/ 14 /I/2022/Senat PMIK</td>
+                    <td>Nomor: ....................................................</td>
                 </tr>
             </table>
             <table id="tujuan-surat">
@@ -168,21 +193,21 @@
                     <td>Ketua Senat PMIK</td>
                 </tr>
                 <tr>
-                    <td>Perihal</td>
-                    <td>:</td>
-                    <td><?php echo $perihal; ?></td>
+                    <td style="vertical-align: top;">Perihal</td>
+                    <td style="vertical-align: top;">:</td>
+                    <td><?php echo $surat->perihal; ?></td>
                 </tr>
             </table>
-            <div style="text-align: justify;"><?php echo $isi_surat; ?></div>
+            <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
             <table class="penutup-surat">
                 <tr>
-                    <td>Jakarta, ..................................</td>
+                    <td>Jakarta, ....................................................</td>
                 </tr>
             </table>
             <div id="tembusan">
                 <p>Tembusan</p>
                 <div id="list-tembusan">
-                    <?php echo $tembusan; ?>
+                    <?php echo $surat->tembusan; ?>
                 </div>
             </div>
         </div>
@@ -198,15 +223,39 @@
         </table>
         <table class="judul-lampiran">
             <tr>
-                <td><?php echo $judul_lampiran; ?></td>
+                <td><?php echo $surat->judul_lampiran; ?></td>
             </tr>
         </table>
+        <br>
         <div class="isi-lampiran">
-            <?php echo $isi_lampiran; ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NO</th>
+                        <th>NAMA LENGKAP</th>
+                        <th>NIM</th>
+                        <th>KETERANGAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $i = 1;
+                    foreach ($lampiran as $lp) {
+                    ?>
+                        <tr>
+                            <td><?php echo $i++ ?></td>
+                            <td><?php echo $lp->nama_mhs ?></td>
+                            <td><?php echo $lp->nim ?></td>
+                            <td><?php echo $lp->keterangan ?></td>
+                        </tr>
+                    <?php }; ?>
+                </tbody>
+            </table>
         </div>
+        <br>
         <table class="penutup-surat">
             <tr>
-                <td>Jakarta, ..................................</td>
+                <td>Jakarta, ....................................................</td>
             </tr>
         </table>
     </div>

@@ -1,6 +1,7 @@
 <script type="text/javascript">
     var save_method; //for save method string
     var table;
+    var i = 1;
 
     $(document).ready(function() {
 
@@ -72,7 +73,12 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
-        $("select").change(function() {
+        // $("select").change(function() {
+        //     $(this).parent().parent().removeClass('has-error');
+        //     $(this).next().empty();
+        //     $(this).removeClass('is-invalid');
+        // });
+        $("select").not(".select2").change(function() {
             $(this).parent().parent().removeClass('has-error');
             $(this).next().empty();
             $(this).removeClass('is-invalid');
@@ -83,9 +89,26 @@
             $("#tanggal_pulang").prop("disabled", !fne);
         };
 
-
         $("#isCheck").on("change", changeStatus);
     });
+
+    function tambah_data() {
+        var new_id = i++;
+        var html = '';
+        html += '<tr id="' + new_id + '">';
+        html += '<td class="id_mhs' + new_id + '" hidden>' + $("#nama_mhs").val() + '</td>';
+        html += '<td class="mahasiswa' + new_id + '">' + $("#nama_mhs option:selected").text() + '</td>';
+        html += '<td class="keterangan' + new_id + '">' + $("#keterangan").val() + '</td>';
+        html += '<td><button type="button" onclick="hapus_data(this)" class="btn btn-md btn-danger btn_remove">Hapus</button></td>';
+        html += '</tr>'
+        $('#dynamic_field').append(html);
+        $("#nama_mhs").val("disabled").change();
+        $("#keterangan").val('');
+    }
+
+    function hapus_data(id) {
+        id.closest('tr').remove();
+    }
 
     function reload_table() {
         table.ajax.reload(null, false); //reload datatable ajax 
@@ -176,34 +199,44 @@
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id_permohonan_surat"]').val(data.id_permohonan_surat);
-                $('[name="perihal"]').val(data.perihal);
-                $('[name="tanggal_berangkat"]').val(data.tanggal_berangkat);
-                if (data.tanggal_pulang != data.tanggal_berangkat) {
+                $('[name="id_permohonan_surat"]').val(data['surat'].id_permohonan_surat);
+                $('[name="perihal"]').val(data['surat'].perihal);
+                $('[name="tanggal_berangkat"]').val(data['surat'].tanggal_berangkat);
+                if (data.tanggal_pulang != data['surat'].tanggal_berangkat) {
                     $("#tanggal_pulang").prop("disabled", false);
-                    $('[name="tanggal_pulang"]').val(data.tanggal_pulang);
+                    $('[name="tanggal_pulang"]').val(data['surat'].tanggal_pulang);
                     $("#isCheck").prop("checked", true);
                 }
-                $('[name="lokasi"]').val(data.lokasi);
+                $('[name="lokasi"]').val(data['surat'].lokasi);
                 // if (data.isi_surat != '') {
                 //     getIsiSurat.setData(data.isi_surat);
                 // }
 
-                if (data.isi_surat != null) {
-                    getIsiSurat.setData(data.isi_surat);
+                if (data['surat'].isi_surat != null) {
+                    getIsiSurat.setData(data['surat'].isi_surat);
                 }
 
-                if (data.tembusan != null) {
-                    getTembusan.setData(data.tembusan);
+                if (data['surat'].tembusan != null) {
+                    getTembusan.setData(data['surat'].tembusan);
                 }
 
-                if (data.judul_lampiran != null) {
-                    getJudulLampiran.setData(data.judul_lampiran);
+                if (data['surat'].judul_lampiran != null) {
+                    getJudulLampiran.setData(data['surat'].judul_lampiran);
                 }
 
-                if (data.isi_lampiran != null) {
-                    getIsiLampiran.setData(data.isi_lampiran);
-                }
+                var myObj = data['lampiran']
+                $.each(myObj, function(key, value) {
+                    var new_id = i++;
+                    var html = '';
+                    html += '<tr id="' + new_id + '">';
+                    html += '<td class="id_mhs' + new_id + '" hidden>' + value.id_mhs + '</td>';
+                    html += '<td class="mahasiswa' + new_id + '">' + value.nim + ' - ' + value.nama_mhs + '</td>';
+                    html += '<td class="keterangan' + new_id + '">' + value.keterangan + '</td>';
+                    html += '<td class="status' + new_id + ' hidden">' + value.status + '</td>';
+                    html += '<td><button type="button" onclick="hapus_data(this, new_id)" class="btn btn-md btn-danger btn_remove">Hapus</button></td>';
+                    html += '</tr>'
+                    $('#dynamic_field').append(html);
+                });
 
                 //     $('[name="isi_surat"]').val(data.isi_surat);
                 // $('[name="tembusan"]').val(data.tembusan);
@@ -236,9 +269,9 @@
                 $('[name="status_sekretaris"]').text(data.status_sekretaris);
                 $('[name="status_kasenat"]').text(data.status_kasenat);
                 $('[name="status_kakorwa"]').text(data.status_kakorwa);
-                $('[name="keterangan_sekretaris"]').val(data.keterangan_sekretaris);
-                $('[name="keterangan_kasenat"]').val(data.keterangan_kasenat);
-                $('[name="keterangan_kakorwa"]').val(data.keterangan_kakorwa);
+                $('[name="keterangan_sekretaris"]').text(data.keterangan_sekretaris);
+                $('[name="keterangan_kasenat"]').text(data.keterangan_kasenat);
+                $('[name="keterangan_kakorwa"]').text(data.keterangan_kakorwa);
 
                 $('#modal_detail').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Detail Permohonan Surat'); // Set title to Bootstrap modal title
@@ -257,7 +290,17 @@
         const isi_surat = getIsiSurat.getData();
         const tembusan = getTembusan.getData();
         const judul_lampiran = getJudulLampiran.getData();
-        const isi_lampiran = getIsiLampiran.getData();
+
+        var lastRowId = $('#dynamic_field tr:last').attr("id");
+        var id_mhs = new Array();
+        var keterangan = new Array();
+        for (var i = 1; i <= lastRowId; i++) {
+            id_mhs.push($('#' + i + " .id_mhs" + i).html());
+            keterangan.push($('#' + i + " .keterangan" + i).html());
+        }
+
+        var sendID = JSON.stringify(id_mhs);
+        var sendKeterangan = JSON.stringify(keterangan);
 
         let isChecked = $('#isCheck')[0].checked
 
@@ -270,7 +313,8 @@
             isi_surat: isi_surat,
             tembusan: tembusan,
             judul_lampiran: judul_lampiran,
-            isi_lampiran: isi_lampiran,
+            id_mahasiswa: id_mhs,
+            keterangan: sendKeterangan,
             isCheck: isChecked
         };
 
@@ -294,7 +338,7 @@
                     getIsiSurat.setData('');
                     getTembusan.setData('');
                     getJudulLampiran.setData('');
-                    getIsiLampiran.setData('');
+                    i = 1;
                     $('#modal_form').modal('hide');
                     reload_table();
                     if (save_method == 'add') {

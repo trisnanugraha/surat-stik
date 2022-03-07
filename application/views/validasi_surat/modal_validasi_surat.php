@@ -34,15 +34,21 @@
                     <?php
                     if ($level == 'Staff') { ?>
                         <input type="hidden" value="" name="id_validasi_sekretaris" />
-                        <div class="form-group row ">
+                        <div class="form-group row">
                             <label for="status_sekretaris" class="col-sm-3 col-form-label">Validasi Sekretaris</label>
                             <div class="col-sm-9">
-                                <select class="form-control" name="status_sekretaris" id="status_sekretaris">
+                                <select class="form-control validasi_sekretaris" name="status_sekretaris" id="status_sekretaris">
                                     <option value="Diproses">Diproses</option>
                                     <option value="Butuh Perbaikan">Butuh Perbaikan</option>
                                     <option value="Disetujui">Disetujui</option>
                                     <option value="Ditolak">Ditolak</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group row sekretaris">
+                            <label for="nomor_nota" class="col-sm-3 col-form-label">Nomor Nota Dinas</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="nomor_nota" id="nomor_nota" class="form-control" placeholder="Contoh : B-ND/174/XII/2021/Senat PMIK" />
                             </div>
                         </div>
                         <div class="form-group row">

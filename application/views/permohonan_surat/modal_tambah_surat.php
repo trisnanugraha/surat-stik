@@ -64,16 +64,42 @@
                     </div>
                     <div class="form-group row">
                         <label for="judul_lampiran" class="col-sm-2 col-form-label">Judul Lampiran</label>
-                        <div class="col-sm-10 kosong">
+                        <div class="col-sm-10">
                             <textarea class="form-control" name="judul_lampiran" id="judul_lampiran" rows="5" style="resize: none;"></textarea>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="isi_lampiran" class="col-sm-2 col-form-label">Isi Lampiran</label>
                         <div class="col-sm-10">
-                            <div id="isi_lampiran">
-                                <p name="isi_lampiran"></p>
+                            <div class="row mb-3">
+                                <div class="col-md-7">
+                                    <select name="nama_mhs" id="nama_mhs" class="form-control select2 selectpicker" data-live-search="true">
+                                        <option value="disabled" selected disabled>-- Pilih Mahasiswa --</option>
+                                        <?php
+                                        foreach ($mahasiswa as $mhs) { ?>
+                                            <option value="<?= $mhs->id_mhs; ?>"><?= $mhs->nim . ' - ' . $mhs->nama_mhs; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="keterangan" id="keterangan" class="form-control" placeholder="Keterangan" />
+                                </div>
+                                <div class="col-md-2 center">
+                                    <button type="button" onclick="tambah_data()" class="btn btn-success">Tambah Baru</button>
+                                </div>
                             </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th hidden>ID</th>
+                                        <th style="text-align:center;">Nama Lengkap - NIM</th>
+                                        <th style="width: 300px; text-align:center;">Keterangan</th>
+                                        <th style="width: 100px; text-align:center;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dynamic_field">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </form>
@@ -91,7 +117,6 @@
     let getIsiSurat;
     let getTembusan;
     let getJudulLampiran;
-    let getIsiLampiran;
     ClassicEditor
         .create(document.querySelector('#isi_surat'))
         .then(isiSuratBaru => {
@@ -112,14 +137,6 @@
         .create(document.querySelector('#judul_lampiran'))
         .then(judulLampiranBaru => {
             getJudulLampiran = judulLampiranBaru;
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#isi_lampiran'))
-        .then(isiLampiranBaru => {
-            getIsiLampiran = isiLampiranBaru;
         })
         .catch(error => {
             console.error(error);

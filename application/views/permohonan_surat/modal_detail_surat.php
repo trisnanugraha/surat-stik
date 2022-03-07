@@ -16,7 +16,7 @@
                     <div class="form-group row ">
                         <label for="perihal" class="col-sm-3 col-form-label">Perihal</label>
                         <div class="col-sm-9">
-                            <p class="form-control my-0" name="perihal" id="perihal"></p>
+                            <p class="form-control my-0" name="perihal" id="perihal" style="height: 100px;"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
@@ -40,7 +40,7 @@
                     <div class="form-group row">
                         <label for="keterangan_sekretaris" class="col-sm-3 col-form-label">Catatan Sekretaris</label>
                         <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_sekretaris" id="keterangan_sekretaris" rows="2" style="resize: none;" readonly></textarea>
+                            <p class="form-control my-0" name="keterangan_sekretaris" id="keterangan_sekretaris" style="height: 100px;"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
@@ -52,7 +52,7 @@
                     <div class="form-group row">
                         <label for="keterangan_kasenat" class="col-sm-3 col-form-label">Keterangan Kasenat</label>
                         <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_kasenat" id="keterangan_kasenat" rows="2" style="resize: none;" readonly></textarea>
+                            <p class="form-control my-0" name="keterangan_kasenat" id="keterangan_kasenat" style="height: 100px;"></p>
                         </div>
                     </div>
                     <div class="form-group row ">
@@ -64,7 +64,7 @@
                     <div class="form-group row">
                         <label for="keterangan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
                         <div class="col-sm-9">
-                            <textarea class="form-control" name="keterangan_kakorwa" id="keterangan_kakorwa" rows="2" style="resize: none;" readonly></textarea>
+                            <p class="form-control my-0" name="keterangan_kakorwa" id="keterangan_kakorwa" style="height: 100px;"></p>
                         </div>
                     </div>
                 </form>

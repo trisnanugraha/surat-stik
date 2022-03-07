@@ -11,11 +11,14 @@ class Permohonansurat extends MY_Controller
         $this->load->model('Mod_validasi_sekretaris');
         $this->load->model('Mod_validasi_kasenat');
         $this->load->model('Mod_validasi_kakorwa');
+        $this->load->model('Mod_mahasiswa');
+        $this->load->model('Mod_lampiran');
     }
 
     public function index()
     {
         $data['judul'] = 'Permohonan Surat';
+        $data['mahasiswa'] = $this->Mod_mahasiswa->get_all();
         $data['modal_tambah_surat'] = show_my_modal('permohonan_surat/modal_tambah_surat', $data);
         $data['modal_detail_surat'] = show_my_modal('permohonan_surat/modal_detail_surat', $data);
         $js = $this->load->view('permohonan_surat/permohonan-surat-js', null, true);
@@ -62,7 +65,17 @@ class Permohonansurat extends MY_Controller
 
     public function edit($id)
     {
-        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['surat'] = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id);
+
+        // echo('<pre>');
+        // print_r(json_encode($data['lampiran']));
+
+        $total = count($data['lampiran']);
+        $data['total'] = $total;
+
+        // echo('<pre>');
+        // print_r($data['total']);
         echo json_encode($data);
     }
 
@@ -79,8 +92,7 @@ class Permohonansurat extends MY_Controller
                 'lokasi'               => $this->input->post('lokasi'),
                 'isi_surat'            => $this->input->post('isi_surat'),
                 'tembusan'             => $this->input->post('tembusan'),
-                'judul_lampiran'       => $this->input->post('judul_lampiran'),
-                'isi_lampiran'         => $this->input->post('isi_lampiran'),
+                'judul_lampiran'       => $this->input->post('judul_lampiran')
             );
         } else {
             $save  = array(
@@ -92,11 +104,27 @@ class Permohonansurat extends MY_Controller
                 'isi_surat'            => $this->input->post('isi_surat'),
                 'tembusan'             => $this->input->post('tembusan'),
                 'judul_lampiran'       => $this->input->post('judul_lampiran'),
-                'isi_lampiran'         => $this->input->post('isi_lampiran'),
             );
         }
 
         $get_id = $this->Mod_permohonan_surat->insert($save);
+
+        if ($this->input->post('id_mahasiswa') != null) {
+            $count = count($this->input->post('id_mahasiswa'));
+
+            if ($count > 0) {
+                for ($i = 0; $i < $count; $i++) {
+                    $id_mhs = $this->input->post('id_mahasiswa');
+                    $keterangan = $this->input->post('keterangan');
+                    $data_mhs = array(
+                        'id_permohonan_surat' => $get_id,
+                        'id_mhs' => intval($id_mhs[$i]),
+                        'keterangan' => $keterangan[$i]
+                    );
+                    $this->Mod_lampiran->insert($data_mhs);
+                }
+            }
+        }
 
         $validasi = array(
             'id_permohonan_surat' => $get_id
@@ -220,12 +248,16 @@ class Permohonansurat extends MY_Controller
 
     public function print($id)
     {
-        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
-        // $this->load->library('pdf');
-        // $paper = $this->pdf->setPaper('A4', 'potrait');
-        // $filename = $this->pdf->filename = "Nota Dinas.pdf";
+        $data['surat'] = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id);
+        // echo('<pre>');
+        // print_r($data['lampiran']);
 
-        if ($data->isi_lampiran != null) {
+        $this->load->library('pdf');
+        $paper = $this->pdf->setPaper('A4', 'potrait');
+        $filename = $this->pdf->filename = "Nota Dinas.pdf";
+
+        if ($data['lampiran'] != null) {
             $html = $this->load->view('permohonan_surat/template-nota-dinas-lampiran', $data, TRUE);
         } else {
             $html = $this->load->view('permohonan_surat/template-nota-dinas', $data, TRUE);
@@ -281,6 +313,12 @@ class Permohonansurat extends MY_Controller
         if ($this->input->post('lokasi') == '') {
             $data['inputerror'][] = 'lokasi';
             $data['error_string'][] = 'Lokasi Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('isi_surat') == '') {
+            $data['inputerror'][] = 'isi_surat';
+            $data['error_string'][] = 'Isi Surat Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
