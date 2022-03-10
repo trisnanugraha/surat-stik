@@ -70,8 +70,7 @@
     });
     $('select.level').change(function() {
       var val = $(this).val();
-      console.log(val)
-      if (val === "11" || val === "12" || val === "13") {
+      if (val === "11" || val === "12" || val === "13" || val === "14" || val === "15") {
         $('.kelas').hide();
         $('.sindikat').hide();
         $('.jabatan').show();

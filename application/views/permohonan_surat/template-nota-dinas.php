@@ -40,7 +40,8 @@
         }
 
         #tujuan-surat {
-            margin-left: 100px;
+            margin-left: 10%;
+            width: 90%;
         }
 
         #tujuan-surat td {
@@ -52,6 +53,7 @@
         }
 
         #tujuan-surat tr td:nth-child(2) {
+            width: 5%;
             padding-right: 10px;
         }
 
@@ -111,7 +113,14 @@
                 <td>NOTA DINAS</td>
             </tr>
             <tr>
-                <td>Nomor: .................................................................</td>
+                <?php
+                if ($surat->nomor_nota != null) { ?>
+                    <td>Nomor : <?php echo $surat->nomor_nota; ?></td>
+                <?php } else { ?>
+                    <td>Nomor: .................................................................</td>
+                <?php }
+                ?>
+
             </tr>
         </table>
         <table id="tujuan-surat">
@@ -134,7 +143,7 @@
         <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
         <table id="penutup-surat">
             <tr>
-                <td>Jakarta, ..................................</td>
+                <td>Jakarta, ..............................................</td>
             </tr>
         </table>
         <div id="tembusan">

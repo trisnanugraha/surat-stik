@@ -16,6 +16,8 @@ class Login extends CI_Controller
         if ($logged_in == TRUE) {
             if ($this->session->userdata('id_level') == 1) {
                 redirect('dashboard');
+            } elseif ($this->session->userdata('id_level') == 15) {
+                redirect('suratperintah');
             } else {
                 redirect('permohonansurat');
             }
@@ -58,10 +60,12 @@ class Login extends CI_Controller
 
                     $checklevel = $this->_cek_status($userdata['id_level']);
 
-                    if($checklevel == 'Admin'){
+                    if ($checklevel == 'Admin') {
                         $data['url'] = 'dashboard';
-                    } else if($checklevel == 'Mahasiswa'){
+                    } else if ($checklevel == 'Mahasiswa') {
                         $data['url'] = 'permohonan-surat';
+                    } else if ($checklevel == 'Staff Korwa') {
+                        $data['url'] = 'surat-perintah';
                     } else {
                         $data['url'] = 'validasi-surat';
                     }

@@ -103,7 +103,7 @@
 
         .judul-lampiran {
             text-align: center;
-            margin: 5px auto 0 auto;
+            margin: 20px auto 10px auto;
 
         }
 
@@ -178,7 +178,13 @@
                     <td>NOTA DINAS</td>
                 </tr>
                 <tr>
-                    <td>Nomor: ....................................................</td>
+                    <?php
+                    if ($surat->nomor_nota != null) { ?>
+                        <td>Nomor : <?php echo $surat->nomor_nota; ?></td>
+                    <?php } else { ?>
+                        <td>Nomor: .................................................................</td>
+                    <?php }
+                    ?>
                 </tr>
             </table>
             <table id="tujuan-surat">
@@ -201,7 +207,7 @@
             <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
             <table class="penutup-surat">
                 <tr>
-                    <td>Jakarta, ....................................................</td>
+                    <td>Jakarta, ..............................................</td>
                 </tr>
             </table>
             <div id="tembusan">
@@ -255,7 +261,7 @@
         <br>
         <table class="penutup-surat">
             <tr>
-                <td>Jakarta, ....................................................</td>
+                <td>Jakarta, ..............................................</td>
             </tr>
         </table>
     </div>

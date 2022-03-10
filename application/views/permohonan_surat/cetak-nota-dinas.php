@@ -7,12 +7,12 @@
             font-family: 'OpenSans-Regular';
             font-style: normal;
             font-weight: normal;
-            src: url(<?php echo base_url() . '/assets/fonts/OpenSans-Regular.ttf';?>) format('truetype');
+            src: url(<?php echo base_url() . '/assets/fonts/OpenSans-Regular.ttf'; ?>) format('truetype');
         }
 
         body {
             font-family: 'OpenSans-Regular';
-            font-size:10pt;
+            font-size: 10pt;
         }
 
         #kop-surat {
@@ -40,7 +40,8 @@
         }
 
         #tujuan-surat {
-            margin-left: 100px;
+            margin-left: 10%;
+            width: 90%;
         }
 
         #tujuan-surat td {
@@ -52,6 +53,7 @@
         }
 
         #tujuan-surat tr td:nth-child(2) {
+            width: 5%;
             padding-right: 10px;
         }
 
@@ -81,10 +83,10 @@
 
         #tembusan {
             float: left;
-            margin-top: 100px;
+            margin-top: 200px;
         }
-        
-        #tembusan p{
+
+        #tembusan p {
             padding: 0;
             margin: 0;
         }
@@ -111,7 +113,7 @@
                 <td>NOTA DINAS</td>
             </tr>
             <tr>
-                <td>Nomor: B-ND/ 14 /I/2022/Senat PMIK</td>
+                <td>Nomor : <?php echo $surat->nomor_nota; ?></td>
             </tr>
         </table>
         <table id="tujuan-surat">
@@ -128,22 +130,22 @@
             <tr>
                 <td>Perihal</td>
                 <td>:</td>
-                <td><?php echo $perihal; ?></td>
+                <td><?php echo $surat->perihal; ?></td>
             </tr>
         </table>
-        <div style="text-align: justify;"><?php echo $isi_surat; ?></div>
+        <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
         <table id="penutup-surat">
             <tr>
-                <td>Jakarta, <?php echo $tgl_diubah; ?></td>
+                <td>Jakarta, <?php echo $surat->tgl_diubah; ?></td>
             </tr>
             <tr>
-                <td><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code/' . $qr_nota; ?>"></td>
+                <td><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code/' . $surat->qr_nota; ?>"></td>
             </tr>
         </table>
         <div id="tembusan">
             <p>Tembusan</p>
             <div id="list-tembusan">
-                <?php echo $tembusan; ?>
+                <?php echo $surat->tembusan; ?>
             </div>
         </div>
     </div>

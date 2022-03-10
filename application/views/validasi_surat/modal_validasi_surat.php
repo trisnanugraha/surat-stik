@@ -32,7 +32,7 @@
                         </div>
                     </div> -->
                     <?php
-                    if ($level == 'Staff') { ?>
+                    if ($level == 'Sekretaris') { ?>
                         <input type="hidden" value="" name="id_validasi_sekretaris" />
                         <div class="form-group row">
                             <label for="status_sekretaris" class="col-sm-3 col-form-label">Validasi Sekretaris</label>
@@ -83,10 +83,11 @@
                     ?>
                     <?php
                     if ($level == 'Kakorwa') { ?>
+                        <input type="hidden" value="" name="id_validasi_kakorwa" />
                         <div class="form-group row ">
                             <label for="status_kakorwa" class="col-sm-3 col-form-label">Validasi Kakorwa</label>
                             <div class="col-sm-9">
-                                <select class="form-control" name="status_kakorwa" id="status_kakorwa">
+                                <select class="form-control validasi_kakorwa" name="status_kakorwa" id="status_kakorwa">
                                     <option value="Diproses">Diproses</option>
                                     <option value="Butuh Perbaikan">Butuh Perbaikan</option>
                                     <option value="Disetujui">Disetujui</option>
@@ -98,6 +99,18 @@
                             <label for="catatan_kakorwa" class="col-sm-3 col-form-label">Keterangan Kakorwa</label>
                             <div class="col-sm-9">
                                 <textarea class="form-control" name="catatan_kakorwa" id="catatan_kakorwa" rows="2" style="resize: none;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row staffkorwa">
+                            <label for="kirim_ke" class="col-sm-3 col-form-label">Kirim Ke</label>
+                            <div class="col-sm-9">
+                                <select name="kirim_ke" id="kirim_ke" class="form-control select2 selectpicker" data-live-search="true">
+                                    <option value="disabled" selected disabled>-- Pilih Staff --</option>
+                                    <?php
+                                    foreach ($staffkorwa as $staff) { ?>
+                                        <option value="<?= $staff->id_user; ?>"><?= $staff->full_name; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
                     <?php }

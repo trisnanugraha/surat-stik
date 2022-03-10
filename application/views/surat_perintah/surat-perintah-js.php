@@ -5,11 +5,11 @@
 
     $(document).ready(function() {
 
-        table = $("#tabelsurat").DataTable({
+        table = $("#tabelsuratperintah").DataTable({
             "responsive": true,
             "autoWidth": false,
             "language": {
-                "sEmptyTable": "Data Permohonan Surat Masih Kosong"
+                "sEmptyTable": "Data Surat Perintah Masih Kosong"
             },
             "processing": true, //Feature control the processing indicator.
             "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -17,46 +17,45 @@
 
             // Load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo site_url('permohonansurat/ajax_list') ?>",
+                "url": "<?php echo site_url('suratperintah/ajax_list') ?>",
                 "type": "POST"
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 4, 5],
-                "className": 'text-center'
-            }, {
-                "searchable": false,
-                "orderable": false,
-                "targets": 0
-            }, {
-                "targets": [-2],
-                "render": function(data, type, row) {
-                    if (row[4] == "Diproses") {
-                        return "<div class=\"badge bg-info text-white text-wrap\">" + row[4] + "</div>"
-                    } else if (row[4] == "Butuh Perbaikan") {
-                        return "<div class=\"badge bg-warning text-white text-wrap\">" + row[4] + "</div>"
-                    } else if (row[4] == "Disetujui") {
-                        return "<div class=\"badge bg-success text-white text-wrap\">" + row[4] + "</div>"
-                    } else if (row[4] == "Ditolak") {
-                        return "<div class=\"badge bg-danger text-white text-wrap\">" + row[4] + "</div>"
-                    }
-                }
-            }, {
-                "targets": [-1], //last column
-                "render": function(data, type, row) {
-                    if (row[4] == "Diproses") {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div>"
-                    } else if (row[4] == "Butuh Perbaikan") {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
-                    } else if (row[4] == "Ditolak") {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
-                    } else if (row[4] == "Disetujui") {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[5] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Print\" onclick=\"generate(" + row[5] + ")\"><i class=\"fas fa-print\"></i> Print</a></div>"
-                    }
-
+                    "targets": [0, 1, 2, 3],
+                    "className": 'text-center'
+                }, {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
                 },
-                "orderable": false, //set not orderable
-            }],
+                {
+                    "targets": [-2],
+                    "render": function(data, type, row) {
+                        if (row[2] == 'Belum Terbit') {
+                            return "<div class=\"badge bg-warning text-white text-wrap\">" + row[2] + "</div>"
+                        } else if (row[2] == 'Diproses') {
+                            return "<div class=\"badge bg-info text-white text-wrap\">" + row[2] + "</div>"
+                        } else if (row[2] == 'Selesai') {
+                            return "<div class=\"badge bg-success text-white text-wrap\">" + row[2] + "</div>"
+                        }
+                    }
+                },
+                {
+                    "targets": [-1], //last column
+                    "render": function(data, type, row) {
+                        if (row[2] == "Belum Terbit") {
+                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Add\" onclick=\"add(" + row[3] + ")\"><i class=\"fas fa-plus\"></i> Tambah Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
+                        } else if (row[2] == "Diproses") {
+                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[3] + ")\"><i class=\"fas fa-print\"></i> Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
+                        } else if (row[2] == "Selesai") {
+                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[3] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[3] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+                        }
+
+                    },
+                    "orderable": false, //set not orderable
+                }
+            ],
         });
         $("input[type=text]").change(function() {
             $(this).parent().parent().removeClass('has-error');
@@ -176,14 +175,14 @@
         })
     }
 
-    function add() {
+    function add(id) {
         save_method = 'add';
         $('#form')[0].reset(); // reset form on modals
-        $('[id="perihal"]').val('');
+        $('[name="id_surat_perintah"]').val(id);
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         $('#modal_form').modal('show'); // show bootstrap modal
-        $('.modal-title').text('Tambah Permohonan Surat'); // Set Title to Bootstrap modal title
+        $('.modal-title').text('Tambah Surat Perintah'); // Set Title to Bootstrap modal title
     }
 
     function edit(id) {
@@ -194,54 +193,37 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('permohonansurat/edit') ?>/" + id,
+            url: "<?php echo site_url('suratperintah/edit') ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id_permohonan_surat"]').val(data['surat'].id_permohonan_surat);
-                $('[name="perihal"]').val(data['surat'].perihal);
-                $('[name="tanggal_berangkat"]').val(data['surat'].tanggal_berangkat);
-                if (data.tanggal_pulang != data['surat'].tanggal_berangkat) {
-                    $("#tanggal_pulang").prop("disabled", false);
-                    $('[name="tanggal_pulang"]').val(data['surat'].tanggal_pulang);
-                    $("#isCheck").prop("checked", true);
+                $('[name="id_surat_perintah"]').val(data.id_surat_perintah);
+                $('[name="nomor_surat"]').val(data.nomor_surat);
+                if (data.pertimbangan != null) {
+                    getPertimbangan.setData(data.pertimbangan);
                 }
-                $('[name="lokasi"]').val(data['surat'].lokasi);
-                // if (data.isi_surat != '') {
-                //     getIsiSurat.setData(data.isi_surat);
-                // }
-
-                if (data['surat'].isi_surat != null) {
-                    getIsiSurat.setData(data['surat'].isi_surat);
+                if (data.dasar != null) {
+                    getDasar.setData(data.dasar);
                 }
-
-                if (data['surat'].tembusan != null) {
-                    getTembusan.setData(data['surat'].tembusan);
+                if (data.kepada != null) {
+                    getKepada.setData(data.kepada);
                 }
-
-                if (data['surat'].judul_lampiran != null) {
-                    getJudulLampiran.setData(data['surat'].judul_lampiran);
+                if (data.untuk != null) {
+                    getUntuk.setData(data.untuk);
                 }
+                $('[name="tempat_terbit"]').val(data.tempat_terbit);
+                $('[name="tanggal_terbit"]').val(data.tanggal_terbit);
+                $('[name="atas_nama"]').val(data.atas_nama);
+                $('[name="nama_lengkap"]').val(data.nama_lengkap);
+                $('[name="pangkat"]').val(data.pangkat);
 
-                var myObj = data['lampiran']
-                $.each(myObj, function(key, value) {
-                    var new_id = i++;
-                    var html = '';
-                    html += '<tr id="' + new_id + '">';
-                    html += '<td class="id_mhs' + new_id + '" hidden>' + value.id_mhs + '</td>';
-                    html += '<td class="mahasiswa' + new_id + '">' + value.nim + ' - ' + value.nama_mhs + '</td>';
-                    html += '<td class="keterangan' + new_id + '">' + value.keterangan + '</td>';
-                    html += '<td class="status' + new_id + ' hidden">' + value.status + '</td>';
-                    html += '<td><button type="button" onclick="hapus_data(this, new_id)" class="btn btn-md btn-danger btn_remove">Hapus</button></td>';
-                    html += '</tr>'
-                    $('#dynamic_field').append(html);
-                });
-
-                //     $('[name="isi_surat"]').val(data.isi_surat);
-                // $('[name="tembusan"]').val(data.tembusan);
+                if (data.tembusan != null) {
+                    getTembusan.setData(data.tembusan);
+                }
+                $('[name="judul_lampiran"]').val(data.judul_lampiran);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title').text('Ubah Permohonan Surat'); // Set title to Bootstrap modal title
+                $('.modal-title').text('Ubah Surat Perintah'); // Set title to Bootstrap modal title
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -287,42 +269,30 @@
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
 
-        const isi_surat = getIsiSurat.getData();
+        const pertimbangan = getPertimbangan.getData();
+        const dasar = getDasar.getData();
+        const kepada = getKepada.getData();
+        const untuk = getUntuk.getData();
         const tembusan = getTembusan.getData();
         const judul_lampiran = getJudulLampiran.getData();
 
-        var lastRowId = $('#dynamic_field tr:last').attr("id");
-        var id_mhs = new Array();
-        var keterangan = new Array();
-        for (var i = 1; i <= lastRowId; i++) {
-            id_mhs.push($('#' + i + " .id_mhs" + i).html());
-            keterangan.push($('#' + i + " .keterangan" + i).html());
-        }
-
-        // var sendID = JSON.stringify(id_mhs);
-        // var sendKeterangan = JSON.stringify(keterangan);
-
-        let isChecked = $('#isCheck')[0].checked
-
         var formData = {
-            id_permohonan_surat: $("#id_permohonan_surat").val(),
-            perihal: $("#perihal").val(),
-            tanggal_berangkat: $("#tanggal_berangkat").val(),
-            tanggal_pulang: $("#tanggal_pulang").val(),
-            lokasi: $("#lokasi").val(),
-            isi_surat: isi_surat,
+            id_surat_perintah: $("#id_surat_perintah").val(),
+            nomor_surat: $("#nomor_surat").val(),
+            tempat_terbit: $("#tempat_terbit").val(),
+            tanggal_terbit: $("#tanggal_terbit").val(),
+            atas_nama: $("#atas_nama").val(),
+            nama_lengkap: $("#nama_lengkap").val(),
+            pangkat: $("#pangkat").val(),
+            pertimbangan: pertimbangan,
+            dasar: dasar,
+            kepada: kepada,
+            untuk: untuk,
             tembusan: tembusan,
-            judul_lampiran: judul_lampiran,
-            id_mahasiswa: id_mhs,
-            keterangan: keterangan,
-            isCheck: isChecked
+            judul_lampiran: judul_lampiran
         };
 
-        if (save_method == 'add') {
-            url = "<?php echo site_url('permohonansurat/insert') ?>";
-        } else {
-            url = "<?php echo site_url('permohonansurat/update') ?>";
-        }
+        url = "<?php echo site_url('suratperintah/update') ?>";
 
         // ajax adding data to database
         $.ajax({
@@ -334,8 +304,10 @@
 
                 if (data.status) //if success close modal and reload ajax table
                 {
-                    $('[id="perihal"]').val('');
-                    getIsiSurat.setData('');
+                    getPertimbangan.setData('');
+                    getDasar.setData('');
+                    getKepada.setData('');
+                    getUntuk.setData('');
                     getTembusan.setData('');
                     getJudulLampiran.setData('');
                     i = 1;
@@ -344,12 +316,12 @@
                     if (save_method == 'add') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Permohonan Surat Berhasil Disimpan!'
+                            title: 'Surat Perintah Berhasil Disimpan!'
                         });
                     } else if (save_method == 'update') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Permohonan Surat Berhasil Diubah!'
+                            title: 'Surat Perintah Berhasil Diubah!'
                         });
                     }
                 } else {

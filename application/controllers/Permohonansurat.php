@@ -150,7 +150,6 @@ class Permohonansurat extends MY_Controller
                 'isi_surat'            => $this->input->post('isi_surat'),
                 'tembusan'             => $this->input->post('tembusan'),
                 'judul_lampiran'       => $this->input->post('judul_lampiran'),
-                'isi_lampiran'         => $this->input->post('isi_lampiran'),
                 'status'               => 'Diproses'
             );
         } else {
@@ -163,7 +162,6 @@ class Permohonansurat extends MY_Controller
                 'isi_surat'            => $this->input->post('isi_surat'),
                 'tembusan'             => $this->input->post('tembusan'),
                 'judul_lampiran'       => $this->input->post('judul_lampiran'),
-                'isi_lampiran'         => $this->input->post('isi_lampiran'),
                 'status'               => 'Diproses'
             );
         }
@@ -268,19 +266,21 @@ class Permohonansurat extends MY_Controller
 
     public function generate($id)
     {
-        $data = $this->Mod_permohonan_surat->get_surat_by_id($id);
-        $data->tgl_diubah = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($data->tgl_diubah)));
+        $data['surat'] = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id);
+        $tanggal = $this->Mod_validasi_kasenat->get_surat_by_id($id);
+        $data['surat']->tgl_diubah = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($tanggal->tgl_diubah)));
         // $this->load->library('pdf');
         // $paper = $this->pdf->setPaper('A4', 'potrait');
         // $filename = $this->pdf->filename = "Nota Dinas.pdf";
 
-        if ($data->isi_lampiran != null) {
+        if ($data['lampiran'] != null) {
             $html = $this->load->view('permohonan_surat/cetak-nota-dinas-lampiran', $data, TRUE);
         } else {
             $html = $this->load->view('permohonan_surat/cetak-nota-dinas', $data, TRUE);
         }
 
-        $this->fungsi->PdfGenerator($html, 'E-Nota Dinas -- ' . date('d:m:Y', strtotime($data->tgl_diubah)) . '.pdf', 'A4', 'potrait');
+        $this->fungsi->PdfGenerator($html, 'E-Nota Dinas -- ' . date('d:m:Y', strtotime($data['surat']->tgl_diubah)) . '.pdf', 'A4', 'potrait');
     }
 
     private function _validate()

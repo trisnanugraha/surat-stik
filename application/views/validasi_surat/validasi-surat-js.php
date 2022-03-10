@@ -4,6 +4,7 @@
 
     $(document).ready(function() {
         $('.sekretaris').hide();
+        $('.staffkorwa').hide();
         table = $("#tabelsurat").DataTable({
             "responsive": true,
             "autoWidth": false,
@@ -21,7 +22,7 @@
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 4, 5, 6],
+                "targets": [0, 1, 3, 5, 6],
                 "className": 'text-center'
             }, {
                 "searchable": false,
@@ -62,7 +63,12 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
-        $("select").change(function() {
+        // $("select").change(function() {
+        //     $(this).parent().parent().removeClass('has-error');
+        //     $(this).next().empty();
+        //     $(this).removeClass('is-invalid');
+        // });
+        $("select").not(".select2").change(function() {
             $(this).parent().parent().removeClass('has-error');
             $(this).next().empty();
             $(this).removeClass('is-invalid');
@@ -75,6 +81,17 @@
                 // $('.subkategori-buku-umum').hide();
             } else{
                 $('.sekretaris').hide();
+
+            }
+        });
+
+        $('select.validasi_kakorwa').change(function() {
+            var val = $(this).val();
+            if (val === "Disetujui") {
+                $('.staffkorwa').show();
+                // $('.subkategori-buku-umum').hide();
+            } else{
+                $('.staffkorwa').hide();
 
             }
         });
@@ -191,7 +208,7 @@
                 $('[name="tanggal"]').text(data.tanggal);
                 $('[name="lokasi"]').text(data.lokasi);
                 $('[name="tanggal_akhir"]').text(data.tanggal_akhir);
-                if (data.level == 'Staff') {
+                if (data.level == 'Sekretaris') {
                     $('[name="id_validasi_sekretaris"]').val(data.id_validasi_sekretaris);
                     $('[name="status_sekretaris"]').val(data.status_sekretaris);
                     $('[name="catatan_sekretaris"]').val(data.catatan_sekretaris);
@@ -200,6 +217,7 @@
                     $('[name="status_kasenat"]').val(data.status_kasenat);
                     $('[name="catatan_kasenat"]').val(data.catatan_kasenat);
                 } else if (data.level == 'Kakorwa') {
+                    $('[name="id_validasi_kakorwa"]').val(data.id_validasi_kakorwa);
                     $('[name="status_kakorwa"]').val(data.status_kakorwa);
                     $('[name="catatan_kakorwa"]').val(data.catatan_kakorwa);
                 }

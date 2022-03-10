@@ -13,7 +13,9 @@ class Validasisurat extends MY_Controller
         $this->load->model('Mod_validasi_kakorwa');
         $this->load->model('Mod_permohonan_surat');
         $this->load->model('Mod_userlevel');
+        $this->load->model('Mod_user');
         $this->load->model('Mod_surat_keluar');
+        $this->load->model('Mod_surat_perintah');
         $this->load->model('Mod_lampiran');
         $this->load->library('ciqrcode');
     }
@@ -23,6 +25,7 @@ class Validasisurat extends MY_Controller
         $checklevel = $this->_cek_status($this->session->userdata('id_level'));
         $data['judul'] = 'Validasi Permohonan Surat';
         $data['level'] = $checklevel;
+        $data['staffkorwa'] = $this->Mod_user->get_all(15);
         // $data['modal_tambah_surat'] = show_my_modal('validasi_surat/modal_tambah_surat', $data);
         $data['modal_validasi_surat'] = show_my_modal('validasi_surat/modal_validasi_surat', $data);
         $js = $this->load->view('validasi_surat/validasi-surat-js', null, true);
@@ -34,7 +37,7 @@ class Validasisurat extends MY_Controller
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
         $level = $this->_cek_status($this->session->userdata('id_level'));
-        if ($level == 'Staff') {
+        if ($level == 'Sekretaris') {
             $list = $this->Mod_validasi_sekretaris->get_datatables();
             $recordTotal = $this->Mod_validasi_sekretaris->count_all();
             $recordFiltered = $this->Mod_validasi_sekretaris->count_filtered();
@@ -56,9 +59,9 @@ class Validasisurat extends MY_Controller
             $row[] = $no;
             $row[] = $surat->pemohon;
             $row[] = $surat->perihal;
-            $row[] = $this->fungsi->tanggalindo($surat->tanggal_berangkat) . ' s/d ' . $this->fungsi->tanggalindo($surat->tanggal_pulang);
+            $row[] = $this->fungsi->tanggalindo($surat->tanggal_berangkat) . '<br>s/d<br>' . $this->fungsi->tanggalindo($surat->tanggal_pulang);
             $row[] = $surat->lokasi;
-            if ($level == 'Staff') {
+            if ($level == 'Sekretaris') {
                 $row[] = $surat->status_sekretaris;
                 $row[] = $surat->id_validasi_sekretaris;
             } else if ($level == 'Kasenat') {
@@ -125,7 +128,7 @@ class Validasisurat extends MY_Controller
     {
         $level = $this->_cek_status($this->session->userdata('id_level'));
 
-        if ($level == 'Staff') {
+        if ($level == 'Sekretaris') {
             $data = $this->Mod_validasi_sekretaris->get_surat_by_id($id);
         } else if ($level == 'Kasenat') {
             $data = $this->Mod_validasi_kasenat->get_surat_by_id($id);
@@ -145,7 +148,7 @@ class Validasisurat extends MY_Controller
         $id = $this->input->post('id_permohonan_surat');
         $checklevel = $this->_cek_status($this->session->userdata('id_level'));
 
-        if ($checklevel == 'Staff') {
+        if ($checklevel == 'Sekretaris') {
             $data  = array(
                 'status_sekretaris' => $this->input->post('status_sekretaris'),
                 'catatan_sekretaris' => $this->input->post('catatan_sekretaris'),
@@ -162,7 +165,7 @@ class Validasisurat extends MY_Controller
                 $nota_dinas = '';
             } else if ($this->input->post('status_sekretaris') == 'Disetujui') {
                 $status = 'Diproses';
-                $nota_dinas = $this->input->post('nota_dinas');
+                $nota_dinas = $this->input->post('nomor_nota');
             }
 
             $data_surat = array(
@@ -178,16 +181,26 @@ class Validasisurat extends MY_Controller
                 'catatan_kasenat' => $this->input->post('catatan_kasenat'),
             );
 
-            if ($this->input->post('status_kasenat') == 'Diproses' || $this->input->post('status_kasenat') == 'Disetujui') {
+            if ($this->input->post('status_kasenat') == 'Diproses') {
                 $status = 'Diproses';
             } else if ($this->input->post('status_kasenat') == 'Ditolak') {
                 $status = 'Ditolak';
             } else if ($this->input->post('status_kasenat') == 'Butuh Perbaikan') {
                 $status = 'Butuh Perbaikan';
+            } else if ($this->input->post('status_kasenat') == 'Disetujui') {
+                $status = 'Disetujui';
+                $qr_nota = $id . '.png'; //buat name dari qr code sesuai dengan nim
+
+                $params['data'] = 'Surat ini telah disahkan dan divalidasi oleh Kasenat pada ' . tgl_indonesia(date('Y-m-d H:i:s')) . ' melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
+                $params['level'] = 'H'; //H=High
+                $params['size'] = 10;
+                $params['savename'] = FCPATH . './assets/qr-code/' . $id . ".png"; //simpan image QR CODE ke folder assets/images/
+                $this->ciqrcode->generate($params);
             }
 
             $data_surat = array(
                 'status' => $status,
+                'qr_nota' => $qr_nota
             );
 
             $this->Mod_validasi_kasenat->update($id, $data);
@@ -206,19 +219,20 @@ class Validasisurat extends MY_Controller
                 $status = 'Butuh Perbaikan';
             } elseif ($this->input->post('status_kakorwa') == 'Disetujui') {
                 $status = 'Disetujui';
+                $staffkorwa = $this->input->post('kirim_ke');
 
-                $qr_nota = $id . '.png'; //buat name dari qr code sesuai dengan nim
+                // $qr_nota = $id . '.png'; //buat name dari qr code sesuai dengan nim
 
-                $params['data'] = 'Surat ini telah disahkan dan divalidasi oleh Kakorwa pada ' . date('d-m-Y H:i:s') . ' Melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
-                $params['level'] = 'H'; //H=High
-                $params['size'] = 10;
-                $params['savename'] = FCPATH . './assets/qr-code/' . $id . ".png"; //simpan image QR CODE ke folder assets/images/
-                $this->ciqrcode->generate($params);
+                // $params['data'] = 'Surat ini telah disahkan dan divalidasi oleh Kakorwa pada ' . date('d-m-Y H:i:s') . ' Melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
+                // $params['level'] = 'H'; //H=High
+                // $params['size'] = 10;
+                // $params['savename'] = FCPATH . './assets/qr-code/' . $id . ".png"; //simpan image QR CODE ke folder assets/images/
+                // $this->ciqrcode->generate($params);
             }
 
             $data_surat = array(
                 'status' => $status,
-                'qr_nota' => $qr_nota
+                // 'qr_nota' => $qr_nota
             );
 
             $this->Mod_validasi_kakorwa->update($id, $data);
@@ -245,7 +259,14 @@ class Validasisurat extends MY_Controller
             $this->Mod_validasi_kakorwa->insert($kasenat);
         };
 
+        if ($this->input->post('status_kakorwa') == 'Disetujui') {
+            $data_staff = array(
+                'id_user' => $staffkorwa,
+                'id_permohonan_surat' => $id
+            );
 
+            $this->Mod_surat_perintah->insert($data_staff);
+        };
 
         // echo json_encode($data);
 
