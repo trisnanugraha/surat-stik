@@ -78,9 +78,32 @@ class Mod_surat_perintah extends CI_Model
             ->result();
     }
 
-    function get_surat_by_id($id)
+    function get_surat_perintah_by_id($id)
     {
         $this->db->where('id_surat_perintah', $id);
+        return $this->db->get($this->table)->row();
+    }
+
+    function get_pemohon($id)
+    {
+        $this->db->select('b.id_pemohon');
+        $this->db->join('tbl_permohonan_surat b', 'a.id_permohonan_surat = b.id_permohonan_surat');
+        $this->db->where('id_surat_perintah', $id);
+        $query = $this->db->get("{$this->table} a")->row();
+        return $query->id_pemohon;
+    }
+
+    function get_id_surat_permohonan($id)
+    {
+        $this->db->select('id_permohonan_surat');
+        $this->db->where('id_surat_perintah', $id);
+        $query = $this->db->get("{$this->table} a")->row();
+        return $query->id_permohonan_surat;
+    }
+
+    function get_surat_by_id($id)
+    {
+        $this->db->where('id_permohonan_surat', $id);
         return $this->db->get($this->table)->row();
     }
 

@@ -10,5 +10,7 @@ $route['validasi-surat'] = 'Validasisurat/index';
 $route['daftar-mahasiswa'] = 'Mahasiswa/index';
 $route['daftar-mahasiswa/import'] = 'Mahasiswa/import';
 $route['kotak-surat'] = 'Kotaksurat/index';
+// $route['kotak-surat/print'] = 'Kotaksurat/print';
 $route['surat-perintah'] = 'Suratperintah/index';
+$route['surat-perintah/send'] = 'Suratperintah/send';
 

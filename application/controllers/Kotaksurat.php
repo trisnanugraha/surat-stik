@@ -8,6 +8,8 @@ class Kotaksurat extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_validasi_surat');
+        $this->load->model('Mod_surat_perintah');
+        $this->load->model('Mod_lampiran');
         $this->load->model('Mod_userlevel');
         $this->load->model('Mod_surat_keluar');
     }
@@ -24,10 +26,17 @@ class Kotaksurat extends MY_Controller
 
     public function ajax_list()
     {
+        $nama_level = $this->Mod_userlevel->getUserlevel($this->session->userdata('id_level'));
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
         // $level = $this->_cek_status($this->session->userdata('id_level'));
-        $list = $this->Mod_surat_keluar->get_datatables();
+        if ($nama_level->nama_level == 'Mahasiswa') {
+            $id_user = $this->session->userdata('id_user');
+            $list = $this->Mod_surat_keluar->get_datatables($id_user);
+        } else {
+            $list = $this->Mod_surat_keluar->get_datatables();
+        }
+
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $surat) {
@@ -35,18 +44,29 @@ class Kotaksurat extends MY_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = 'B-ND/' . $surat->id_surat_keluar . '/I/2022/Senat PMIK';
-            $row[] = $surat->id_permohonan_surat;
+            $row[] = $surat->nomor_surat;
+            $row[] = $surat->id_surat_perintah;
             // $row[] = $cekuser;
             $data[] = $row;
         }
 
-        $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->Mod_surat_keluar->count_all(),
-            "recordsFiltered" => $this->Mod_surat_keluar->count_filtered(),
-            "data" => $data,
-        );
+        if ($nama_level->nama_level == 'Mahasiswa') {
+            $output = array(
+                "draw" => $_POST['draw'],
+                "recordsTotal" => $this->Mod_surat_keluar->count_all(),
+                "recordsFiltered" => $this->Mod_surat_keluar->count_filtered($id_user),
+                "data" => $data,
+            );
+        } else {
+            $output = array(
+                "draw" => $_POST['draw'],
+                "recordsTotal" => $this->Mod_surat_keluar->count_all(),
+                "recordsFiltered" => $this->Mod_surat_keluar->count_filtered(),
+                "data" => $data,
+            );
+        }
+
+
         //output to json format
         echo json_encode($output);
     }
@@ -185,12 +205,24 @@ class Kotaksurat extends MY_Controller
 
     public function print($id)
     {
-        $data['surat'] = $this->Mod_validasi_surat->get_surat_by_id($id);
-        // $this->load->library('pdf');
-        // $paper = $this->pdf->setPaper('A4', 'potrait');
-        // $filename = $this->pdf->filename = "Nota Dinas.pdf";
-        $html = $this->load->view('kotak_surat/template-nota-dinas', $data, TRUE);
-        $this->fungsi->PdfGenerator($html, 'Nota Dinas.pdf', 'A4', 'potrait');
+        $id_permohonan_surat = $this->Mod_surat_perintah->get_id_surat_permohonan($id);
+        $data['surat'] = $this->Mod_surat_perintah->get_surat_by_id($id_permohonan_surat);
+        $data['surat']->tanggal_terbit = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($data['surat']->tanggal_terbit)));
+        $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id_permohonan_surat);
+        // echo('<pre>');
+        // print_r($data['lampiran']);
+
+        $this->load->library('pdf');
+        $paper = $this->pdf->setPaper('A4', 'potrait');
+        $filename = $this->pdf->filename = "Nota Dinas.pdf";
+
+        if ($data['lampiran'] != null) {
+            $html = $this->load->view('surat_perintah/template-surat-perintah-lampiran', $data, TRUE);
+        } else {
+            $html = $this->load->view('surat_perintah/template-nota-dinas', $data, TRUE);
+        }
+
+        $this->fungsi->PdfGenerator($html, 'Draft - Surat Perintah.pdf', 'A4', 'potrait');
     }
 }
 

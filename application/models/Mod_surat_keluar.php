@@ -14,9 +14,14 @@ class Mod_surat_keluar extends CI_Model
         parent::__construct();
         $this->load->database();
     }
-    private function _get_datatables_query()
+    private function _get_datatables_query($id = '')
     {
-        $this->db->from($this->table);
+        $this->db->select('b.nomor_surat, b.id_surat_perintah');
+        $this->db->join('tbl_surat_perintah b', 'a.id_surat_perintah = b.id_surat_perintah');
+        if ($id != '') {
+            $this->db->where('a.id_tujuan', $id);
+        }
+        $this->db->from("{$this->table} a");
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -47,18 +52,18 @@ class Mod_surat_keluar extends CI_Model
         }
     }
 
-    function get_datatables()
+    function get_datatables($id = '')
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($id);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    function count_filtered()
+    function count_filtered($id = '')
     {
-        $this->_get_datatables_query();
+        $this->_get_datatables_query($id);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -98,8 +103,7 @@ class Mod_surat_keluar extends CI_Model
 
     function insert($data)
     {
-        $insert = $this->db->insert($this->table, $data);
-        return $insert;
+        $this->db->insert($this->table, $data);
     }
 
     function update($id, $data)

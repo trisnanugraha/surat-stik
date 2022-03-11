@@ -8,11 +8,13 @@ class Suratperintah extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_surat_perintah');
+        $this->load->model('Mod_surat_keluar');
         $this->load->model('Mod_validasi_sekretaris');
         $this->load->model('Mod_validasi_kasenat');
         $this->load->model('Mod_validasi_kakorwa');
         $this->load->model('Mod_mahasiswa');
         $this->load->model('Mod_lampiran');
+        $this->load->library('ciqrcode');
     }
 
     public function index()
@@ -66,7 +68,7 @@ class Suratperintah extends MY_Controller
 
     public function edit($id)
     {
-        $data = $this->Mod_surat_perintah->get_surat_by_id($id);
+        $data = $this->Mod_surat_perintah->get_surat_perintah_by_id($id);
 
         echo json_encode($data);
     }
@@ -133,9 +135,41 @@ class Suratperintah extends MY_Controller
         echo json_encode($data);
     }
 
+    public function send()
+    {
+        $id = $this->input->post('id_surat_perintah');
+        $id_pengirim = $this->session->userdata('id_user');
+        $id_tujuan = $this->Mod_surat_perintah->get_pemohon($id);
+        $data_surat = $this->Mod_surat_perintah->get_surat_perintah_by_id($id);
+
+        $save = array(
+            'id_surat_perintah' => $id,
+            'id_pengirim' => $id_pengirim,
+            'id_tujuan' => $id_tujuan
+        );
+
+        $qr_surat = $id . '.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = 'Surat ini telah disahkan dan divalidasi a/n ' . $data_surat->atas_nama . ' oleh ' . $data_surat->nama_lengkap . ' (' . $data_surat->pangkat . ') pada ' . tgl_indonesia(date('Y-m-d H:i:s')) . ' melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . './assets/qr-code-sprin/' . $id . ".png"; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params);
+
+        $status = array(
+            'status' => 'Selesai',
+            'qr_surat' => $qr_surat
+        );
+
+        $this->Mod_surat_keluar->insert($save);
+        $this->Mod_surat_perintah->update($id, $status);
+        echo json_encode(array("status" => TRUE));
+    }
+
     public function print($id)
     {
-        $data['surat'] = $this->Mod_permohonan_surat->get_surat_by_id($id);
+        $data['surat'] = $this->Mod_surat_perintah->get_surat_by_id($id);
+        $data['surat']->tanggal_terbit = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($data['surat']->tanggal_terbit)));
         $data['lampiran'] = $this->Mod_lampiran->get_lampiran_by_id($id);
         // echo('<pre>');
         // print_r($data['lampiran']);
@@ -145,12 +179,12 @@ class Suratperintah extends MY_Controller
         $filename = $this->pdf->filename = "Nota Dinas.pdf";
 
         if ($data['lampiran'] != null) {
-            $html = $this->load->view('permohonan_surat/template-nota-dinas-lampiran', $data, TRUE);
+            $html = $this->load->view('surat_perintah/template-surat-perintah-lampiran', $data, TRUE);
         } else {
-            $html = $this->load->view('permohonan_surat/template-nota-dinas', $data, TRUE);
+            $html = $this->load->view('surat_perintah/template-nota-dinas', $data, TRUE);
         }
 
-        $this->fungsi->PdfGenerator($html, 'Draft - Nota Dinas.pdf', 'A4', 'potrait');
+        $this->fungsi->PdfGenerator($html, 'Draft - Surat Perintah.pdf', 'A4', 'potrait');
     }
 
     public function generate($id)

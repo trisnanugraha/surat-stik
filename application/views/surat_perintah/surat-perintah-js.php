@@ -47,9 +47,9 @@
                         if (row[2] == "Belum Terbit") {
                             return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Add\" onclick=\"add(" + row[3] + ")\"><i class=\"fas fa-plus\"></i> Tambah Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
                         } else if (row[2] == "Diproses") {
-                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[3] + ")\"><i class=\"fas fa-print\"></i> Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
+                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Send\" onclick=\"send(" + row[3] + ")\"><i class=\"fas fa-envelope\"></i> Kirim Surat</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
                         } else if (row[2] == "Selesai") {
-                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[3] + ")\"><i class=\"fas fa-eye\"></i> Detail</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[3] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+                            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Surat Perintah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"generate(" + row[4] + ")\"><i class=\"fas fa-print\"></i> Nota Dinas</a></div>"
                         }
 
                     },
@@ -121,7 +121,7 @@
     });
 
     function print(id) {
-        var go_to_url = '<?php echo base_url('permohonansurat/print/'); ?>' + id;
+        var go_to_url = '<?php echo base_url('suratperintah/print/'); ?>' + id;
         window.open(go_to_url, '_blank');
     }
 
@@ -185,6 +185,49 @@
         $('.modal-title').text('Tambah Surat Perintah'); // Set Title to Bootstrap modal title
     }
 
+    function send(id) {
+        Swal.fire({
+            title: 'Kirim Surat Perintah',
+            text: "Pastikan Bahwa Surat Perintah Sudah Sesuai",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Kirim Sekarang!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "<?php echo site_url('surat-perintah/send'); ?>",
+                    type: "POST",
+                    data: "id_surat_perintah=" + id,
+                    cache: false,
+                    dataType: 'json',
+                    success: function(respone) {
+                        if (respone.status == true) {
+                            reload_table();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Surat Perintah Berhasil Terkirim!'
+                            });
+                        } else {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Delete Error!!.'
+                            });
+                        }
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                )
+            }
+        })
+    }
+
     function edit(id) {
         save_method = 'update';
         $('#form')[0].reset(); // reset form on modals
@@ -221,7 +264,10 @@
                 if (data.tembusan != null) {
                     getTembusan.setData(data.tembusan);
                 }
-                $('[name="judul_lampiran"]').val(data.judul_lampiran);
+                if (data.judul_lampiran != null) {
+                    getJudulLampiran.setData(data.judul_lampiran);
+                }
+                // $('[name="judul_lampiran"]').val(data.judul_lampiran);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Ubah Surat Perintah'); // Set title to Bootstrap modal title
 
