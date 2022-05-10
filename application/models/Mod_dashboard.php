@@ -86,7 +86,7 @@ class Mod_dashboard extends CI_Model
             ->join('tbl_priode d', 'd.id_priode = c.id_priode')
             ->where('d.id_priode', $idPriode)
             ->get();
-            // ->result();
+        // ->result();
     }
 
     function get_total_pkm($idPriode)
@@ -104,6 +104,18 @@ class Mod_dashboard extends CI_Model
             ->where('d.id_priode', $idPriode)
             ->get();
         // ->result();
+    }
+
+    function total_mahasiswa_by_sindikat()
+    {
+        $this->db->group_by('a.id_sindikat');
+        $this->db->select([
+            'b.nama_sindikat',
+            'COUNT(a.nama_mhs) AS total'
+        ]);
+        $this->db->join('tbl_sindikat b', 'b.id_sindikat = a.id_sindikat');
+        return $this->db->from('tbl_mahasiswa a')
+            ->get();
     }
 }
 

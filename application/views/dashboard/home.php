@@ -29,6 +29,76 @@
                     <a href="<?php echo base_url('aktivasi-user'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+            <div class="col-lg-3 col-6"></div>
+            <div class="col-lg-3 col-6"></div>
+            <div class="col-lg-3 col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">List Total Mahasiswa / Sindikat</h3>
+                                <div class="card-tools">
+                                </div>
+                            </div>
+
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Sindikat</th>
+                                            <th style="text-align: center;">Total Mahasiswa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        foreach ($totalMahasiswa as $total) {
+                                        ?>
+                                            <tr>
+                                                <td style="text-align: center;"><?php echo $total->nama_sindikat; ?></td>
+                                                <td style="text-align: center;"><?php echo $total->total; ?></td>
+                                            </tr>
+                                        <?php }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Log Activity System</h3>
+                                <div class="card-tools">
+                                </div>
+                            </div>
+
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Status</th>
+                                            <th style="text-align: center;">Run As</th>
+                                            <th style="text-align: center;">IP Address</th>
+                                            <th style="text-align: center;">Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /.row -->
     </div>

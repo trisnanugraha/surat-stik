@@ -77,3 +77,48 @@ function show_my_modal($content = '', $data = '')
 		return $view_content;
 	}
 }
+
+function helper_log($tipe = "", $str = "", $id = "", $ip = "")
+{
+	$CI = &get_instance();
+
+	if (strtolower($tipe) == "login") {
+		$log_tipe   = 0;
+	} elseif (strtolower($tipe) == "logout") {
+		$log_tipe   = 1;
+	} elseif (strtolower($tipe) == "add") {
+		$log_tipe   = 2;
+	} elseif (strtolower($tipe) == "edit") {
+		$log_tipe  = 3;
+	} elseif (strtolower($tipe) == "delete") {
+		$log_tipe  = 4;
+	} elseif (strtolower($tipe) == "export") {
+		$log_tipe  = 5;
+	} elseif (strtolower($tipe) == "import") {
+		$log_tipe  = 6;
+	} else {
+		$log_tipe  = 7;
+	}
+
+	// parameter
+	$param['log_username']  = $CI->session->userdata('username');
+	$param['log_type']      = $log_tipe;
+	$param['log_desc']      = $str;
+	$param['log_id_act']	= $id;
+	$param['log_ip']		= $ip;
+	$CI->load->library('user_agent');
+
+	$data['browser'] = $CI->agent->browser();
+
+	$data['browser_version'] = $CI->agent->version();
+
+	$data['os'] = $CI->agent->platform();
+
+	$data['ip_address'] = $CI->input->ip_address();
+
+	//load model log
+	$CI->load->model('m_log');
+
+	//save to database
+	$CI->m_log->save_log($param);
+}

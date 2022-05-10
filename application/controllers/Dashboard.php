@@ -24,6 +24,9 @@ class Dashboard extends MY_Controller
         $data['user'] = $this->Mod_user->total_rows();
         $data['pendinguser'] = $this->Mod_aktivasi_user->total_rows();
         $data['permohonansurat'] = $this->Mod_permohonan_surat->total_rows();
+        $data['totalMahasiswa'] = $this->Mod_dashboard->total_mahasiswa_by_sindikat()->result();
+        // echo '<pre>';
+        // print_r($data['totalMahasiswa']);
         // $data['dataPenelitian'] = $this->Mod_dashboard->get_total_penelitian($this->getdata());
         // $data['dataPKM'] = $this->Mod_dashboard->get_total_pkm($this->getdata());
         // $data['dataPriode'] = $this->Mod_priode->get_priode($this->getdata());

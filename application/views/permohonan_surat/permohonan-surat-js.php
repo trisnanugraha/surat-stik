@@ -2,6 +2,7 @@
     var save_method; //for save method string
     var table;
     var i = 1;
+    var temp_id = new Array();
 
     $(document).ready(function() {
 
@@ -107,6 +108,11 @@
     }
 
     function hapus_data(id) {
+        id.closest('tr').remove();
+    }
+
+    function hapus_edit_data(id) {
+        temp_id.push(id.closest('tr').className)
         id.closest('tr').remove();
     }
 
@@ -228,12 +234,12 @@
                 $.each(myObj, function(key, value) {
                     var new_id = i++;
                     var html = '';
-                    html += '<tr id="' + new_id + '">';
+                    html += '<tr id="' + new_id + '" class="' + value.id_lampiran + '">';
+                    html += '<td class="delete_id id_lampiran' + new_id + '" hidden>' + value.id_lampiran + '</td>';
                     html += '<td class="id_mhs' + new_id + '" hidden>' + value.id_mhs + '</td>';
                     html += '<td class="mahasiswa' + new_id + '">' + value.nim + ' - ' + value.nama_mhs + '</td>';
                     html += '<td class="keterangan' + new_id + '">' + value.keterangan + '</td>';
-                    html += '<td class="status' + new_id + ' hidden">' + value.status + '</td>';
-                    html += '<td><button type="button" onclick="hapus_data(this, new_id)" class="btn btn-md btn-danger btn_remove">Hapus</button></td>';
+                    html += '<td><button type="button" onclick="hapus_edit_data(this,' + new_id + ')" class="btn btn-md btn-danger btn_remove">Hapus</button></td>';
                     html += '</tr>'
                     $('#dynamic_field').append(html);
                 });
@@ -286,6 +292,7 @@
         $('#btnSave').text('Menyimpan...'); //change button text
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
+        var formData;
 
         const isi_surat = getIsiSurat.getData();
         const tembusan = getTembusan.getData();
@@ -294,9 +301,11 @@
         var lastRowId = $('#dynamic_field tr:last').attr("id");
         var id_mhs = new Array();
         var keterangan = new Array();
+        var id_lampiran = new Array();
         for (var i = 1; i <= lastRowId; i++) {
             id_mhs.push($('#' + i + " .id_mhs" + i).html());
             keterangan.push($('#' + i + " .keterangan" + i).html());
+            id_lampiran.push($('#' + i + " .id_lampiran" + i).html());
         }
 
         // var sendID = JSON.stringify(id_mhs);
@@ -304,24 +313,38 @@
 
         let isChecked = $('#isCheck')[0].checked
 
-        var formData = {
-            id_permohonan_surat: $("#id_permohonan_surat").val(),
-            perihal: $("#perihal").val(),
-            tanggal_berangkat: $("#tanggal_berangkat").val(),
-            tanggal_pulang: $("#tanggal_pulang").val(),
-            lokasi: $("#lokasi").val(),
-            isi_surat: isi_surat,
-            tembusan: tembusan,
-            judul_lampiran: judul_lampiran,
-            id_mahasiswa: id_mhs,
-            keterangan: keterangan,
-            isCheck: isChecked
-        };
-
         if (save_method == 'add') {
             url = "<?php echo site_url('permohonansurat/insert') ?>";
+            formData = {
+                id_permohonan_surat: $("#id_permohonan_surat").val(),
+                perihal: $("#perihal").val(),
+                tanggal_berangkat: $("#tanggal_berangkat").val(),
+                tanggal_pulang: $("#tanggal_pulang").val(),
+                lokasi: $("#lokasi").val(),
+                isi_surat: isi_surat,
+                tembusan: tembusan,
+                judul_lampiran: judul_lampiran,
+                id_mahasiswa: id_mhs,
+                keterangan: keterangan,
+                isCheck: isChecked
+            };
         } else {
             url = "<?php echo site_url('permohonansurat/update') ?>";
+            formData = {
+                id_permohonan_surat: $("#id_permohonan_surat").val(),
+                perihal: $("#perihal").val(),
+                tanggal_berangkat: $("#tanggal_berangkat").val(),
+                tanggal_pulang: $("#tanggal_pulang").val(),
+                lokasi: $("#lokasi").val(),
+                isi_surat: isi_surat,
+                tembusan: tembusan,
+                judul_lampiran: judul_lampiran,
+                id_mahasiswa: id_mhs,
+                keterangan: keterangan,
+                isCheck: isChecked,
+                delete_data: temp_id,
+                lampiran: id_lampiran
+            };
         }
 
         // ajax adding data to database

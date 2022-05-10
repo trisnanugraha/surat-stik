@@ -140,6 +140,14 @@ class Permohonansurat extends MY_Controller
         $id = $this->input->post('id_permohonan_surat');
         $this->_validate();
 
+        if ($this->input->post('delete_data') != null) {
+            $count_delete_data = count($this->input->post('delete_data'));
+            $delete_id = $this->input->post('delete_data');
+            for ($i = 0; $i < $count_delete_data; $i++) {
+                $this->Mod_lampiran->delete($delete_id[$i]);
+            }
+        }
+
         if ($this->input->post('isCheck') == 'true') {
             $save  = array(
                 'id_pemohon'           => $this->session->userdata('id_user'),
@@ -166,6 +174,66 @@ class Permohonansurat extends MY_Controller
             );
         }
         $this->Mod_permohonan_surat->update($id, $save);
+
+        if ($this->input->post('id_mahasiswa') != null) {
+            $count = count($this->input->post('id_mahasiswa'));
+            if ($this->input->post('lampiran') != null) {
+                $count_id = count($this->input->post('lampiran'));
+                $new_data = $count - $count_id;
+
+                if ($new_data == 0) {
+                    for ($i = 0; $i < $count; $i++) {
+                        $id_permohonan_surat = $this->input->post('id_permohonan_surat');
+                        $id_lampiran = $this->input->post('lampiran');
+                        $id_mhs = $this->input->post('id_mahasiswa');
+                        $keterangan = $this->input->post('keterangan');
+                        $data_mhs = array(
+                            'id_mhs' => intval($id_mhs[$i]),
+                            'keterangan' => $keterangan[$i]
+                        );
+                        $this->Mod_lampiran->update($id_lampiran[$i], $data_mhs);
+                    }
+                } else if ($new_data != 0) {
+                    for ($i = 0; $i < $count_id; $i++) {
+                        $id_permohonan_surat = $this->input->post('id_permohonan_surat');
+                        $id_lampiran = $this->input->post('lampiran');
+                        $id_mhs = $this->input->post('id_mahasiswa');
+                        $keterangan = $this->input->post('keterangan');
+                        $data_mhs = array(
+                            'id_mhs' => intval($id_mhs[$i]),
+                            'keterangan' => $keterangan[$i]
+                        );
+                        $this->Mod_lampiran->update($id_lampiran[$i], $data_mhs);
+                    }
+
+                    for ($i = $new_data; $i < $count; $i++) {
+                        $id_permohonan_surat = $this->input->post('id_permohonan_surat');
+                        $id_lampiran = $this->input->post('lampiran');
+                        $id_mhs = $this->input->post('id_mahasiswa');
+                        $keterangan = $this->input->post('keterangan');
+                        $data_mhs = array(
+                            'id_permohonan_surat' => $id_permohonan_surat,
+                            'id_mhs' => intval($id_mhs[$i]),
+                            'keterangan' => $keterangan[$i]
+                        );
+                        $this->Mod_lampiran->insert($data_mhs);
+                    }
+                }
+            } else {
+                for ($i = 0; $i < $count; $i++) {
+                    $id_permohonan_surat = $this->input->post('id_permohonan_surat');
+                    $id_lampiran = $this->input->post('lampiran');
+                    $id_mhs = $this->input->post('id_mahasiswa');
+                    $keterangan = $this->input->post('keterangan');
+                    $data_mhs = array(
+                        'id_permohonan_surat' => $id_permohonan_surat,
+                        'id_mhs' => intval($id_mhs[$i]),
+                        'keterangan' => $keterangan[$i]
+                    );
+                    $this->Mod_lampiran->insert($data_mhs);
+                }
+            }
+        }
 
         $data_sekretaris = $this->Mod_validasi_sekretaris->get_surat_by_id($id);
         $data_kasenat = $this->Mod_validasi_kasenat->get_surat_by_id($id);
