@@ -10,6 +10,7 @@ class Register extends CI_Controller
         $this->load->model('Mod_kelas');
         $this->load->model('Mod_sindikat');
         $this->load->model('Mod_jabatan');
+        $this->load->model('Mod_angkatan');
         $this->load->model('Mod_user');
         $this->load->model('Mod_userlevel');
         $this->load->model('Mod_aktivasi_user');
@@ -23,6 +24,7 @@ class Register extends CI_Controller
         $data['kelas'] = $this->Mod_kelas->get_all_kelas();
         $data['sindikat'] = $this->Mod_sindikat->get_all_sindikat();
         $data['jabatan'] = $this->Mod_jabatan->get_all_jabatan();
+        $data['angkatan'] = $this->Mod_angkatan->get_all_angkatan();
         $this->load->view('admin/register', $data);
     }
 
@@ -47,6 +49,7 @@ class Register extends CI_Controller
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('fullname'),
                     'password'  => get_hash($this->input->post('password')),
+                    'id_angkatan'  => 5,
                     'id_kelas'  => 4,
                     'id_sindikat'  => 8,
                     'id_jabatan'  => $this->input->post('jabatan'),
@@ -58,6 +61,7 @@ class Register extends CI_Controller
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('fullname'),
                     'password'  => get_hash($this->input->post('password')),
+                    'id_angkatan'  => $this->input->post('angkatan'),
                     'id_kelas'  => $this->input->post('kelas'),
                     'id_sindikat'  => $this->input->post('sindikat'),
                     'id_jabatan'  => 8,
@@ -93,7 +97,7 @@ class Register extends CI_Controller
 
         if ($this->input->post('username') == '') {
             $data['inputerror'][] = 'username';
-            $data['error_string'][] = 'Nama Lengkap Tidak Boleh Kosong';
+            $data['error_string'][] = 'Username Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
@@ -130,6 +134,12 @@ class Register extends CI_Controller
         }
 
         if ($level->nama_level == 'Mahasiswa') {
+            if ($this->input->post('angkatan') == '') {
+                $data['inputerror'][] = 'angkatan';
+                $data['error_string'][] = 'Angkatan Tidak Boleh Kosong';
+                $data['status'] = FALSE;
+            }
+
             if ($this->input->post('kelas') == '') {
                 $data['inputerror'][] = 'kelas';
                 $data['error_string'][] = 'Kelas Tidak Boleh Kosong';
@@ -164,7 +174,7 @@ class Register extends CI_Controller
 
         if ($this->input->post('username') == '') {
             $data['inputerror'][] = 'username';
-            $data['error_string'][] = 'Nama Lengkap Tidak Boleh Kosong';
+            $data['error_string'][] = 'Username Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

@@ -7,7 +7,7 @@ class Mod_validasi_kasenat extends CI_Model
     var $table = 'tbl_validasi_kasenat';
     var $column_order = array('', 'c.full_name', 'b.perihal', 'b.lokasi', 'b.tanggal_berangkat', 'b.tanggal_pulang', 'status_kasenat');
     var $column_search = array('c.full_name', 'b.perihal', 'b.lokasi', 'b.tanggal_berangkat', 'b.tanggal_pulang', 'status_kasenat');
-    var $order = array('tgl_diubah' => 'desc'); // default order 
+    var $order = array('b.id_permohonan_surat' => 'desc'); // default order 
 
     public function __construct()
     {

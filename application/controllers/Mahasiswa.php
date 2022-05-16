@@ -12,6 +12,7 @@ class Mahasiswa extends MY_Controller
     {
         parent::__construct();
         $this->load->model('Mod_mahasiswa');
+        $this->load->model('Mod_angkatan');
         $this->load->model('Mod_sindikat');
         $this->load->model('Mod_import');
     }
@@ -19,6 +20,7 @@ class Mahasiswa extends MY_Controller
     public function index()
     {
         $data['judul'] = 'Daftar Mahasiswa';
+        $data['angkatan'] = $this->Mod_angkatan->get_all();
         $data['sindikat'] = $this->Mod_sindikat->get_all();
         $data['modal_tambah_mahasiswa'] = show_my_modal('mahasiswa/modal_tambah_mahasiswa', $data);
         $js = $this->load->view('mahasiswa/mahasiswa-js', null, true);
@@ -38,6 +40,7 @@ class Mahasiswa extends MY_Controller
             $row = array();
             $row[] = $no;
             $row[] = $mhs->nama_mhs;
+            $row[] = $mhs->nama_angkatan;
             $row[] = $mhs->nim;
             $row[] = $mhs->sindikat;
             $row[] = $mhs->id_mhs;
@@ -68,6 +71,9 @@ class Mahasiswa extends MY_Controller
             'nama_mhs'       => $this->input->post('nama_mhs'),
             'nim'            => $this->input->post('nim'),
             'id_sindikat'    => $this->input->post('sindikat'),
+            'id_angkatan'    => $this->input->post('angkatan'),
+            'alamat'         => $this->input->post('alamat'),
+            'no_hp'          => $this->input->post('telepon'),
         );
         $this->Mod_mahasiswa->insert($save);
         echo json_encode(array("status" => TRUE));
@@ -81,6 +87,9 @@ class Mahasiswa extends MY_Controller
             'nama_mhs'       => $this->input->post('nama_mhs'),
             'nim'            => $this->input->post('nim'),
             'id_sindikat'    => $this->input->post('sindikat'),
+            'id_angkatan'    => $this->input->post('angkatan'),
+            'alamat'         => $this->input->post('alamat'),
+            'no_hp'          => $this->input->post('telepon'),
         );
         $this->Mod_mahasiswa->update($id, $data);
         echo json_encode(array("status" => TRUE));
@@ -118,30 +127,23 @@ class Mahasiswa extends MY_Controller
                 for ($i = 1; $i < $sheetcount; $i++) {
                     $nama_mhs = $sheetData[$i]['0'];
                     $nim = $sheetData[$i]['1'];
-                    $sindikat = $sheetData[$i]['2'];
+                    $nama_sindikat = $sheetData[$i]['2'];
 
-                    if ($sindikat == 'Sindikat I') {
-                        $id_sindikat = 1;
-                    } elseif ($sindikat == 'Sindikat II') {
-                        $id_sindikat = 2;
-                    } elseif ($sindikat == 'Sindikat III') {
-                        $id_sindikat = 3;
-                    } elseif ($sindikat == 'Sindikat IV') {
-                        $id_sindikat = 4;
-                    } elseif ($sindikat == 'Sindikat V') {
-                        $id_sindikat = 5;
-                    } elseif ($sindikat == 'Sindikat VI') {
-                        $id_sindikat = 6;
-                    } elseif ($sindikat == 'Sindikat VII') {
-                        $id_sindikat = 7;
-                    } else {
-                        $id_sindikat = 8;
-                    }
+                    $sindikat = $this->Mod_sindikat->get_id_sindikat($nama_sindikat);
+
+                    $alamat = $sheetData[$i]['3'];
+                    $telepon = $sheetData[$i]['4'];
+                    $nama_angkatan = $sheetData[$i]['5'];
+
+                    $angkatan = $this->Mod_angkatan->get_id_angkatan($nama_angkatan);
 
                     $temp_data[] = array(
                         'nama_mhs' => $nama_mhs,
                         'nim' => $nim,
-                        'id_sindikat' => $id_sindikat
+                        'id_sindikat' => $sindikat->id_sindikat,
+                        'id_angkatan' => $angkatan->id_angkatan,
+                        'alamat' => $alamat,
+                        'no_hp' => $telepon,
                     );
                 }
 
@@ -176,6 +178,24 @@ class Mahasiswa extends MY_Controller
         if ($this->input->post('sindikat') == '') {
             $data['inputerror'][] = 'sindikat';
             $data['error_string'][] = 'Sindikat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('angkatan') == '') {
+            $data['inputerror'][] = 'angkatan';
+            $data['error_string'][] = 'Angkatan Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('alamat') == '') {
+            $data['inputerror'][] = 'alamat';
+            $data['error_string'][] = 'Alamat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('telepon') == '') {
+            $data['inputerror'][] = 'telepon';
+            $data['error_string'][] = 'No. HP Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

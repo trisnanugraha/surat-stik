@@ -14,6 +14,7 @@ class User extends MY_Controller
         $this->load->model('Mod_userlevel');
         $this->load->model('Mod_kelas');
         $this->load->model('Mod_sindikat');
+        $this->load->model('Mod_angkatan');
         $this->load->model('Mod_jabatan');
     }
 
@@ -25,6 +26,7 @@ class User extends MY_Controller
         $data['user_level'] = $this->Mod_user->userlevel();
         $data['kelas'] = $this->Mod_kelas->get_all_kelas();
         $data['sindikat'] = $this->Mod_sindikat->get_all_sindikat();
+        $data['angkatan'] = $this->Mod_angkatan->get_all_angkatan();
         $data['jabatan'] = $this->Mod_jabatan->get_all_jabatan();
         $data['modal_tambah_user'] = show_my_modal('user/modal_tambah_user', $data);
         $js = $this->load->view('user/user-js', null, true);
@@ -44,6 +46,7 @@ class User extends MY_Controller
             $row[] = $no;
             $row[] = $user->full_name;
             $row[] = $user->username;
+            $row[] = $user->angkatan;
             $row[] = $user->nama_level;
             $row[] = $user->is_active;
             $row[] = $user->id_user;
@@ -75,6 +78,7 @@ class User extends MY_Controller
                 'username' => $this->input->post('username'),
                 'full_name' => $this->input->post('full_name'),
                 'password'  => get_hash($this->input->post('password')),
+                'id_angkatan'  => 5,
                 'id_kelas'  => 4,
                 'id_sindikat'  => 8,
                 'id_jabatan'  => $this->input->post('jabatan'),
@@ -86,6 +90,7 @@ class User extends MY_Controller
                 'username' => $this->input->post('username'),
                 'full_name' => $this->input->post('full_name'),
                 'password'  => get_hash($this->input->post('password')),
+                'id_angkatan'  => $this->input->post('angkatan'),
                 'id_kelas'  => $this->input->post('kelas'),
                 'id_sindikat'  => $this->input->post('sindikat'),
                 'id_jabatan'  => 8,
@@ -137,6 +142,7 @@ class User extends MY_Controller
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
                     'password'  => get_hash($this->input->post('password')),
+                    'id_angkatan'  => $this->input->post('angkatan'),
                     'id_kelas'  => $this->input->post('kelas'),
                     'id_sindikat'  => $this->input->post('sindikat'),
                     'id_jabatan'  => 8,
@@ -159,6 +165,7 @@ class User extends MY_Controller
                 $save  = array(
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
+                    'id_angkatan'  => $this->input->post('angkatan'),
                     'id_kelas'  => $this->input->post('kelas'),
                     'id_sindikat'  => $this->input->post('sindikat'),
                     'id_jabatan'  => 8,

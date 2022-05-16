@@ -6,20 +6,16 @@
                 <div class="card">
                     <div class="card-header bg-light">
                         <div class="text-left">
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="add()" title="Add Data"><i class="fas fa-plus"></i> Tambah Mahasiswa</button>
-                            <button class="btn btn-sm btn-outline-success" title="Import Data" data-toggle="modal" data-target="#import-mahasiswa"><i class="fas fa-file-import"></i> Import Data</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="add()" title="Add Data"><i class="fas fa-plus"></i> Tambah Angkatan</button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="tabelmhs" class="table table-bordered table-striped table-hover">
+                        <table id="tabelangkatan" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr class="bg-info text-center">
                                     <th>No.</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Angkatan</th>
-                                    <th>NIM</th>
-                                    <th>Sindikat</th>
+                                    <th>Nama Angkatan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -38,12 +34,4 @@
     <!-- /.container-fluid -->
 </section>
 
-<?php echo $modal_tambah_mahasiswa; ?>
-
-<?php
-$data['judul'] = 'Import Data Mahasiswa';
-$data['url'] = 'mahasiswa/import';
-$data['link'] = 'assets/template/Mahasiswa-Template.xlsx';
-$data['filename'] = 'Mahasiswa -- Import Template.xlsx';
-echo show_my_modal('modals/modal_import', $data);
-?>
+<?php echo $modal_tambah_angkatan; ?>

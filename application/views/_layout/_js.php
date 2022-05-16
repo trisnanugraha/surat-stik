@@ -2,7 +2,7 @@
   <script src="<?php echo base_url(); ?>assets/plugins/jquery-ui/jquery-ui.min.js"></script>
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
-      $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button)
   </script>
   <!-- Bootstrap 4 -->
   <script src="<?php echo base_url(); ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -14,8 +14,8 @@
   <!-- jQuery Knob Chart -->
   <!-- <script src="<?php echo base_url(); ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script> -->
   <!-- daterangepicker -->
-  <!-- <script src="<?php echo base_url(); ?>assets/plugins/moment/moment.min.js"></script> -->
-  <!-- <script src="<?php echo base_url(); ?>assets/plugins/daterangepicker/daterangepicker.js"></script> -->
+  <script src="<?php echo base_url(); ?>assets/plugins/moment/moment.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/plugins/daterangepicker/daterangepicker.js"></script>
   <!-- Tempusdominus Bootstrap 4 -->
   <!-- <script src="<?php echo base_url(); ?>assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
   <!-- Summernote -->
@@ -42,7 +42,7 @@
   <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/plugins/select2/js/select2.full.min.js"></script>
 
-  <script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>  
+  <script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>
 
   <!-- Bootstrap4 Duallistbox -->
   <script src="<?php echo base_url(); ?>assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>

@@ -44,6 +44,18 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row angkatan">
+                        <label for="angkatan" class="col-sm-4 col-form-label">Angkatan</label>
+                        <div class="col-sm-8 kosong">
+                            <select class="form-control" name="angkatan" id="angkatan">
+                                <option value="" selected disabled>Pilih Angkatan</option>
+                                <?php
+                                foreach ($angkatan as $a) { ?>
+                                    <option value="<?= $a->id_angkatan; ?>"><?= $a->nama_angkatan; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row kelas">
                         <label for="kelas" class="col-sm-4 col-form-label">Kelas</label>
                         <div class="col-sm-8 kosong">

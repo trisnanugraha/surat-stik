@@ -4,11 +4,11 @@
 
     $(document).ready(function() {
 
-        table = $("#tabelmhs").DataTable({
+        table = $("#tabelibl").DataTable({
             "responsive": true,
             "autoWidth": false,
             "language": {
-                "sEmptyTable": "Data Mahasiswa Masih Kosong"
+                "sEmptyTable": "Data IBL / Cuti Masih Kosong"
             },
             "processing": true, //Feature control the processing indicator.
             "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -16,12 +16,12 @@
 
             // Load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo site_url('mahasiswa/ajax_list') ?>",
+                "url": "<?php echo site_url('ibl/ajax_list') ?>",
                 "type": "POST"
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 2, 3, 4, 5],
+                "targets": [0, 1, 2],
                 "className": 'text-center'
             }, {
                 "searchable": false,
@@ -30,7 +30,11 @@
             }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
+                    if (row[3] > 0) {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div>";
+                    } else {
+                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[2] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
+                    }
                 },
                 "orderable": false, //set not orderable
             }, ],
@@ -78,9 +82,9 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('mahasiswa/delete'); ?>",
+                    url: "<?php echo site_url('angkatan/delete'); ?>",
                     type: "POST",
-                    data: "id_mhs=" + id,
+                    data: "id_angkatan=" + id,
                     cache: false,
                     dataType: 'json',
                     success: function(respone) {
@@ -88,7 +92,7 @@
                             reload_table();
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Data Mahasiswa Berhasil Dihapus!'
+                                title: 'Angkatan Berhasil Dihapus!'
                             });
                         } else {
                             Toast.fire({
@@ -114,7 +118,7 @@
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         $('#modal_form').modal('show'); // show bootstrap modal
-        $('.modal-title').text('Tambah Mahasiswa'); // Set Title to Bootstrap modal title
+        $('.modal-title').text('Tambah IBL / Cuti'); // Set Title to Bootstrap modal title
     }
 
     function edit(id) {
@@ -125,20 +129,15 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('mahasiswa/edit') ?>/" + id,
+            url: "<?php echo site_url('angkatan/edit') ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id_mhs"]').val(data.id_mhs);
-                $('[name="nama_mhs"]').val(data.nama_mhs);
-                $('[name="nim"]').val(data.nim);
-                $('[name="angkatan"]').val(data.id_angkatan);
-                $('[name="sindikat"]').val(data.id_sindikat);
-                $('[name="alamat"]').val(data.alamat);
-                $('[name="telepon"]').val(data.no_hp);
+                $('[name="id_angkatan"]').val(data.id_angkatan);
+                $('[name="nama_angkatan"]').val(data.nama_angkatan);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title').text('Ubah Mahasiswa'); // Set title to Bootstrap modal title
+                $('.modal-title').text('Ubah Angkatan'); // Set title to Bootstrap modal title
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -153,9 +152,9 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo site_url('mahasiswa/insert') ?>";
+            url = "<?php echo site_url('angkatan/insert') ?>";
         } else {
-            url = "<?php echo site_url('mahasiswa/update') ?>";
+            url = "<?php echo site_url('angkatan/update') ?>";
         }
 
         // ajax adding data to database
@@ -173,12 +172,12 @@
                     if (save_method == 'add') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data Mahasiswa Berhasil Disimpan!'
+                            title: 'Angkatan Berhasil Disimpan!'
                         });
                     } else if (save_method == 'update') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data Mahasiswa Berhasil Diubah!'
+                            title: 'Angkatan Berhasil Diubah!'
                         });
                     }
                 } else {

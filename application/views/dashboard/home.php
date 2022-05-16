@@ -29,8 +29,34 @@
                     <a href="<?php echo base_url('aktivasi-user'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-lg-3 col-6"></div>
-            <div class="col-lg-3 col-6"></div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3><?php echo $mahasiswa; ?></h3>
+
+                        <p>Total Mahasiswa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-id-card"></i>
+                    </div>
+                    <a href="<?php echo base_url('daftar-mahasiswa'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3><?php echo $angkatan; ?></h3>
+
+                        <p>Total Angkatan</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <a href="<?php echo base_url('angkatan'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
             <div class="col-lg-3 col-12">
                 <div class="row">
                     <div class="col-12">
@@ -89,7 +115,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>

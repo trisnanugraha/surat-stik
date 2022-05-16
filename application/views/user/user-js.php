@@ -7,6 +7,7 @@
     $('.kelas').hide();
     $('.sindikat').hide();
     $('.jabatan').hide();
+    $('.angkatan').hide();
 
     table = $("#tabeluser").DataTable({
       "responsive": true,
@@ -25,15 +26,15 @@
       },
       //Set column definition initialisation properties.
       "columnDefs": [{
-        "targets": [0, 1, 2, 3, 4, 5],
+        "targets": [0, 1, 2, 3, 4, 5, 6],
         "className": 'text-center'
       }, {
         "targets": [-1], //last column
         "render": function(data, type, row) {
           if (row[4] == "N") {
-            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[5] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[6] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
           } else {
-            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[5] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[5] + ")\"><i></i> Reset Password</a></div>";
+            return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[6] + ")\"><i></i> Reset Password</a></div>";
           }
         },
         "orderable": false, //set not orderable
@@ -72,12 +73,14 @@
       var val = $(this).val();
       if (val === "11" || val === "12" || val === "13" || val === "14" || val === "15") {
         $('.kelas').hide();
+        $('.angkatan').hide();
         $('.sindikat').hide();
         $('.jabatan').show();
         // $('.subkategori-buku-umum').hide();
       } else if (val === "6") {
         $('.kelas').show();
         $('.sindikat').show();
+        $('.angkatan').show();
         $('.jabatan').hide();
 
       }
@@ -206,9 +209,11 @@
       type: "GET",
       dataType: "JSON",
       success: function(data) {
+        val = data.id_level
         $('[name="id_user"]').val(data.id_user);
         $('[name="username"]').val(data.username);
         $('[name="full_name"]').val(data.full_name);
+        $('[name="angkatan"]').val(data.id_angkatan);
         $('[name="kelas"]').val(data.id_kelas);
         $('[name="sindikat"]').val(data.id_sindikat);
         $('[name="jabatan"]').val(data.id_jabatan);

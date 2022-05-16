@@ -5,8 +5,8 @@ class Mod_user extends CI_Model
 {
 
     var $table = 'tbl_user';
-    var $column_order = array('', 'full_name', 'username', 'nama_level', 'is_active');
-    var $column_search = array('full_name', 'username', 'nama_level', 'is_active');
+    var $column_order = array('', 'full_name', 'username', 'angkatan', 'nama_level', 'is_active');
+    var $column_search = array('full_name', 'username', 'angkatan', 'nama_level', 'is_active');
     var $order = array('id_user' => 'desc'); // default order 
 
     public function __construct()
@@ -17,8 +17,9 @@ class Mod_user extends CI_Model
 
     private function _get_datatables_query()
     {
-        $this->db->select('a.*,b.nama_level');
+        $this->db->select('a.*,b.nama_level,c.nama_angkatan as angkatan');
         $this->db->join('tbl_userlevel b', 'a.id_level=b.id_level');
+        $this->db->join('tbl_angkatan c', 'a.id_angkatan=c.id_angkatan');
         $this->db->from('tbl_user a');
 
         $i = 0;

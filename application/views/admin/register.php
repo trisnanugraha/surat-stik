@@ -35,7 +35,7 @@
             <div class="card-body register-card-body">
                 <form action="" method="post" id="signup-form">
                     <div class="form-group">
-                        <label for="judul" class="col-form-label">Nama Lengkap</label>
+                        <label for="judul" class="col-form-label">Nama Lengkap <span style="color: red;">*</span></label>
                         <div class="input-group kosong">
                             <input type="text" class="form-control" name="fullname" placeholder="Misal : John Doe">
                             <div class="input-group-append">
@@ -46,9 +46,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="judul" class="col-form-label">Username</label>
+                        <label for="judul" class="col-form-label">Username <span style="color: red;">*</span></label>
                         <div class="input-group kosong">
-                            <input type="text" class="form-control" name="username" placeholder="Misal : johndoe">
+                            <input type="text" class="form-control" name="username" placeholder="Misal : NIM / Kode Dosen">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="judul" class="col-form-label">Password</label>
+                        <label for="judul" class="col-form-label">Password <span style="color: red;">*</span></label>
                         <div class="input-group kosong">
                             <input type="password" class="form-control" name="password" placeholder="Misal : Secret@1234">
                             <div class="input-group-append">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="judul" class="col-form-label">Verifikasi Password</label>
+                        <label for="judul" class="col-form-label">Verifikasi Password <span style="color: red;">*</span></label>
                         <div class="input-group kosong">
                             <input type="password" class="form-control" name="verifypassword" placeholder="Misal : Secret@1234">
                             <div class="input-group-append">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="level" class="col-form-label">Hak Akses</label>
+                        <label for="level" class="col-form-label">Hak Akses <span style="color: red;">*</span></label>
                         <div class="kosong">
                             <select class="form-control level" name="level">
                                 <option value="" selected disabled>-- Pilih Hak Akses --</option>
@@ -91,8 +91,20 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
+                    <div class="form-group angkatan">
+                        <label for="angkatan" class="col-form-label">Angkatan</label>
+                        <div class="kosong">
+                            <select class="form-control" name="angkatan" id="angkatan">
+                                <option value="" selected disabled>Pilih Angkatan</option>
+                                <?php
+                                foreach ($angkatan as $a) { ?>
+                                    <option value="<?= $a->id_angkatan; ?>"><?= $a->nama_angkatan; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group kelas">
-                        <label for="judul" class="col-form-label">Kelas</label>
+                        <label for="judul" class="col-form-label">Kelas <span style="color: red;">*</span></label>
                         <div class="kosong">
                             <select class="form-control" name="kelas" id="kelas">
                                 <option value="" selected disabled>Pilih Kelas</option>
@@ -105,7 +117,7 @@
                         </div>
                     </div>
                     <div class="form-group sindikat">
-                        <label for="judul" class="col-form-label">Sindikat</label>
+                        <label for="judul" class="col-form-label">Sindikat <span style="color: red;">*</span></label>
                         <div class="kosong">
                             <select class="form-control" name="sindikat" id="sindikat">
                                 <option value="" selected disabled>Pilih Sindikat</option>
@@ -118,7 +130,7 @@
                         </div>
                     </div>
                     <div class="form-group jabatan">
-                        <label for="judul" class="col-form-label">Jabatan</label>
+                        <label for="judul" class="col-form-label">Jabatan <span style="color: red;">*</span></label>
                         <div class="kosong">
                             <select class="form-control" name="jabatan" id="jabatan">
                                 <option value="" selected disabled>Pilih Jabatan</option>
@@ -177,6 +189,7 @@
             $('.kelas').hide();
             $('.sindikat').hide();
             $('.jabatan').hide();
+            $('.angkatan').hide();
 
             $("input").change(function() {
                 $(this).parent().parent().removeClass('has-error');
@@ -193,9 +206,11 @@
                 if (val === "11" || val === "12" || val === "13") {
                     $('.kelas').hide();
                     $('.sindikat').hide();
+                    $('.angkatan').hide();
                     $('.jabatan').show();
                     // $('.subkategori-buku-umum').hide();
                 } else if (val === "6") {
+                    $('.angkatan').show();
                     $('.kelas').show();
                     $('.sindikat').show();
                     $('.jabatan').hide();

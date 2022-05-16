@@ -12,6 +12,8 @@ class Dashboard extends MY_Controller
         $this->load->helper('myfunction_helper');
         $this->load->model('Mod_user');
         $this->load->model('Mod_aktivasi_user');
+        $this->load->model('Mod_angkatan');
+        $this->load->model('Mod_mahasiswa');
         $this->load->model('Mod_userlevel');
         $this->load->model('Mod_dashboard');
         $this->load->model('Mod_permohonan_surat');
@@ -23,6 +25,8 @@ class Dashboard extends MY_Controller
         $data['judul'] = 'Dashboard';
         $data['user'] = $this->Mod_user->total_rows();
         $data['pendinguser'] = $this->Mod_aktivasi_user->total_rows();
+        $data['angkatan'] = $this->Mod_angkatan->total_rows();
+        $data['mahasiswa'] = $this->Mod_mahasiswa->total_rows();
         $data['permohonansurat'] = $this->Mod_permohonan_surat->total_rows();
         $data['totalMahasiswa'] = $this->Mod_dashboard->total_mahasiswa_by_sindikat()->result();
         // echo '<pre>';

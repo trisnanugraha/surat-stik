@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_sindikat extends CI_Model
+class Mod_angkatan extends CI_Model
 {
 
-    var $table = 'tbl_sindikat';
-    var $column_order = array('', 'nama_sindikat');
-    var $column_search = array('nama_sindikat');
-    var $order = array('id_sindikat' => 'asc'); // default order 
+    var $table = 'tbl_angkatan';
+    var $column_order = array('', 'nama_angkatan');
+    var $column_search = array('nama_angkatan');
+    var $order = array('id_angkatan' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -76,23 +76,30 @@ class Mod_sindikat extends CI_Model
             ->result();
     }
 
-    function get_all_sindikat()
+    function get_all_kelas()
     {
-        $this->db->where('nama_sindikat !=', '-');
+        $this->db->where('nama_kelas !=', '-');
         return $this->db->get($this->table)
             ->result();
     }
 
-    function get_id_sindikat($nama_sindikat)
+    function get_id_angkatan($nama_angkatan)
     {
-        $this->db->where('nama_sindikat', $nama_sindikat);
+        $this->db->where('nama_angkatan', $nama_angkatan);
         return $this->db->get($this->table)->row();
     }
 
-    function get_sindikat($id)
+    function get_angkatan($id)
     {
-        $this->db->where('id_sindikat', $id);
+        $this->db->where('id_angkatan', $id);
         return $this->db->get($this->table)->row();
+    }
+
+    function get_all_angkatan()
+    {
+        $this->db->where('nama_angkatan !=', '-');
+        return $this->db->get($this->table)
+            ->result();
     }
 
     function getuser($id_prodi)
@@ -111,15 +118,21 @@ class Mod_sindikat extends CI_Model
 
     function update($id, $data)
     {
-        $this->db->where('id_sindikat', $id);
+        $this->db->where('id_angkatan', $id);
         $this->db->update($this->table, $data);
     }
 
     function delete($id)
     {
-        $this->db->where('id_sindikat', $id);
+        $this->db->where('id_angkatan', $id);
         $this->db->delete($this->table);
+    }
+
+    function total_rows()
+    {
+        $data = $this->db->get($this->table);
+        return $data->num_rows();
     }
 }
 
-/* End of file Mod_sindikat.php */
+/* End of file Mod_angkatan.php */

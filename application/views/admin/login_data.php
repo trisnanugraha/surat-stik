@@ -48,13 +48,18 @@
           </div>
           <label for="username">Password</label>
           <div class="input-group mb-3 kosong">
-            <input type="password" class="form-control" name="password" placeholder="Password" value="<?php echo set_value('password'); ?>">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="<?php echo set_value('password'); ?>">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
               </div>
             </div>
           </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="show_password" onclick="ShowPassword()">
+            <label class="form-check-label" for="show_password">Tampilkan Password</label>
+          </div>
+          <br>
           <div class="row">
             <!-- <div class="col-8">
             <div class="icheck-primary">
@@ -133,6 +138,15 @@
 
 
   <script>
+    function ShowPassword() {
+      var input_pass = document.getElementById("password");
+      if (input_pass.type === "password") {
+        input_pass.type = "text";
+      } else {
+        input_pass.type = "password";
+      }
+    }
+
     $("#quickForm").submit(function(e) {
       //prevent Default functionality
       e.preventDefault();

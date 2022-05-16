@@ -7,7 +7,7 @@ class Mod_surat_perintah extends CI_Model
     var $table = 'tbl_surat_perintah';
     var $column_order = array('', 'nomor_nota', 'status');
     var $column_search = array('nomor_nota', 'status');
-    var $order = array('tgl_diubah' => 'desc'); // default order 
+    var $order = array('b.id_permohonan_surat' => 'desc'); // default order 
 
     public function __construct()
     {

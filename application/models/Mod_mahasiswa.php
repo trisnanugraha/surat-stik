@@ -5,9 +5,9 @@ class Mod_mahasiswa extends CI_Model
 {
 
     var $table = 'tbl_mahasiswa';
-    var $column_order = array('', 'nama_mhs', 'nim', 'nama_sindikat');
-    var $column_search = array('nama_mhs', 'nim', 'nama_sindikat');
-    var $order = array('id_mhs' => 'asc'); // default order 
+    var $column_order = array('', 'nama_mhs', 'nim', 'nama_sindikat', 'nama_angkatan');
+    var $column_search = array('nama_mhs', 'nim', 'nama_sindikat', 'nama_angkatan');
+    var $order = array('nama_sindikat' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -16,8 +16,9 @@ class Mod_mahasiswa extends CI_Model
     }
     private function _get_datatables_query()
     {
-        $this->db->select('a.*,b.nama_sindikat as sindikat');
+        $this->db->select('a.*,b.nama_sindikat as sindikat, c.nama_angkatan');
         $this->db->join('tbl_sindikat b', 'a.id_sindikat=b.id_sindikat');
+        $this->db->join('tbl_angkatan c', 'a.id_angkatan=c.id_angkatan');
         $this->db->from("{$this->table} a");
         $i = 0;
 
@@ -108,6 +109,12 @@ class Mod_mahasiswa extends CI_Model
     {
         $this->db->where('id_mhs', $id);
         $this->db->delete($this->table);
+    }
+
+    function total_rows()
+    {
+        $data = $this->db->get($this->table);
+        return $data->num_rows();
     }
 }
 
