@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <div class="form-group angkatan">
-                        <label for="angkatan" class="col-form-label">Angkatan</label>
+                        <label for="angkatan" class="col-form-label">Angkatan <span style="color: red;">*</span></label>
                         <div class="kosong">
                             <select class="form-control" name="angkatan" id="angkatan">
                                 <option value="" selected disabled>Pilih Angkatan</option>

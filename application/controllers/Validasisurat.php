@@ -189,12 +189,12 @@ class Validasisurat extends MY_Controller
                 $status = 'Butuh Perbaikan';
             } else if ($this->input->post('status_kasenat') == 'Disetujui') {
                 $status = 'Disetujui';
-                $qr_nota = $id . '.png'; //buat name dari qr code sesuai dengan nim
+                $qr_nota = 'qr-permohonan-surat' . $id . '.png'; //buat name dari qr code sesuai dengan nim
 
                 $params['data'] = 'Surat ini telah disahkan dan divalidasi oleh Kasenat pada ' . tgl_indonesia(date('Y-m-d H:i:s')) . ' melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
                 $params['level'] = 'H'; //H=High
                 $params['size'] = 10;
-                $params['savename'] = FCPATH . './assets/qr-code/' . $id . ".png"; //simpan image QR CODE ke folder assets/images/
+                $params['savename'] = FCPATH . './assets/qr-code/' . $qr_nota; //simpan image QR CODE ke folder assets/images/
                 $this->ciqrcode->generate($params);
             }
 

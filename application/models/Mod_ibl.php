@@ -83,15 +83,16 @@ class Mod_ibl extends CI_Model
             ->result();
     }
 
-    function get_id_angkatan($nama_angkatan)
+    function get_id_angkatan($id)
     {
-        $this->db->where('nama_angkatan', $nama_angkatan);
+        $this->db->select('id_angkatan');
+        $this->db->where('id_ibl', $id);
         return $this->db->get($this->table)->row();
     }
 
-    function get_angkatan($id)
+    function get_ibl($id)
     {
-        $this->db->where('id_angkatan', $id);
+        $this->db->where('id_ibl', $id);
         return $this->db->get($this->table)->row();
     }
 
@@ -105,19 +106,19 @@ class Mod_ibl extends CI_Model
 
     function insert($data)
     {
-        $insert = $this->db->insert($this->table, $data);
-        return $insert;
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
     }
 
     function update($id, $data)
     {
-        $this->db->where('id_angkatan', $id);
+        $this->db->where('id_ibl', $id);
         $this->db->update($this->table, $data);
     }
 
     function delete($id)
     {
-        $this->db->where('id_angkatan', $id);
+        $this->db->where('id_ibl', $id);
         $this->db->delete($this->table);
     }
 

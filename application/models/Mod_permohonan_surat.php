@@ -7,7 +7,7 @@ class Mod_permohonan_surat extends CI_Model
     var $table = 'tbl_permohonan_surat';
     var $column_order = array('', 'perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
     var $column_search = array('perihal', 'lokasi', 'tanggal_berangkat', 'tanggal_pulang');
-    var $order = array('tgl_diubah' => 'desc'); // default order 
+    var $order = array('id_permohonan_surat' => 'desc'); // default order 
 
     public function __construct()
     {

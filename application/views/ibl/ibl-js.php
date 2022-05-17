@@ -1,6 +1,8 @@
 <script type="text/javascript">
     var save_method; //for save method string
     var table;
+    var tanggal_berangkat;
+    var tanggal_kembali;
 
     $(document).ready(function() {
 
@@ -30,11 +32,7 @@
             }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    if (row[3] > 0) {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div>";
-                    } else {
-                        return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[2] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
-                    }
+                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[2] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-info\" href=\"javascript:void(0)\" title=\"Preview\" onclick=\"print(" + row[2] + ")\"><i class=\"fas fa-print\"></i> Preview</a></div>";
                 },
                 "orderable": false, //set not orderable
             }, ],
@@ -54,6 +52,20 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
+
+        //Date range picker with time picker
+        $('#tgl_cuti').daterangepicker({
+            timePicker: true,
+            showDropdowns: true,
+            timePicker24Hour: true,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm'
+            }
+        })
+        $('#tgl_cuti').on('apply.daterangepicker', function(ev, picker) {
+            tanggal_berangkat = picker.startDate.format('YYYY-MM-DD HH:mm:ss')
+            tanggal_kembali = picker.endDate.format('YYYY-MM-DD HH:mm:ss')
+        });
     });
 
     function reload_table() {
@@ -66,6 +78,11 @@
         showConfirmButton: false,
         timer: 3000
     });
+
+    function print(id) {
+        var go_to_url = '<?php echo base_url('ibl/print/'); ?>' + id;
+        window.open(go_to_url, '_blank');
+    }
 
     //delete
     function del(id) {
@@ -82,9 +99,9 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('angkatan/delete'); ?>",
+                    url: "<?php echo site_url('ibl/delete'); ?>",
                     type: "POST",
-                    data: "id_angkatan=" + id,
+                    data: "id_ibl=" + id,
                     cache: false,
                     dataType: 'json',
                     success: function(respone) {
@@ -92,7 +109,7 @@
                             reload_table();
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Angkatan Berhasil Dihapus!'
+                                title: 'Cuti / IBL Berhasil Dihapus!'
                             });
                         } else {
                             Toast.fire({
@@ -129,15 +146,17 @@
 
         //Ajax Load data from ajax
         $.ajax({
-            url: "<?php echo site_url('angkatan/edit') ?>/" + id,
+            url: "<?php echo site_url('ibl/edit') ?>/" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id_angkatan"]').val(data.id_angkatan);
-                $('[name="nama_angkatan"]').val(data.nama_angkatan);
+                $('[name="id_ibl"]').val(data.id_ibl);
+                $('[name="no_surat"]').val(data.no_surat);
+                $('[name="angkatan"]').val(data.id_angkatan);
+                $('[name="keperluan"]').val(data.keperluan);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
-                $('.modal-title').text('Ubah Angkatan'); // Set title to Bootstrap modal title
+                $('.modal-title').text('Ubah Cuti / IBL'); // Set title to Bootstrap modal title
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -151,17 +170,28 @@
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
 
+        formData = {
+            id_ibl: $("#id_ibl").val(),
+            no_surat: $("#no_surat").val(),
+            id_angkatan: $("#angkatan").val(),
+            tgl_berangkat: tanggal_berangkat,
+            tgl_kembali: tanggal_kembali,
+            keperluan: $("#keperluan").val()
+        };
+
+        console.log(formData)
+
         if (save_method == 'add') {
-            url = "<?php echo site_url('angkatan/insert') ?>";
+            url = "<?php echo site_url('ibl/insert') ?>";
         } else {
-            url = "<?php echo site_url('angkatan/update') ?>";
+            url = "<?php echo site_url('ibl/update') ?>";
         }
 
         // ajax adding data to database
         $.ajax({
             url: url,
             type: "POST",
-            data: $('#form').serialize(),
+            data: formData,
             dataType: "JSON",
             success: function(data) {
 
@@ -172,12 +202,12 @@
                     if (save_method == 'add') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Angkatan Berhasil Disimpan!'
+                            title: 'Cuti / IBL Berhasil Disimpan!'
                         });
                     } else if (save_method == 'update') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Angkatan Berhasil Diubah!'
+                            title: 'Cuti / IBL Berhasil Diubah!'
                         });
                     }
                 } else {

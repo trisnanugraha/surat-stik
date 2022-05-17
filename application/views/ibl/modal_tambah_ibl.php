@@ -33,11 +33,11 @@
                     </div>
                     <div class="form-group row">
                         <label for="tanggal" class="col-sm-4 col-form-label">Tanggal Cuti</label>
-                        <div class="input-group col-sm-8">
+                        <div class="input-group col-sm-8 kosong">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="far fa-clock"></i></span>
                             </div>
-                            <input type="text" class="form-control float-right" id="reservationtime">
+                            <input type="text" class="form-control float-right" id="tgl_cuti">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -45,8 +45,8 @@
                         <div class="col-sm-8 kosong">
                             <select class="form-control" name="keperluan" id="keperluan">
                                 <option value="" selected disabled>Pilih Keperluan</option>
-                                <option value="Cuti Lebaran">Cuti Lebaran</option>
-                                <option value="IBL">IBL</option>
+                                <option value="Cuti Mahasiswa">Cuti Mahasiswa</option>
+                                <option value="IBL Mahasiswa">IBL Mahasiswa</option>
                             </select>
                         </div>
                     </div>
@@ -61,16 +61,3 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
-
-<script>
-    $(function() {
-        //Date range picker with time picker
-        $('#reservationtime').daterangepicker({
-            timePicker: true,
-            timePickerIncrement: 30,
-            locale: {
-                format: 'MM/DD/YYYY hh:mm A'
-            }
-        })
-    })
-</script>

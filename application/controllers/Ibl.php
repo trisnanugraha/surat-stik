@@ -1,4 +1,7 @@
 <?php
+
+use SebastianBergmann\Diff\Diff;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Ibl extends MY_Controller
@@ -9,6 +12,8 @@ class Ibl extends MY_Controller
         parent::__construct();
         $this->load->model('Mod_ibl');
         $this->load->model('Mod_angkatan');
+        $this->load->model('Mod_mahasiswa');
+        $this->load->library('ciqrcode');
     }
 
     public function index()
@@ -50,7 +55,7 @@ class Ibl extends MY_Controller
 
     public function edit($id)
     {
-        $data = $this->Mod_angkatan->get_angkatan($id);
+        $data = $this->Mod_ibl->get_ibl($id);
         echo json_encode($data);
     }
 
@@ -58,28 +63,66 @@ class Ibl extends MY_Controller
     {
         $this->_validate();
         $save  = array(
-            'nama_angkatan'    => $this->input->post('nama_angkatan'),
+            'no_surat'      => $this->input->post('no_surat'),
+            'id_angkatan'   => $this->input->post('id_angkatan'),
+            'tgl_berangkat' => $this->input->post('tgl_berangkat'),
+            'tgl_kembali'   => $this->input->post('tgl_kembali'),
+            'keperluan'     => $this->input->post('keperluan'),
         );
-        $this->Mod_angkatan->insert($save);
+
+        $get_id = $this->Mod_ibl->insert($save);
+
+        $qr = $get_id . '.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = 'Surat ini telah disahkan dan divalidasi a/n KETUA SEKOLAH TINGGI ILMU KEPOLISIAN WAKET BIDMINWA u.b. KAKORWA oleh NOVIAR, S.I.K. (KOMISARIS BESAR POLISI NRP 6903039) pada ' . tgl_indonesia(date('Y-m-d H:i:s')) . ' melalui Sistem E-Nota Dinas'; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . './assets/qr-code-ibl/' . $qr; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params);
+
         echo json_encode(array("status" => TRUE));
     }
 
     public function update()
     {
         $this->_validate();
-        $id      = $this->input->post('id_angkatan');
+        $id      = $this->input->post('id_ibl');
         $data  = array(
-            'nama_angkatan' => $this->input->post('nama_angkatan'),
+            'no_surat'      => $this->input->post('no_surat'),
+            'id_angkatan'   => $this->input->post('id_angkatan'),
+            'tgl_berangkat' => $this->input->post('tgl_berangkat'),
+            'tgl_kembali'   => $this->input->post('tgl_kembali'),
+            'keperluan'     => $this->input->post('keperluan'),
         );
-        $this->Mod_angkatan->update($id, $data);
+        $this->Mod_ibl->update($id, $data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function delete()
     {
-        $id = $this->input->post('id_angkatan');
-        $this->Mod_angkatan->delete($id);
+        $id = $this->input->post('id_ibl');
+        $this->Mod_ibl->delete($id);
         echo json_encode(array("status" => TRUE));
+    }
+
+    public function print($id)
+    {
+        $angkatan = $this->Mod_ibl->get_id_angkatan($id);
+        $data['surat'] = $this->Mod_ibl->get_ibl($id);
+        $data['surat']->tgl_dibuat = $this->fungsi->tanggalindo(date('Y-m-d', strtotime($data['surat']->tgl_dibuat)));
+        $tgl_berangkat = new DateTime($data['surat']->tgl_berangkat);
+        $tgl_kembali = new DateTime($data['surat']->tgl_kembali);
+        $total_cuti = date_diff($tgl_berangkat, $tgl_kembali);
+        $data['surat']->total_cuti = $total_cuti->days;
+        $data['surat']->terbilang = Num_to_text($total_cuti->days);
+        $data['mahasiswa'] = $this->Mod_mahasiswa->get_all_by_angkatan($angkatan->id_angkatan);
+
+        $this->load->library('pdf');
+        $paper = $this->pdf->setPaper('A4', 'potrait');
+        $filename = $this->pdf->filename = "Cuti / IBL.pdf";
+        $html = $this->load->view('ibl/template-cuti-ibl', $data, TRUE);
+
+        $this->fungsi->PdfGenerator($html, 'Draft - Cuti - IBL.pdf', 'A4', 'potrait');
     }
 
     private function _validate()
@@ -89,9 +132,27 @@ class Ibl extends MY_Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('nama_angkatan') == '') {
-            $data['inputerror'][] = 'nama_angkatan';
-            $data['error_string'][] = 'Nama Angkatan Tidak Boleh Kosong';
+        if ($this->input->post('no_surat') == '') {
+            $data['inputerror'][] = 'no_surat';
+            $data['error_string'][] = 'Nomor Surat Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('id_angkatan') == '') {
+            $data['inputerror'][] = 'angkatan';
+            $data['error_string'][] = 'Angkatan Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        // if ($this->input->post('tgl_cuti') == '') {
+        //     $data['inputerror'][] = 'tgl_cuti';
+        //     $data['error_string'][] = 'Tanggal Cuti Tidak Boleh Kosong';
+        //     $data['status'] = FALSE;
+        // }
+
+        if ($this->input->post('keperluan') == '') {
+            $data['inputerror'][] = 'keperluan';
+            $data['error_string'][] = 'Keperluan Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 
