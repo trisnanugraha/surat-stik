@@ -31,7 +31,7 @@
       }, {
         "targets": [-1], //last column
         "render": function(data, type, row) {
-          if (row[4] == "N") {
+          if (row[5] == "N") {
             return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\"  onclick=\"del(" + row[6] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>"
           } else {
             return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[6] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-warning\" href=\"javascript:void(0)\" title=\"Reset Password\" onclick=\"reset(" + row[6] + ")\"><i></i> Reset Password</a></div>";
@@ -41,7 +41,7 @@
       }, {
         "targets": [-2], //last column
         "render": function(data, type, row) {
-          if (row[4] == "N") {
+          if (row[5] == "N") {
             return "<div class=\"badge bg-danger text-white text-wrap\">Non-Aktif</div>"
           } else {
             return "<div class=\"badge bg-success text-white text-wrap\">Aktif</div>";
