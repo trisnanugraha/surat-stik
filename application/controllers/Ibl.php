@@ -20,7 +20,7 @@ class Ibl extends MY_Controller
     public function index()
     {
         $data['judul'] = 'IBL / Cuti';
-        $data['angkatan'] = $this->Mod_angkatan->get_all();
+        $data['angkatan'] = $this->Mod_angkatan->get_all_angkatan();
         $data['modal_tambah_ibl'] = show_my_modal('ibl/modal_tambah_ibl', $data);
         $js = $this->load->view('ibl/ibl-js', null, true);
         $this->template->views('ibl/home', $data, $js);
