@@ -83,8 +83,8 @@
         }
 
         #tembusan {
-            float: left;
-            margin-top: 100px;
+            position: relative;
+            top: 120px;
         }
 
         #tembusan p {
@@ -94,6 +94,7 @@
 
         #list-tembusan {
             margin-top: -10px;
+            width: 200px;
             border-bottom: 0.5px solid black;
         }
 
@@ -199,23 +200,25 @@
                 </tr>
             </table>
             <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
-            <table class="penutup-surat">
-                <tr>
-                    <td>Jakarta, <?php echo $surat->tgl_diubah; ?></td>
-                </tr>
-                <tr>
-                    <td><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code/' . $surat->qr_nota; ?>"></td>
-                </tr>
-            </table>
-            <div id="tembusan">
-                <p>Tembusan</p>
-                <div id="list-tembusan">
-                    <?php echo $surat->tembusan; ?>
+            <div style="position: relative;">
+                <table class="penutup-surat">
+                    <tr>
+                        <td>Jakarta, <?php echo $surat->tgl_diubah; ?></td>
+                    </tr>
+                    <tr>
+                        <td><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code/' . $surat->qr_nota; ?>"></td>
+                    </tr>
+                </table>
+                <div id="tembusan">
+                    <p>Tembusan</p>
+                    <div id="list-tembusan">
+                        <?php echo $surat->tembusan; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="page" style="margin-bottom: 20px;">
+    <div class="page" style="margin-bottom: 150px;">
         <table class="kop-surat">
             <tr>
                 <td>KORPS MAHASISWA</td>

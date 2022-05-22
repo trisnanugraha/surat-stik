@@ -13,6 +13,7 @@
         body {
             font-family: 'OpenSans-Regular';
             font-size: 10pt;
+            margin-bottom: 100px;
         }
 
         #kop-surat {
@@ -82,8 +83,8 @@
         }
 
         #tembusan {
-            float: left;
-            margin-top: 100px;
+            position: relative;
+            top: 120px;
         }
 
         #tembusan p {
@@ -93,6 +94,7 @@
 
         #list-tembusan {
             margin-top: -10px;
+            width: 200px;
             border-bottom: 0.5px solid black;
         }
     </style>
@@ -141,15 +143,17 @@
             </tr>
         </table>
         <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div>
-        <table id="penutup-surat">
-            <tr>
-                <td>Jakarta, ..............................................</td>
-            </tr>
-        </table>
-        <div id="tembusan">
-            <p>Tembusan</p>
-            <div id="list-tembusan">
-                <?php echo $surat->tembusan; ?>
+        <div style="position: relative;">
+            <table id="penutup-surat">
+                <tr>
+                    <td>Jakarta, ..............................................</td>
+                </tr>
+            </table>
+            <div id="tembusan">
+                <p>Tembusan :</p>
+                <div id="list-tembusan">
+                    <?php echo $surat->tembusan; ?>
+                </div>
             </div>
         </div>
     </div>

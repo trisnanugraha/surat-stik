@@ -106,8 +106,8 @@
         }
 
         #tembusan {
-            float: left;
-            margin-top: 150px;
+            position: relative;
+            top: 120px;
         }
 
         #tembusan p {
@@ -117,6 +117,7 @@
 
         #list-tembusan {
             margin-top: -10px;
+            /* width: 150px; */
             border-bottom: 0.5px solid black;
         }
 
@@ -259,37 +260,39 @@
                 </tr>
             </table>
             <!-- <div style="text-align: justify;"><?php echo $surat->isi_surat; ?></div> -->
-            <table class="penutup-surat" border="0">
-                <tr>
-                    <td>Dikeluarkan di</td>
-                    <td>:</td>
-                    <td><?php echo $surat->tempat_terbit; ?></td>
-                </tr>
-                <tr>
-                    <td>pada tanggal</td>
-                    <td>:</td>
-                    <td><?php echo $surat->tanggal_terbit; ?></td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                </tr>
-                <?php
-                if ($surat->status == 'Selesai') { ?>
+            <div style="position: relative;">
+                <table class="penutup-surat" border="0">
                     <tr>
-                        <td style="text-align: center; padding-top: 10px;" colspan="3"><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code-sprin/' . $surat->qr_surat; ?>"></td>
+                        <td>Dikeluarkan di</td>
+                        <td>:</td>
+                        <td><?php echo $surat->tempat_terbit; ?></td>
                     </tr>
-                <?php }
-                ?>
-            </table>
-            <div id="tembusan">
-                <p>Tembusan :</p>
-                <div id="list-tembusan" style="padding-top: 20px;">
-                    <?php echo $surat->tembusan; ?>
+                    <tr>
+                        <td>pada tanggal</td>
+                        <td>:</td>
+                        <td><?php echo $surat->tanggal_terbit; ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>
+                    <?php
+                    if ($surat->status == 'Selesai') { ?>
+                        <tr>
+                            <td style="text-align: center; padding-top: 10px;" colspan="3"><img style="width: 100px;" src="<?php echo base_url() . '/assets/qr-code-sprin/' . $surat->qr_surat; ?>"></td>
+                        </tr>
+                    <?php }
+                    ?>
+                </table>
+                <div id="tembusan">
+                    <p>Tembusan :</p>
+                    <div id="list-tembusan" style="padding-top: 20px; display: inline-block;">
+                        <?php echo $surat->tembusan; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="page" style="margin-bottom: 20px;">
+    <div class="page" style="margin-bottom: 150px;">
         <table class="kop-surat">
             <tr>
                 <td>LEMBAGA PENDIDIKAN DAN PELATIHAN POLRI</td>
@@ -299,27 +302,27 @@
             </tr>
         </table>
         <table class="kop-lampiran-surat" border="0">
-            <tr>
-                <td colspan="3">LAMPIRAN SPRIN KETUA STIK</td>
+            <tr style="padding: 0; margin: 0;">
+                <td colspan="3" style="padding: 0; margin: 0;">LAMPIRAN SPRIN KETUA STIK</td>
             </tr>
-            <tr>
-                <td colspan="3" class="underline"></td>
+            <tr style="padding: 0; margin: 0;">
+                <td colspan="3" class="underline" style="padding: 0; margin: 0;"></td>
             </tr>
-            <tr>
-                <td>NOMOR</td>
-                <td>:</td>
-                <td><?php echo $surat->nomor_surat; ?></td>
+            <tr style="padding: 0; margin: 0;">
+                <td style="padding: 0; margin: 0;">NOMOR</td>
+                <td style="padding: 0; margin: 0;">:</td>
+                <td style="padding: 0; margin: 0;"><?php echo $surat->nomor_surat; ?></td>
             </tr>
-            <tr>
-                <td colspan="3" class="underline"></td>
+            <tr style="padding: 0; margin: 0;">
+                <td colspan="3" class="underline" style="padding: 0; margin: 0;"></td>
             </tr>
-            <tr>
-                <td>TANGGAL</td>
-                <td>:</td>
-                <td><?php echo $surat->tanggal_terbit; ?></td>
+            <tr style="padding: 0; margin: 0;">
+                <td style="padding: 0; margin: 0;">TANGGAL</td>
+                <td style="padding: 0; margin: 0;">:</td>
+                <td style="padding: 0; margin: 0;"><?php echo $surat->tanggal_terbit; ?></td>
             </tr>
-            <tr>
-                <td colspan="3" class="underline"></td>
+            <tr style="padding: 0; margin: 0;">
+                <td colspan="3" class="underline" style="padding: 0; margin: 0;"></td>
             </tr>
         </table>
         <table class="judul-lampiran">
