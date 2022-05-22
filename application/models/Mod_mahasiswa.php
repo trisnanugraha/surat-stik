@@ -87,8 +87,11 @@ class Mod_mahasiswa extends CI_Model
 
     function get_all_by_angkatan($id)
     {
-        $this->db->where('id_angkatan', $id);
-        return $this->db->get($this->table)->result();
+        $this->db->select('a.nama_mhs, a.nim, a.alamat, a.no_hp, b.nama_sindikat, c.nama_angkatan');
+        $this->db->join('tbl_sindikat b', 'a.id_sindikat=b.id_sindikat');
+        $this->db->join('tbl_angkatan c', 'a.id_angkatan=c.id_angkatan');
+        $this->db->where('a.id_angkatan', $id);
+        return $this->db->get("{$this->table} a")->result();
     }
 
     function getuser($id_prodi)

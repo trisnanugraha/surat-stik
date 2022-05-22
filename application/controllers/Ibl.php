@@ -13,6 +13,7 @@ class Ibl extends MY_Controller
         $this->load->model('Mod_ibl');
         $this->load->model('Mod_angkatan');
         $this->load->model('Mod_mahasiswa');
+        $this->load->model('Mod_sindikat');
         $this->load->library('ciqrcode');
     }
 
@@ -56,6 +57,8 @@ class Ibl extends MY_Controller
     public function edit($id)
     {
         $data = $this->Mod_ibl->get_ibl($id);
+        $data->tgl_berangkat = date("d-m-Y H:i:s", strtotime($data->tgl_berangkat));
+        $data->tgl_kembali = date("d-m-Y H:i:s", strtotime($data->tgl_kembali));
         echo json_encode($data);
     }
 
@@ -90,8 +93,8 @@ class Ibl extends MY_Controller
         $data  = array(
             'no_surat'      => $this->input->post('no_surat'),
             'id_angkatan'   => $this->input->post('id_angkatan'),
-            'tgl_berangkat' => $this->input->post('tgl_berangkat'),
-            'tgl_kembali'   => $this->input->post('tgl_kembali'),
+            'tgl_berangkat' => date("Y-m-d H:i:s", strtotime($this->input->post('tgl_berangkat'))),
+            'tgl_kembali'   => date("Y-m-d H:i:s", strtotime($this->input->post('tgl_kembali'))),
             'keperluan'     => $this->input->post('keperluan'),
         );
         $this->Mod_ibl->update($id, $data);
@@ -113,8 +116,8 @@ class Ibl extends MY_Controller
         $tgl_berangkat = new DateTime($data['surat']->tgl_berangkat);
         $tgl_kembali = new DateTime($data['surat']->tgl_kembali);
         $total_cuti = date_diff($tgl_berangkat, $tgl_kembali);
-        $data['surat']->total_cuti = $total_cuti->days;
-        $data['surat']->terbilang = Num_to_text($total_cuti->days);
+        $data['surat']->total_cuti = $total_cuti->days + 1;
+        $data['surat']->terbilang = Num_to_text($total_cuti->days + 1);
         $data['mahasiswa'] = $this->Mod_mahasiswa->get_all_by_angkatan($angkatan->id_angkatan);
 
         $this->load->library('pdf');
@@ -144,11 +147,11 @@ class Ibl extends MY_Controller
             $data['status'] = FALSE;
         }
 
-        // if ($this->input->post('tgl_cuti') == '') {
-        //     $data['inputerror'][] = 'tgl_cuti';
-        //     $data['error_string'][] = 'Tanggal Cuti Tidak Boleh Kosong';
-        //     $data['status'] = FALSE;
-        // }
+        if ($this->input->post('tgl_cuti') == '') {
+            $data['inputerror'][] = 'tgl_cuti';
+            $data['error_string'][] = 'Tanggal Cuti Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
 
         if ($this->input->post('keperluan') == '') {
             $data['inputerror'][] = 'keperluan';

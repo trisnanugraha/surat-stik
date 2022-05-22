@@ -71,10 +71,6 @@
             padding-right: 5px;
         }
 
-        /* #tujuan-surat tr:nth-child(3) td:nth-child(3) {
-            text-decoration: underline;
-        } */
-
         #isi-surat {
             width: 90%;
             margin: 50px 10px 10px 50px;
@@ -106,8 +102,8 @@
         }
 
         #tembusan {
-            float: left;
-            margin-top: 150px;
+            position: absolute;
+            bottom: 20px;
         }
 
         #tembusan p {
@@ -124,77 +120,19 @@
             height: 100%;
         }
 
-        .judul-lampiran {
-            text-align: center;
-            margin: 120px auto 10px auto;
-
+        .rata-atas {
+            vertical-align: top;
         }
 
-        .judul-lampiran tr td p {
-            padding: 0;
-            margin: 0;
-        }
-
-        .judul-lampiran td:last-child {
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-top: 0;
-            margin-bottom: 0;
-            border-bottom: 0.5px solid black;
-        }
-
-        .isi-lampiran {
-            width: 100%;
-            font-family: 'OpenSans-Regular';
-        }
-
-        .isi-lampiran table {
-            width: 100%;
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        .isi-lampiran thead th {
-            font-family: 'OpenSans-Regular';
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border: 1px solid black;
-            border-collapse: collapse;
-            font-weight: 400;
-        }
-
-        .isi-lampiran tbody tr td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            padding-top: 5px;
-            padding-bottom: 5px;
+        .rata-atas-tengah {
+            vertical-align: top;
             text-align: center;
         }
 
-        .isi-lampiran tbody tr td:nth-child(2) {
-            text-align: left;
+        .rata-atas-20 {
+            vertical-align: top;
+            width: 20px;
         }
-
-        .isi-lampiran tbody tr td p {
-            margin: 5px auto;
-        }
-
-        .isi-lampiran tbody tr td:nth-child(2) {
-            padding-left: 5px;
-        }
-
-        .kop-lampiran-surat {
-            float: right;
-            width: 40%;
-        }
-
-        .underline {
-            border-bottom: 0.5px solid black;
-        }
-
-        /* .kop-lampiran-surat tr td:nth-child(3) {
-            padding-left: 20px;
-        } */
     </style>
 </head>
 
@@ -234,76 +172,76 @@
                         <td colspan="4" valign="top">Diberikan kepada :</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">1.</td>
-                        <td style="vertical-align: top;">Nama</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $mhs->nama_mhs; ?></td>
+                        <td class="rata-atas">1.</td>
+                        <td class="rata-atas">Nama</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $mhs->nama_mhs; ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">2.</td>
-                        <td style="vertical-align: top;">No.Mhs/Sin</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $mhs->nim; ?>/<?php echo $mhs->id_sindikat; ?></td>
+                        <td class="rata-atas">2.</td>
+                        <td class="rata-atas">No.Mhs/Sin</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $mhs->nim; ?>/<?php echo $mhs->nama_sindikat; ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">3.</td>
-                        <td style="vertical-align: top;">Jabatan</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;">Mahasiswa S1 STIK Angkatan Ke-<?php echo $mhs->id_angkatan; ?></td>
+                        <td class="rata-atas">3.</td>
+                        <td class="rata-atas">Jabatan</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas">Mahasiswa S1 STIK Angkatan Ke-<?php echo $mhs->nama_angkatan; ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">4.</td>
-                        <td style="vertical-align: top;">Kesatuan/Alamat</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;">STIK Jl. Tirtayasa Raya No.6 Kebayoran Baru, Jakarta Selatan</td>
+                        <td class="rata-atas">4.</td>
+                        <td class="rata-atas">Kesatuan/Alamat</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas">STIK Jl. Tirtayasa Raya No.6 Kebayoran Baru, Jakarta Selatan</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">5.</td>
-                        <td style="vertical-align: top;">Berpergian Dari</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;">Jakarta</td>
+                        <td class="rata-atas">5.</td>
+                        <td class="rata-atas">Berpergian Dari</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas">Jakarta</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">6.</td>
-                        <td style="vertical-align: top;">Ke (Alamat Lengkap)</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $mhs->alamat; ?></td>
+                        <td class="rata-atas">6.</td>
+                        <td class="rata-atas">Ke (Alamat Lengkap)</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $mhs->alamat; ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">7.</td>
-                        <td style="vertical-align: top;">Lamanya Ijin</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $surat->total_cuti; ?> (<?php echo $surat->terbilang; ?>) Hari</td>
+                        <td class="rata-atas">7.</td>
+                        <td class="rata-atas">Lamanya Ijin</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $surat->total_cuti; ?> (<?php echo $surat->terbilang; ?>) Hari</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;"></td>
-                        <td style="vertical-align: top;">- Berangkat</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo tgl_indonesia_ibl($surat->tgl_berangkat); ?></td>
+                        <td class="rata-atas"></td>
+                        <td class="rata-atas">- Berangkat</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo tgl_indonesia_ibl($surat->tgl_berangkat); ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;"></td>
-                        <td style="vertical-align: top;">- Kembali</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo tgl_indonesia_ibl($surat->tgl_kembali); ?></td>
+                        <td class="rata-atas"></td>
+                        <td class="rata-atas">- Kembali</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo tgl_indonesia_ibl($surat->tgl_kembali); ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">8.</td>
-                        <td style="vertical-align: top;">Keperluan</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $surat->keperluan; ?></td>
+                        <td class="rata-atas">8.</td>
+                        <td class="rata-atas">Keperluan</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $surat->keperluan; ?></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">9.</td>
-                        <td style="vertical-align: top;">Menggunakan Angkutan</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;">Darat dan Udara</td>
+                        <td class="rata-atas">9.</td>
+                        <td class="rata-atas">Menggunakan Angkutan</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas">Darat dan Udara</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">10.</td>
-                        <td style="vertical-align: top;">No. Telepon</td>
-                        <td style="vertical-align: top; text-align: center;">:</td>
-                        <td style="vertical-align: top;"><?php echo $mhs->no_hp; ?></td>
+                        <td class="rata-atas">10.</td>
+                        <td class="rata-atas">No. Telepon</td>
+                        <td class="rata-atas-tengah">:</td>
+                        <td class="rata-atas"><?php echo $mhs->no_hp; ?></td>
                     </tr>
                 </table>
                 <br>
@@ -312,36 +250,36 @@
                         <td colspan="2"><u>PERHATIAN :</u></td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">1.</td>
-                        <td style="vertical-align: top;">Segera melapor ke kantor Polisi terdekat setelah tiba di tempat tujuan dan berangkat dari tempat tujuan;</td>
+                        <td class="rata-atas-20">1.</td>
+                        <td class="rata-atas">Segera melapor ke kantor Polisi terdekat setelah tiba di tempat tujuan dan berangkat dari tempat tujuan;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">2.</td>
-                        <td style="vertical-align: top;">Jika mendapat halangan, harap segera melaporkan kepada Waket Bid Minwa STIK u.p. Kakorwa Bid Minwa STIK pada kesempatan pertama;</td>
+                        <td class="rata-atas-20">2.</td>
+                        <td class="rata-atas">Jika mendapat halangan, harap segera melaporkan kepada Waket Bid Minwa STIK u.p. Kakorwa Bid Minwa STIK pada kesempatan pertama;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">3.</td>
-                        <td style="vertical-align: top;">Selama berada di alamat tujuan, mahasiswa tetap menjaga tata tertib sebagai Mahasiswa STIK;</td>
+                        <td class="rata-atas-20">3.</td>
+                        <td class="rata-atas">Selama berada di alamat tujuan, mahasiswa tetap menjaga tata tertib sebagai Mahasiswa STIK;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">4.</td>
-                        <td style="vertical-align: top;">Mahasiswa yang izin meninggalkan jam kuliah, diwajibkan membuat resume mata kuliah yang tidak diikuti;</td>
+                        <td class="rata-atas-20">4.</td>
+                        <td class="rata-atas">Mahasiswa yang izin meninggalkan jam kuliah, diwajibkan membuat resume mata kuliah yang tidak diikuti;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">5.</td>
-                        <td style="vertical-align: top;">Dilarang membawa senjata api;</td>
+                        <td class="rata-atas-20">5.</td>
+                        <td class="rata-atas">Dilarang membawa senjata api;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">6.</td>
-                        <td style="vertical-align: top;">Menerapkan protokol kesehatan yang berlaku secara ketat</td>
+                        <td class="rata-atas-20">6.</td>
+                        <td class="rata-atas">Menerapkan protokol kesehatan yang berlaku secara ketat</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">7.</td>
-                        <td style="vertical-align: top;">Surat Ijin Jalan ini berlaku hanya untuk anggota yang tersebut dalam Surart Ijin Jalan ini;</td>
+                        <td class="rata-atas-20">7.</td>
+                        <td class="rata-atas">Surat Ijin Jalan ini berlaku hanya untuk anggota yang tersebut dalam Surart Ijin Jalan ini;</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top; width: 20px;">8.</td>
-                        <td style="vertical-align: top;">Surat Ijin Jalan ini diserahkan ke Korps Mahasiswa Bid Minwa STIK, setelah kembali dari melaksanakan ijin.</td>
+                        <td class="rata-atas-20">8.</td>
+                        <td class="rata-atas">Surat Ijin Jalan ini diserahkan ke Korps Mahasiswa Bid Minwa STIK, setelah kembali dari melaksanakan ijin.</td>
                     </tr>
                 </table>
                 <br>

@@ -59,7 +59,7 @@
             showDropdowns: true,
             timePicker24Hour: true,
             locale: {
-                format: 'DD/MM/YYYY HH:mm'
+                format: 'DD-MM-YYYY HH:mm'
             }
         })
         $('#tgl_cuti').on('apply.daterangepicker', function(ev, picker) {
@@ -150,9 +150,12 @@
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-
+                tgl_berangkat = data.tgl_berangkat;
+                tgl_kembali = data.tgl_kembali;
                 $('[name="id_ibl"]').val(data.id_ibl);
                 $('[name="no_surat"]').val(data.no_surat);
+                $('#tgl_cuti').data('daterangepicker').setStartDate(data.tgl_berangkat);
+                $('#tgl_cuti').data('daterangepicker').setEndDate(data.tgl_kembali);
                 $('[name="angkatan"]').val(data.id_angkatan);
                 $('[name="keperluan"]').val(data.keperluan);
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
@@ -174,6 +177,7 @@
             id_ibl: $("#id_ibl").val(),
             no_surat: $("#no_surat").val(),
             id_angkatan: $("#angkatan").val(),
+            tgl_cuti: $("#tgl_cuti").val(),
             tgl_berangkat: tanggal_berangkat,
             tgl_kembali: tanggal_kembali,
             keperluan: $("#keperluan").val()

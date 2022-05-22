@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id_ibl" />
+                    <input type="hidden" value="" name="id_ibl" id="id_ibl" />
                     <div class="form-group row ">
                         <label for="no_surat" class="col-sm-4 col-form-label">Nomor Surat</label>
                         <div class="col-sm-8 kosong">
@@ -37,7 +37,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="far fa-clock"></i></span>
                             </div>
-                            <input type="text" class="form-control float-right" id="tgl_cuti">
+                            <input type="text" class="form-control float-right" name="tgl_cuti" id="tgl_cuti">
                         </div>
                     </div>
                     <div class="form-group row">
