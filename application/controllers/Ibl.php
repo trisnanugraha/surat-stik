@@ -104,6 +104,12 @@ class Ibl extends MY_Controller
     public function delete()
     {
         $id = $this->input->post('id_ibl');
+
+        if ($id != null) {
+            //hapus gambar yg ada diserver
+            unlink('assets/qr-code-ibl/' . $id . '.png');
+        }
+
         $this->Mod_ibl->delete($id);
         echo json_encode(array("status" => TRUE));
     }
