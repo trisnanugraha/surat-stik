@@ -130,6 +130,7 @@ class Mod_angkatan extends CI_Model
 
     function total_rows()
     {
+        $this->db->where('nama_angkatan !=', '-');
         $data = $this->db->get($this->table);
         return $data->num_rows();
     }
